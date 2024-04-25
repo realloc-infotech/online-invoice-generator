@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
+import { CreateinvoiceComponent } from './pages/theme-pages/createinvoice/createinvoice.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
           ),
       },
     ],
+  },
+  {
+    path : 'createinvoice',
+    component : CreateinvoiceComponent
   },
   {
     path: '**',

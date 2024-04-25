@@ -25,13 +25,15 @@ import { FilterPipe } from './pipe/filter.pipe';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CreateinvoiceComponent } from './pages/theme-pages/createinvoice/createinvoice.component';
+import { ThmHeaderComponent } from './pages/theme/thm-header/thm-header.component';
+import { ThmFooterComponent } from './pages/theme/thm-footer/thm-footer.component';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
 }
 
 @NgModule({
-  declarations: [AppComponent, BlankComponent, FilterPipe],
+  declarations: [AppComponent, BlankComponent, FilterPipe , ThmHeaderComponent , ThmFooterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -49,7 +51,7 @@ export function HttpLoaderFactory(http: HttpClient): any {
       },
     }),
     NgScrollbarModule,
-    FullComponent
+    FullComponent,
   ],
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],

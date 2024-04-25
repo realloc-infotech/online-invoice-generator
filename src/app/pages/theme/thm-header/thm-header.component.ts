@@ -1,8 +1,6 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
-import { ViewportScroller } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
-import { CreateinvoiceComponent } from '../createinvoice/createinvoice.component';
+
 
 interface apps {
   id: number;
@@ -18,48 +16,13 @@ interface quicklinks {
   link: string;
 }
 
-interface demos {
-  id: number;
-  name: string;
-  url: string;
-  imgSrc: string;
-}
-
-interface testimonials {
-  id: number;
-  name: string;
-  subtext: string;
-  imgSrc: string;
-}
-
-interface features {
-  id: number;
-  icon: string;
-  title: string;
-  subtext: string;
-}
-
 @Component({
-  selector: 'app-landingpage',
-  templateUrl: './landingpage.component.html',
+  selector: 'app-thm-header',
+  templateUrl: './thm-header.component.html',
+  styleUrls: ['./thm-header.component.scss']
 })
-export class AppLandingpageComponent {
-  @Input() showToggle = true;
-  @Output() toggleMobileNav = new EventEmitter<void>();
-  @Output() toggleMobileFilterNav = new EventEmitter<void>();
-  @Output() toggleCollapsed = new EventEmitter<void>();
+export class ThmHeaderComponent {
 
-  options = this.settings.getOptions();
-
-  constructor(
-    private settings: CoreService,
-    private scroller: ViewportScroller
-  ) {}
-
-  // scroll to demos
-  gotoDemos() {
-    this.scroller.scrollToAnchor('demos');
-  }
 
   apps: apps[] = [
     {
@@ -119,56 +82,6 @@ export class AppLandingpageComponent {
       link: '/apps/courses',
     },
   ];
-  testimonials: testimonials[] = [
-    {
-      id: 1,
-      imgSrc: '/assets/images/profile/user-1.jpg',
-      name: 'Jenny Wilson',
-      subtext: 'Features avaibility',
-    },
-    {
-      id: 2,
-      imgSrc: '/assets/images/profile/user-2.jpg',
-      name: 'Minshan Cui',
-      subtext: 'Features avaibility',
-    },
-    {
-      id: 3,
-      imgSrc: '/assets/images/profile/user-3.jpg',
-      name: 'Eminson Mendoza',
-      subtext: 'Features avaibility',
-    },
-  ];
-
-  features: features[] = [
-    {
-      id: 1,
-      icon: 'wand',
-      title: '6 Theme Colors',
-      subtext:
-        'We have included 6 pre-defined Theme Colors with Elegant Admin.',
-    },
-    {
-      id: 2,
-      icon: 'shield-lock',
-      title: 'Authguard',
-      subtext:
-        'AuthGuard is used to protect the routes from unauthorized access in angular..',
-    },
-    {
-      id: 3,
-      icon: 'archive',
-      title: '80+ Page Templates',
-      subtext: 'Yes, we have 6 demos & 80+ Pages per demo to make it easier.',
-    },
-    {
-      id: 4,
-      icon: 'adjustments',
-      title: '50+ UI Components',
-      subtext:
-        'Almost 50+ UI Components being given with Krenoz Admin Pack.',
-    }
-  ];
 
   quicklinks: quicklinks[] = [
     {
@@ -212,4 +125,11 @@ export class AppLandingpageComponent {
       link: '/theme-pages/treeview',
     },
   ];
+
+  options = this.settings.getOptions();
+
+  constructor(
+    private settings: CoreService,
+  ){}
+
 }
