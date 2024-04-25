@@ -1,27 +1,36 @@
 .bg-footer {
-    background-color: #33383c;
-    padding: 50px 0 30px;
+    background-color: #f6f9fc;
+    padding: 0px 0 10px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    margin-top: 3%;
 }
 .footer-heading {
     letter-spacing: 2px;
 }
 
 .footer-link a {
-    color: #acacac;
-    line-height: 40px;
-    font-size: 14px;
+    line-height: 30px;
     transition: all 0.5s;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: #2a3547;
+    font-size: 14px;
+    text-decoration: none; 
 }
 
 .footer-link a:hover {
-    color: #1bbc9b;
+    color: #5d87ff;
 }
 
 .contact-info {
-    color: #acacac;
+    line-height: 20px;
+    transition: all 0.5s;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: #2a3547;
     font-size: 14px;
 }
-
+.list-unstyled{
+    list-style-type: none;
+}
 .footer-social-icon {
     font-size: 15px;
     height: 34px;
@@ -32,42 +41,26 @@
     display: inline-block;
 }
 
-.facebook {
-    background-color: #4e71a8;
-    color: #ffffff;
-}
-
-.twitter {
-    background-color: #55acee;
-    color: #ffffff;
-}
-
-.google {
-    background-color: #d6492f;
-    color: #ffffff;
-}
-
-.apple {
-    background-color: #424041;
-    color: #ffffff;
-}
-
 .footer-alt {
-    color: #acacac;
+    color: #000000;
 }
 
 .footer-heading {
     position: relative;
     padding-bottom: 12px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: #2a3547;
+    font-size: 15px;
+    line-height: 1.334rem;
 }
 
 .footer-heading:after {
     content: '';
-    width: 25px;
+    width: 50px;
     border-bottom: 1px solid #FFF;
     position: absolute;
     left: 0;
     bottom: 0;
     display: block;
-    border-bottom: 1px solid #1bbc9b;
+    border-bottom: 3px solid #5d87ff;
 }

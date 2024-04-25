@@ -1,0 +1,35 @@
+.cardWithShadow {
+    box-shadow: 0 3.2px 7.2px 0 rgb(0 0 0 / 13%), 0 0.6px 1.8px 0 rgb(0 0 0 / 11%);
+}
+
+.m-r-10 {
+    margin-right: 10px;
+}
+
+// .container {
+//     display: inline-block;
+//     cursor: pointer;
+//   }
+  
+  .edit {
+    margin-bottom: 8px;
+
+      input[type="text"] {
+        border: none;
+        background-color: transparent;
+        width: -webkit-fill-available;
+        outline: none;
+        padding: 0;
+        margin: 0;
+        font-size: inherit;
+        font-family: inherit;
+        color: inherit;
+        box-shadow: 0 3.2px 7.2px 0 rgb(0 0 0 / 13%), 0 0.6px 1.8px 0 rgb(0 0 0 / 11%);
+        padding: 10px 20px;
+        font-weight: 600;
+      }
+  } 
+
+  .w-120 {
+    width: 120px;
+  }

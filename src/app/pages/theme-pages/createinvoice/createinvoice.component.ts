@@ -49,6 +49,11 @@ export class  CreateinvoiceComponent {
   vat = 0;
   grandTotal = 0;
 
+  text: string = "Sub Total"; // Input text
+  discount: any = "Discount"; // Input text
+  isEditing: boolean = false;
+  isDiscount: boolean = false;
+
   constructor(
     private fb: UntypedFormBuilder,
     private router: Router,

@@ -27,6 +27,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CreateinvoiceComponent } from './pages/theme-pages/createinvoice/createinvoice.component';
 import { ThmHeaderComponent } from './pages/theme/thm-header/thm-header.component';
 import { ThmFooterComponent } from './pages/theme/thm-footer/thm-footer.component';
+import { AppLandingpageComponent } from './pages/theme-pages/landingpage/landingpage.component';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');

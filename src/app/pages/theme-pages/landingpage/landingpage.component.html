@@ -18,7 +18,7 @@
               </h1>
               <p class="f-s-18 p-y-24 m-t-12 m-0 banner-subtitle">
                 Use Templates to Create Invoices Online <br>
-                Download, Print, Email Invoice with Easy Invoice Generator
+                Download, Print, Invoice with Easy Invoice Generator
               </p>
               <div class="m-t-24 hstack">
                 <!-- <a
@@ -61,74 +61,22 @@
     <!-- ------------------------------------------------------------------
 End Banner
 ------------------------------------------------------------------ -->
-            <!-- ------------------------------------------------------------------
-      Template
-      ------------------------------------------------------------------ -->
-      <div class="spacer" id="demos">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-              <!-- <div class="d-sm-flex align-items-center justify-content-center">
-            <div
-              class="d-flex align-items-center justify-content-center social-chips"
-            >
-              <img
-                src="assets/images/profile/user-2.jpg"
-                width="30"
-                alt="social"
-                class="rounded-circle"
-              />
-              <img
-                src="assets/images/profile/user-3.jpg"
-                width="30"
-                alt="social"
-                class="rounded-circle"
-              />
-              <img
-                src="assets/images/profile/user-4.jpg"
-                width="30"
-                alt="social"
-                class="rounded-circle"
-              />
-            </div>
-            <span class="f-s-16 f-w-500 m-l-10"
-              ><span class="f-w-600">52,589+</span> developers & agencies
-              using our templates</span
-            >
-          </div> -->
-              <h2 class="section-title">
-                Create Your Invoice in Less than 5 Minutes
-              </h2>
-            </div>
-          </div>
-          <div class="text-center m-t-30 m-b-32">
-            <span class="bg-primary p-8 rounded-pill text-white f-w-600 p-x-10">
-              Demos
-            </span>
-          </div>
-          <div>
-            
-          </div>
-        </div>
-      </div>
-      <!-- ------------------------------------------------------------------
-  End Template
-  ------------------------------------------------------------------ -->
+
   
       <!-- ------------------------------------------------------------------
   Demo slider
   ------------------------------------------------------------------ -->
-      <div class="bg-extra-light spacer">
+      <div class="bg-extra-light spacer" style="margin-top: 5%;padding: 0;">
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-lg-8 col-sm-11">
               <h2 class="section-title text-center">
-                Multiple Invoice Templates with <br> 250+ Colors
+                Create your invoice in less than 5 minutes
               </h2>
             </div>
           </div>
         </div>
-        <div class="demo-slider overflow-hidden d-flex">
+        <div class="demo-slider overflow-hidden d-flex" style="margin-top: 0;">
           <div>
             <div class="demo-slide">
               <img src="assets/images/landingpage/background/slider-group.png" alt="slide" />
@@ -199,7 +147,7 @@ End Banner
       <!-- ------------------------------------------------------------------
   Features
   ------------------------------------------------------------------ -->
-      <div class="spacer">
+      <div class="spacer" style="padding: 80px 0 80px;">
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-lg-6 col-sm-8">
@@ -237,7 +185,7 @@ End Banner
             'url(/assets/images/landingpage/shape/line-bg.svg)'
           ">
               <mat-card-content class="p-32 text-center">
-                <h3 class="f-s-24 f-w-600 m-0 m-t-12 mat-subtitle-1">
+                <h3 class="f-s-24 f-w-600 m-0 m-t-12 mat-subtitle-1" style="line-height: 30px;">
                   Create Online Invoices for FREE with Easy Invoice Generator
                 </h3>
                 <!-- <span class="f-s-14 f-w-500 m-t-8 d-block"
@@ -266,7 +214,7 @@ End Banner
       <!-- ------------------------------------------------------------------
   buy section
   ------------------------------------------------------------------ -->
-      <div class="bg-primary spacer-sm">
+      <div class="bg-primary spacer-sm" style="border-radius: 5px;">
         <div class="container">
           <div class="row justify-content-between">
             <div class="col-lg-5">
@@ -280,32 +228,45 @@ End Banner
               </p>
             </div>
             <div class="col-lg-5 text-right">
-              <img src="assets/images/landingpage/background/c2a.png" alt="img" width="330" />
+              <img src="assets/images/landingpage/background/c2a.png" alt="img" width="250" />
             </div>
           </div>
         </div>
       </div>
   
-      <div class="container">
+      <div class="container" style="margin-bottom: 10px;">
         <mat-card class="cardWithShadow c2a-card bg-size-cover" [style.background-image]="
         'url(/assets/images/landingpage/shape/line-bg-2.svg)'
       ">
-          <mat-card-content class="p-24">
-            <div class="hstack justify-content-between align-items-center">
-              <div class="d-flex align-items-center">
-                <img src="assets/images/landingpage/shape/badge.svg" alt="badge" />
-  
-                <div class="m-l-24">
-                  <h5 class="f-s-21 f-w-600 mat-subtitle-1 m-b-4">
-                    100% Accurate Invoice
-                  </h5>
-                  <span class="f-s-14">We offer 48 hours moneyback guarantee.</span>
-                </div>
-              </div>
-              <a mat-flat-button color="primary" class="btn-custom"
-              [routerLink]="['/createinvoice']">Create invoice</a>
-            </div>
-          </mat-card-content>
+                <mat-card-content class="p-24">
+                  <div class="hstack justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                      <img
+                        src="assets/images/landingpage/shape/badge.svg"
+                        alt="badge"
+                      />
+        
+                      <div style="margin-left: 24px;">
+                        <h5 class="mat-subtitle-1" style="font-size: 21px;
+                        font-weight: 600;
+                        margin-bottom: 4px;
+                        margin-top: 0;  ">
+                          100% Accurate Invoice
+                        </h5>
+                        <span style=" font-size: 14px;"
+                          >We are accurate invoice generator</span
+                        >
+                      </div>
+                    </div>
+                    <a
+                      mat-flat-button
+                      color="primary"
+                      class="btn-custom"
+                      [routerLink]="['/createinvoice']"
+                      >Create Invoice</a
+                    >
+                  </div>
+                </mat-card-content>
         </mat-card>
       </div>
   

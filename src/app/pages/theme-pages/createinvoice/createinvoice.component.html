@@ -1,164 +1,211 @@
-
-  <mat-card class="cardWithShadow">
-    <mat-card-content class="p-24">
-      <form #invoiceForm="ngForm">
-        <button class="m-b-20 m-r-10" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF('download') : ''">
-          Download Invoice
-        </button>
-        <button class="m-b-20 m-r-10" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF('print') : ''">
-          Print Invoice
-        </button>
-        <button class="m-b-20 m-r-10" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF() : ''">
-          Open Invoice
-        </button>
-        <button class="m-b-20" color="primary" mat-flat-button (click)="sendPdfWhatsapp()">
-          Send Pdf Whatsapp
-        </button>
-        <mat-divider></mat-divider>
-        <mat-divider></mat-divider>
-        <div class="row m-y-24 p-t-24">
-          <div class="col-sm-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Bill From</mat-label>
-              <input type="text" matInput class="form-control" name="name" id="name"
-                                        [ngClass]="{'is-invalid': invoiceForm.submitted && CustName.invalid}"
-                                        [(ngModel)]="invoices.customerName" #CustName="ngModel" required>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Bill To</mat-label>
-              <input type="text" matInput class="form-control" name="billName" id="billName"
-                                        [ngClass]="{'is-invalid': invoiceForm.submitted && billToName.invalid}"
-                                        [(ngModel)]="invoices.billTo" #billToName="ngModel" required>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Email Id</mat-label>
-              <input type="email" matInput class="form-control" name="email" id="email"
-                                        [(ngModel)]="invoices.email" required>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Email Id</mat-label>
-              <input type="email" matInput class="form-control" name="billEmail" id="billEmail"
-                                        [(ngModel)]="invoices.billToEmail" required>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Enter From Address</mat-label>
-              <textarea class="form-control" matInput name="address" id="address" row="3"
-                                        [ngClass]="{'is-invalid': invoiceForm.submitted && Address.invalid}"
-                                        [(ngModel)]="invoices.address" #Address="ngModel" required></textarea>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Enter To Address</mat-label>
-              <textarea class="form-control" matInput name="billAddress" id="billAddress" row="3"
-                                        [ngClass]="{'is-invalid': invoiceForm.submitted && billToAddress.invalid}"
-                                        [(ngModel)]="invoices.billToAddress" #billToAddress="ngModel" required></textarea>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Contact No</mat-label>
-              <input type="number" matInput class="form-control" name="contactNo" id="contactNo"
-                                        [ngClass]="{'is-invalid': invoiceForm.submitted && ContactNo.invalid}"
-                                        [(ngModel)]="invoices.contactNo" #ContactNo="ngModel" required>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Contact No</mat-label>
-              <input type="number" matInput class="form-control" name="billContactNo" id="billContactNo"
-                                        [ngClass]="{'is-invalid': invoiceForm.submitted && billToContact.invalid}"
-                                        [(ngModel)]="invoices.billToContact" #billToContact="ngModel" required>
-            </mat-form-field>
-          </div>
-        </div>
-      </form>
-        <div class="text-right m-t-30">
-          <button class="m-b-20"
-            color="primary"
-            mat-flat-button
-            (click)="addProduct()"
-          >
-            Add row
-          </button>
-          <div class="table-responsive">
-            <table class="table table-hover b-1 no-wrap w-100 rounded">
-              <thead>
-                <tr>
-                  <th class="p-16">#</th>
-                  <th width="25%" class="text-center">Product</th>
-                  <th width="25%" class="text-center">Price</th>
-                  <th width="25%" class="text-center">Quantity</th>
-                  <th width="25%" class="text-center">Discount</th>
-                  <th width="25%" class="text-center">Amount</th>
-                  <th class="p-16 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let product of invoices.products; let i=index">
-                  <td>
-                    {{i + 1}}
-                  </td>
-                  <td scope="row">
-                    <mat-form-field appearance="outline" class="w-100 hide-hint">
-                      <input type="text" matInput class="form-control" name="productName{{i}}"
-                        [ngClass]="{'is-invalid': invoiceForm.submitted && ProductName.invalid}" id="productName" [(ngModel)]="product.name"
-                        #ProductName="ngModel" required>
-                    </mat-form-field>
-                  </td>
-                  <td>
-                    <mat-form-field appearance="outline" class="w-100 hide-hint">
-                      <input type="number" matInput class="form-control" name="price{{i}}" id="price"
-                        [ngClass]="{'is-invalid': invoiceForm.submitted && ProductPrice.invalid}" [(ngModel)]="product.price"
-                        #ProductPrice="ngModel" required>
-                    </mat-form-field>
-                  </td>
-                  <td>
-                    <mat-form-field appearance="outline" class="w-100 hide-hint">
-                      <input type="number" matInput class="form-control" name="quantity{{i}}" id="quantity"
-                        [ngClass]="{'is-invalid': invoiceForm.submitted && ProductQty.invalid}" [(ngModel)]="product.qty"
-                        #ProductQty="ngModel" required>
-                    </mat-form-field>
-                  </td>
-                  <td>
-                    <mat-form-field appearance="outline" class="w-100 hide-hint">
-                      <input type="number" matInput class="form-control" name="discount{{i}}" id="discount" (ngModelChange)="discountChange(i)"
-                        [ngClass]="{'is-invalid': invoiceForm.submitted && discountPr.invalid}" [(ngModel)]="product.discount"
-                        #discountPr="ngModel" required>
-                    </mat-form-field>
-                  </td>
-                  <td>
-                    invoices.products[i].total
-                  </td>
-                  <td>
-                    <button
-                      color="warn"
-                      mat-icon-button
-                      (click)="removeRow(i)"
-                      class="d-flex justify-content-center"
-                    >
-                      <i-tabler name="trash" class="icon-18 d-flex"></i-tabler>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-  
-          <div class="text-right m-t-30">
-            <h5 class="m-b-5 f-w-600 f-s-16">Sub total: {{ subTotal }}</h5>
-            <h5 class="f-w-600 f-s-16">Total Vat: {{ vat }}%</h5>
+<div class="container">
+  <mat-sidenav-container class="cardWithShadow m-t-20">
+    <mat-sidenav-content>
+      <mat-card >
+        <mat-card-content class="p-24">
+          <form #invoiceForm="ngForm">
+            <button class="m-b-20 m-r-10" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF('download') : ''">
+              Download Invoice
+            </button>
+            <button class="m-b-20 m-r-10" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF('print') : ''">
+              Print Invoice
+            </button>
+            <button class="m-b-20 m-r-10" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF() : ''">
+              Open Invoice
+            </button>
+            <button class="m-b-20" color="primary" mat-flat-button (click)="sendPdfWhatsapp()">
+              Send Pdf Whatsapp
+            </button>
             <mat-divider></mat-divider>
-            <h3 class="m-b-0 p-t-20 f-s-18">Grand Total: {{ grandTotal }}</h3>
-          </div>
-        </div>
-    </mat-card-content>
-  </mat-card>
+            <mat-divider></mat-divider>
+            <div class="row m-y-24 p-t-24">
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Bill From</mat-label>
+                  <input type="text" matInput class="form-control" name="name" id="name"
+                                            [ngClass]="{'is-invalid': invoiceForm.submitted && CustName.invalid}"
+                                            [(ngModel)]="invoices.customerName" #CustName="ngModel" required>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Bill To</mat-label>
+                  <input type="text" matInput class="form-control" name="billName" id="billName"
+                                            [ngClass]="{'is-invalid': invoiceForm.submitted && billToName.invalid}"
+                                            [(ngModel)]="invoices.billTo" #billToName="ngModel" required>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Email Id</mat-label>
+                  <input type="email" matInput class="form-control" name="email" id="email"
+                                            [(ngModel)]="invoices.email" required>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Email Id</mat-label>
+                  <input type="email" matInput class="form-control" name="billEmail" id="billEmail"
+                                            [(ngModel)]="invoices.billToEmail" required>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Enter From Address</mat-label>
+                  <textarea class="form-control" matInput name="address" id="address" row="3"
+                                            [ngClass]="{'is-invalid': invoiceForm.submitted && Address.invalid}"
+                                            [(ngModel)]="invoices.address" #Address="ngModel" required></textarea>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Enter To Address</mat-label>
+                  <textarea class="form-control" matInput name="billAddress" id="billAddress" row="3"
+                                            [ngClass]="{'is-invalid': invoiceForm.submitted && billToAddress.invalid}"
+                                            [(ngModel)]="invoices.billToAddress" #billToAddress="ngModel" required></textarea>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Contact No</mat-label>
+                  <input type="number" matInput class="form-control" name="contactNo" id="contactNo"
+                                            [ngClass]="{'is-invalid': invoiceForm.submitted && ContactNo.invalid}"
+                                            [(ngModel)]="invoices.contactNo" #ContactNo="ngModel" required>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Contact No</mat-label>
+                  <input type="number" matInput class="form-control" name="billContactNo" id="billContactNo"
+                                            [ngClass]="{'is-invalid': invoiceForm.submitted && billToContact.invalid}"
+                                            [(ngModel)]="invoices.billToContact" #billToContact="ngModel" required>
+                </mat-form-field>
+              </div>
+            </div>
+          </form>
+            <div class="text-right m-t-30">
+              <button class="m-b-20"
+                color="primary"
+                mat-flat-button
+                (click)="addProduct()"
+              >
+                Add row
+              </button>
+              <div class="table-responsive">
+                <table class="table table-hover b-1 no-wrap w-100 rounded">
+                  <thead>
+                    <tr>
+                      <th class="p-16">#</th>
+                      <th width="25%" class="text-center">Product</th>
+                      <th width="25%" class="text-center">Price</th>
+                      <th width="10%" class="text-center">Quantity</th>
+                      <th width="10%" class="text-center">Discount</th>
+                      <th width="25%" class="text-center">Amount</th>
+                      <th class="p-16 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let product of invoices.products; let i=index">
+                      <td>
+                        {{i + 1}}
+                      </td>
+                      <td scope="row">
+                        <mat-form-field appearance="outline" class="w-100 hide-hint">
+                          <input type="text" matInput class="form-control" name="productName{{i}}"
+                            [ngClass]="{'is-invalid': invoiceForm.submitted && ProductName.invalid}" id="productName" [(ngModel)]="product.name"
+                            #ProductName="ngModel" required>
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field appearance="outline" class="w-100 hide-hint">
+                          <input type="number" matInput class="form-control" name="price{{i}}" id="price"
+                            [ngClass]="{'is-invalid': invoiceForm.submitted && ProductPrice.invalid}" [(ngModel)]="product.price"
+                            #ProductPrice="ngModel" required>
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field appearance="outline" class="w-120 hide-hint">
+                          <input type="number" matInput class="form-control" name="quantity{{i}}" id="quantity"
+                            [ngClass]="{'is-invalid': invoiceForm.submitted && ProductQty.invalid}" [(ngModel)]="product.qty"
+                            #ProductQty="ngModel" required>
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field appearance="outline" class="w-120 hide-hint">
+                          <input type="number" matInput class="form-control" name="discount{{i}}" id="discount" (ngModelChange)="discountChange(i)"
+                            [ngClass]="{'is-invalid': invoiceForm.submitted && discountPr.invalid}" [(ngModel)]="product.discount"
+                            #discountPr="ngModel" required>
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        {{invoices.products[i].total}}
+                      </td>
+                      <td>
+                        <button
+                          color="warn"
+                          mat-icon-button
+                          (click)="removeRow(i)"
+                          class="d-flex justify-content-center"
+                        >
+                          <i-tabler name="trash" class="icon-18 d-flex"></i-tabler>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+      
+              <div class="text-right m-t-30">
+                <div class="row">
+                  <div class="col-sm-8"></div>
+                  <div class="col-sm-2">
+                    <div (mouseenter)="isEditing = true" (mouseleave)="isEditing = false" class="edit m-b-5">
+                      <ng-container *ngIf="!isEditing; else editField">
+                        <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ text }}</h5>
+                      </ng-container>
+                      <ng-template #editField>
+                        <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="text" (keydown.enter)="isEditing = false" (blur)="isEditing = false">
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="col-sm-2 d-flex justify-content-start align-items-center">
+                    : {{ subTotal }}
+                  </div>
+                </div>
+
+                <!-- <h5 class="m-b-5 f-w-600 f-s-16">Sub total: {{ subTotal }}</h5>
+                <h5 class="f-w-600 f-s-16">Total Vat: {{ vat }}%</h5> -->
+
+                <div class="row">
+                  <div class="col-sm-8"></div>
+                  <div class="col-sm-2">
+                    <div (mouseenter)="isDiscount = true" (mouseleave)="isDiscount = false" class="edit m-b-5">
+                      <ng-container *ngIf="!isDiscount; else discountField">
+                        <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ discount }}</h5>
+                      </ng-container>
+                      <ng-template #discountField>
+                        <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="discount" (keydown.enter)="isDiscount = false" (blur)="isDiscount = false">
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="col-sm-2 d-flex justify-content-start align-items-center">
+                    : {{ vat }}%
+                  </div>
+                </div>
+
+                
+                <mat-divider></mat-divider>
+                <div class="row">
+                  <div class="col-sm-8"></div>
+                  <div class="col-sm-2">
+                    <h3 class="m-b-0 f-s-18 text-left" style="padding: 10px 20px !important;">Grand Total</h3>
+                  </div>
+                  <div class="col-sm-2"><h3 class="m-b-0 f-s-18 text-left" style="padding: 10px 0px !important;">: {{ grandTotal }}</h3></div>
+                </div>
+              </div>
+            </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

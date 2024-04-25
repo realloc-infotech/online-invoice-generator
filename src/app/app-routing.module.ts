@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { CreateinvoiceComponent } from './pages/theme-pages/createinvoice/createinvoice.component';
+import { AppLandingpageComponent } from './pages/theme-pages/landingpage/landingpage.component';
 
 const routes: Routes = [
+
   {
     path: '',
-    redirectTo: '/landingpage',
+    component: AppLandingpageComponent,
     pathMatch: 'full',
   },
   {
