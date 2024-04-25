@@ -6,27 +6,27 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-class Product{
+class Product {
   name: string;
-  price: number;
-  qty: number;
-  discount: number;
+  price: number = 0;
+  qty: number = 0;
+  discount: number = 0;
   total: number
 }
-class Invoice{
+class Invoice {
   customerName: string;
   address: string;
   contactNo: number;
   email: string;
   billTo: string;
-  billToEmail : string;
-  billToAddress : String;
-  billToContact : string;
-  
+  billToEmail: string;
+  billToAddress: String;
+  billToContact: string;
+
   products: Product[] = [];
   additionalDetails: string;
 
-  constructor(){
+  constructor() {
     // Initially one empty product row we will show 
     this.products.push(new Product());
   }
@@ -38,21 +38,29 @@ class Invoice{
   styleUrls: ['./createinvoice.component.scss']
 })
 
-export class  CreateinvoiceComponent {
+export class CreateinvoiceComponent {
   addForm: UntypedFormGroup | any;
   rows: UntypedFormArray;
-  
-  invoices = new Invoice(); 
+
+  invoices = new Invoice();
 
   ///////////////////////////////////////////////////////////
   subTotal = 0;
   vat = 0;
   grandTotal = 0;
-
+  termsList : ''
   text: string = "Sub Total"; // Input text
   discount: any = "Discount"; // Input text
+  shipping: any = "Shipping";
+  gst: any = "Gst";
+  terms: any = "Terms";
   isEditing: boolean = false;
   isDiscount: boolean = false;
+  isShipping: boolean = false;
+  isGst: boolean = false;
+  isTerms: boolean = false;
+  invoiceLogo: string | ArrayBuffer | null = null;
+
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -71,6 +79,10 @@ export class  CreateinvoiceComponent {
   ////////////////////////////////////////////////////////////////////////////////////
   onAddRow(): void {
     this.rows.push(this.createItemFormGroup());
+  }
+
+  closeImg(){
+    this.invoiceLogo = ''
   }
 
   onRemoveRow(rowIndex: number): void {
@@ -112,15 +124,15 @@ export class  CreateinvoiceComponent {
   }
   ////////////////////////////////////////////////////////////////////
 
-  
+
   generatePDF(action = 'open') {
-    let docDefinition:any = {
+    let docDefinition: any = {
       content: [
         {
-          text: 'ELECTRONIC SHOP',
-          fontSize: 16,
+          image: this.invoiceLogo, // Add uploaded logo
+          width: 100, // Adjust width as needed
           alignment: 'center',
-          color: '#047886'
+          margin: [0, 10]
         },
         {
           text: 'INVOICE',
@@ -139,32 +151,30 @@ export class  CreateinvoiceComponent {
             [
               {
                 text: this.invoices.customerName,
-                bold:true
+                bold: true
               },
               { text: this.invoices.email },
               { text: this.invoices.contactNo },
               { text: this.invoices.address }
             ],
             [
-              // {
-              //   text: `Date: ${new Date().toLocaleString()}`,
-              //   alignment: 'right'
-              // },
-              // { 
-              //   text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
-              //   alignment: 'right'
-              // }
               {
                 text: this.invoices.billTo,
-                bold:true,
+                bold: true,
                 alignment: 'right'
               },
-              { text: this.invoices.billToEmail,
-                alignment: 'right' },
-              { text: this.invoices.billToContact,
-                alignment: 'right' },
-              { text: this.invoices.billToAddress,
-                alignment: 'right' }
+              {
+                text: this.invoices.billToEmail,
+                alignment: 'right'
+              },
+              {
+                text: this.invoices.billToContact,
+                alignment: 'right'
+              },
+              {
+                text: this.invoices.billToAddress,
+                alignment: 'right'
+              }
             ]
           ]
         },
@@ -175,11 +185,11 @@ export class  CreateinvoiceComponent {
         {
           table: {
             headerRows: 1,
-            widths: ['*', 'auto', 'auto', 'auto'],
+            widths: ['*', 'auto', 'auto',  'auto' , 'auto'],
             body: [
-              ['Product', 'Price', 'Quantity', 'Amount'],
-              ...this.invoices.products.map(p => ([p.name, p.price, p.qty, (p.price*p.qty).toFixed(2)])),
-              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.invoices.products.reduce((sum, p)=> sum + (p.qty * p.price), 0).toFixed(2)]
+              ['Product', 'Price', 'Quantity','Discount', 'Amount'],
+              ...this.invoices.products.map(p => ([p.name, p.price, p.qty, p.discount ,this.calculateTotalPrice(p.price , p.qty , p.discount)])),
+              [{ text: 'Total Amount', colSpan: 3 }, {}, {}, {} ,this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2)]
             ]
           }
         },
@@ -188,25 +198,21 @@ export class  CreateinvoiceComponent {
           style: 'sectionHeader'
         },
         {
-            text: this.invoices.additionalDetails,
-            margin: [0, 0 ,0, 15]          
+          text: this.invoices.additionalDetails,
+          margin: [0, 0, 0, 15]
         },
         {
           columns: [
             [{ qr: `${this.invoices.customerName}`, fit: '50' }],
-            [{ text: 'Signature', alignment: 'right', italics: true}],
+            [{ text: 'Signature', alignment: 'right', italics: true }],
           ]
         },
         {
-          text: 'Terms and Conditions',
+          text: this.terms,
           style: 'sectionHeader'
         },
         {
-            ul: [
-              'Order can be return in max 10 days.',
-              'Warrenty of the product will be subject to the manufacturer terms and conditions.',
-              'This is system generated invoices.',
-            ],
+          ul: this.termsList.split('\n').filter((item :any) => item.trim() !== ''),
         }
       ],
       styles: {
@@ -214,37 +220,39 @@ export class  CreateinvoiceComponent {
           bold: true,
           decoration: 'underline',
           fontSize: 14,
-          margin: [0, 15,0, 15]          
+          margin: [0, 15, 0, 15]
         }
       }
     };
 
-    if(action==='download'){
+    if (action === 'download') {
       pdfMake.createPdf(docDefinition).download();
-    }else if(action === 'print'){
-      pdfMake.createPdf(docDefinition).print();      
-    }else{
-      pdfMake.createPdf(docDefinition).open();      
+    } else if (action === 'print') {
+      pdfMake.createPdf(docDefinition).print();
+    } else {
+      pdfMake.createPdf(docDefinition).open();
     }
 
   }
 
-  addProduct(){
+  addProduct() {
     this.invoices.products.push(new Product());
+    this.calculateSubTotal()
   }
 
-  removeRow(rowIndex:any): void {
+  removeRow(rowIndex: any): void {
     this.invoices.products.splice(rowIndex, 1);
   }
 
-  discountChange(i:any) {
+  discountChange(i: any) {
     const discountValue = this.invoices.products[i].discount * (this.invoices.products[i].price * this.invoices.products[i].qty) / 100;
     this.invoices.products[i].total = (this.invoices.products[i].price * this.invoices.products[i].qty) - discountValue
+    this.calculateSubTotal()
   }
-  
 
-  sendPdfWhatsapp(){
-    let docDefinition:any = {
+
+  sendPdfWhatsapp() {
+    let docDefinition: any = {
       content: [
         {
           text: 'ELECTRONIC SHOP',
@@ -269,32 +277,30 @@ export class  CreateinvoiceComponent {
             [
               {
                 text: this.invoices.customerName,
-                bold:true
+                bold: true
               },
               { text: this.invoices.email },
               { text: this.invoices.contactNo },
               { text: this.invoices.address }
             ],
             [
-              // {
-              //   text: `Date: ${new Date().toLocaleString()}`,
-              //   alignment: 'right'
-              // },
-              // { 
-              //   text: `Bill No : ${((Math.random() *1000).toFixed(0))}`,
-              //   alignment: 'right'
-              // }
               {
                 text: this.invoices.billTo,
-                bold:true,
+                bold: true,
                 alignment: 'right'
               },
-              { text: this.invoices.billToEmail,
-                alignment: 'right' },
-              { text: this.invoices.billToContact,
-                alignment: 'right' },
-              { text: this.invoices.billToAddress,
-                alignment: 'right' }
+              {
+                text: this.invoices.billToEmail,
+                alignment: 'right'
+              },
+              {
+                text: this.invoices.billToContact,
+                alignment: 'right'
+              },
+              {
+                text: this.invoices.billToAddress,
+                alignment: 'right'
+              }
             ]
           ]
         },
@@ -308,8 +314,8 @@ export class  CreateinvoiceComponent {
             widths: ['*', 'auto', 'auto', 'auto'],
             body: [
               ['Product', 'Price', 'Quantity', 'Amount'],
-              ...this.invoices.products.map(p => ([p.name, p.price, p.qty, (p.price*p.qty).toFixed(2)])),
-              [{text: 'Total Amount', colSpan: 3}, {}, {}, this.invoices.products.reduce((sum, p)=> sum + (p.qty * p.price), 0).toFixed(2)]
+              ...this.invoices.products.map(p => ([p.name, p.price, p.qty, (p.price * p.qty).toFixed(2)])),
+              [{ text: 'Total Amount', colSpan: 3 }, {}, {}, this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2)]
             ]
           }
         },
@@ -318,13 +324,13 @@ export class  CreateinvoiceComponent {
           style: 'sectionHeader'
         },
         {
-            text: this.invoices.additionalDetails,
-            margin: [0, 0 ,0, 15]          
+          text: this.invoices.additionalDetails,
+          margin: [0, 0, 0, 15]
         },
         {
           columns: [
             [{ qr: `${this.invoices.customerName}`, fit: '50' }],
-            [{ text: 'Signature', alignment: 'right', italics: true}],
+            [{ text: 'Signature', alignment: 'right', italics: true }],
           ]
         },
         {
@@ -332,11 +338,11 @@ export class  CreateinvoiceComponent {
           style: 'sectionHeader'
         },
         {
-            ul: [
-              'Order can be return in max 10 days.',
-              'Warrenty of the product will be subject to the manufacturer terms and conditions.',
-              'This is system generated invoices.',
-            ],
+          ul: [
+            'Order can be return in max 10 days.',
+            'Warrenty of the product will be subject to the manufacturer terms and conditions.',
+            'This is system generated invoices.',
+          ],
         }
       ],
       styles: {
@@ -344,10 +350,10 @@ export class  CreateinvoiceComponent {
           bold: true,
           decoration: 'underline',
           fontSize: 14,
-          margin: [0, 15,0, 15]          
+          margin: [0, 15, 0, 15]
         }
       }
-    };    
+    };
 
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
     // Download PDF
@@ -361,16 +367,43 @@ export class  CreateinvoiceComponent {
 
   }
 
- openWhatsAppChat(message: string) {
-    // Prepare WhatsApp message with PDF upload link
-    // const message = encodeURIComponent(`Please open the link and upload the document: ${message}`);
+  openWhatsAppChat(message: string) {
     const url = `https://web.whatsapp.com/send?phone=${this.invoices.billToContact}&text=${message}`;
     // Open WhatsApp chat window
     window.open(url, '_blank');
   }
-  
-  closeDialog(): void {
-    // this.dialogRef.close({ event: 'Cancel' });
+
+  calculateTotalPrice(price: number, qty: number, discountPercentage: number): any {
+    const totalPrice = price * qty * (1 - discountPercentage / 100);
+    return totalPrice.toFixed(2);
   }
+
+  calculateSubTotal(): any {
+    let subTotal = 0;
+    for (const product of this.invoices.products) {
+      subTotal += product.price * product.qty * (1 - product.discount / 100);
+    }
+    return subTotal.toFixed(2) ? subTotal.toFixed(2) : 0;
+  }
+
+  calculateTotalDiscounts(): any {
+    let totalDiscounts = 0;
+    for (const product of this.invoices.products) {
+      totalDiscounts += product.discount;
+    }
+    return totalDiscounts ? totalDiscounts : 0;
+  }
+
+    handleLogoUpload(event: any) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.invoiceLogo = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
 }
 
