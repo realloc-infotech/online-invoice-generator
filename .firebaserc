@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "invoice-maker-aa79d"
+  },
+  "targets": {
+    "invoice-maker-aa79d": {
+      "hosting": {
+        "tr": [
+          "onlineinvoicegenerator"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
