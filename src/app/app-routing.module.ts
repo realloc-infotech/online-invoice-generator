@@ -4,6 +4,8 @@ import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { CreateinvoiceComponent } from './pages/theme-pages/createinvoice/createinvoice.component';
 import { AppLandingpageComponent } from './pages/theme-pages/landingpage/landingpage.component';
+import { CookieService } from 'ngx-cookie-service';
+
 
 const routes: Routes = [
 
@@ -40,5 +42,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
   ],
   exports: [RouterModule],
+  providers: [CookieService]
+
 })
 export class AppRoutingModule {}

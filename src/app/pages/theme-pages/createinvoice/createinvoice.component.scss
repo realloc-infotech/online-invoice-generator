@@ -1,70 +1,155 @@
 .cardWithShadow {
-    box-shadow: 0 3.2px 7.2px 0 rgb(0 0 0 / 13%), 0 0.6px 1.8px 0 rgb(0 0 0 / 11%);
+  box-shadow: 0 3.2px 7.2px 0 rgb(0 0 0 / 13%), 0 0.6px 1.8px 0 rgb(0 0 0 / 11%);
 }
 
 .m-r-10 {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
-  .edit {
-    margin-bottom: 8px;
+.edit {
+  margin-bottom: 8px;
 
-      input[type="text"] {
-        border: none;
-        background-color: transparent;
-        width: -webkit-fill-available;
-        outline: none;
-        padding: 0;
-        margin: 0;
-        font-size: inherit;
-        font-family: inherit;
-        color: inherit;
-        box-shadow: 0 3.2px 7.2px 0 rgb(0 0 0 / 13%), 0 0.6px 1.8px 0 rgb(0 0 0 / 11%);
-        padding: 10px 20px;
-        font-weight: 600;
-      }
-  } 
-
-  .w-120 {
-    width: 120px;
-  }
-  .termstextarea{
-    text-align: start;
-    display: flex;
-    flex-direction: column;
-  }
-
-
-  .upload-btn-wrapper {
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
-  }
-  
-  .btn {
-    display: inline-block;
-    outline: 0;
-    border: 0;
-    cursor: pointer;
+  input[type="text"] {
+    border: none;
+    background-color: transparent;
+    width: -webkit-fill-available;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    box-shadow: 0 3.2px 7.2px 0 rgb(0 0 0 / 13%), 0 0.6px 1.8px 0 rgb(0 0 0 / 11%);
+    padding: 10px 20px;
     font-weight: 600;
-    color: #fff;
-    font-size: 14px;
-    height: 38px;
-    padding: 8px 24px;
-    border-radius: 50px;
-    background-image: linear-gradient(180deg, #7c8aff, #5d87ff);
-    box-shadow: 0 4px 11px 0 rgb(37 44 97 / 15%), 0 1px 3px 0 rgb(93 100 148 / 20%);
-    transition: all .2s ease-out;
-    &:hover{
-        box-shadow: 0 8px 22px 0 rgb(37 44 97 / 15%), 0 4px 6px 0 rgb(93 100 148 / 20%);
-    }
-    
   }
-  
-  .upload-btn-wrapper input[type=file] {
-    font-size: 100px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
+}
+
+.w-120 {
+  width: 120px;
+}
+
+.termstextarea {
+  width: 50%;
+  text-align: start;
+  display: flex;
+  margin: 0 10px;
+  flex-direction: column;
+}
+
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.btn {
+  display: inline-block;
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  font-weight: 600;
+  color: #fff;
+  font-size: 14px;
+  height: 38px;
+  padding: 8px 24px;
+  border-radius: 50px;
+  background-image: linear-gradient(180deg, #7c8aff, #5d87ff);
+  box-shadow: 0 4px 11px 0 rgb(37 44 97 / 15%), 0 1px 3px 0 rgb(93 100 148 / 20%);
+  transition: all .2s ease-out;
+
+  &:hover {
+    box-shadow: 0 8px 22px 0 rgb(37 44 97 / 15%), 0 4px 6px 0 rgb(93 100 148 / 20%);
   }
+
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.table-responsive td {
+  padding: 5px !important;
+  text-align: center !important;
+}
+
+
+.table-responsive tr {
+  text-align: start;
+}
+
+::ng-deep #product .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding-top: 10px !important;
+}
+
+::ng-deep #product .mat-mdc-text-field-wrapper {
+  height: 40px !important;
+}
+
+::ng-deep #product .mat-mdc-form-field-flex {
+  height: 40px !important;
+}
+
+.sub-button {
+  display: flex;
+  align-items: center;
+  color: #5d87ff;
+  padding: 7px 0;
+  padding-left: 30px;
+  cursor: pointer;
+}
+
+.addbutton {
+  button {
+    cursor: pointer;
+    outline: 0;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    color: #0d6efd;
+    border-color: #0d6efd;
+    display: flex;
+    font-size: 12px;
+    margin: 10px;
+  }
+}
+
+.nots-term {
+  position: absolute;
+  display: flex;
+  top: 74%;
+  justify-content: space-between;
+  width: 60%;
+}
+
+.prefix {
+  color: black;
+  margin: 7px;
+}
+
+::ng-deep #billbox .mdc-text-field--outlined .mdc-notched-outline {
+  height: 45px;
+}
+
+
+::ng-deep #billbox .mdc-floating-label {
+  padding-bottom: 10px !important;
+}
+
+.show-text-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}

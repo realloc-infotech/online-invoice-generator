@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import { HttpClient } from '@angular/common/http';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 class Product {
@@ -48,23 +49,33 @@ export class CreateinvoiceComponent {
   subTotal = 0;
   vat = 0;
   grandTotal = 0;
-  termsList : ''
+  termsList: ''
+  notesList: ''
+  iscurrencyName: any = ''
   text: string = "Sub Total"; // Input text
   discount: any = "Discount"; // Input text
   shipping: any = "Shipping";
   gst: any = "Gst";
-  terms: any = "Terms";
+  terms: any = "Terms and conditions";
+  notes: any = "Notes";
   isEditing: boolean = false;
   isDiscount: boolean = false;
   isShipping: boolean = false;
   isGst: boolean = false;
   isTerms: boolean = false;
+  isNotes: boolean = false;
   invoiceLogo: string | ArrayBuffer | null = null;
-
-
+  isvisibleButton: boolean = false
+  isvisibleShippingButton: boolean = false
+  isvisibleTaxButton: boolean = false
+  totalDiscount: any = 0
+  totalShipping: any = 0
+  taxRate: any = 0
+  currencyList: any = []
   constructor(
     private fb: UntypedFormBuilder,
     private router: Router,
+    private http: HttpClient,
     // public dialogRef: MatDialogRef<CreateinvoiceComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
 
@@ -74,6 +85,15 @@ export class CreateinvoiceComponent {
     this.rows = this.fb.array([]);
     this.addForm.addControl('rows', this.rows);
     this.rows.push(this.createItemFormGroup());
+
+    this.http.get<any>('../../../../assets/currency/Currency.json').subscribe(
+      data => {
+        this.currencyList = data
+      },
+      error => {
+        console.log('Error fetching JSON data:', error);
+      }
+    );
   }
 
   ////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +101,7 @@ export class CreateinvoiceComponent {
     this.rows.push(this.createItemFormGroup());
   }
 
-  closeImg(){
+  closeImg() {
     this.invoiceLogo = ''
   }
 
@@ -127,10 +147,12 @@ export class CreateinvoiceComponent {
 
   generatePDF(action = 'open') {
     let docDefinition: any = {
+      pageSize: 'A4',
+      pageMargins: [40, 60, 40, 60], // [left, top, right, bottom]
       content: [
         {
-          image: this.invoiceLogo, // Add uploaded logo
-          width: 100, // Adjust width as needed
+          image: this.invoiceLogo,
+          width: 100,
           alignment: 'center',
           margin: [0, 10]
         },
@@ -140,7 +162,8 @@ export class CreateinvoiceComponent {
           bold: true,
           alignment: 'center',
           decoration: 'underline',
-          color: 'skyblue'
+          color: 'skyblue',
+          margin: [0, 0, 0, 20] // Add some space after the title
         },
         {
           text: 'Customer Details',
@@ -149,47 +172,32 @@ export class CreateinvoiceComponent {
         {
           columns: [
             [
-              {
-                text: this.invoices.customerName,
-                bold: true
-              },
+              { text: this.invoices.customerName, bold: true },
               { text: this.invoices.email },
               { text: this.invoices.contactNo },
               { text: this.invoices.address }
             ],
             [
-              {
-                text: this.invoices.billTo,
-                bold: true,
-                alignment: 'right'
-              },
-              {
-                text: this.invoices.billToEmail,
-                alignment: 'right'
-              },
-              {
-                text: this.invoices.billToContact,
-                alignment: 'right'
-              },
-              {
-                text: this.invoices.billToAddress,
-                alignment: 'right'
-              }
+              { text: this.invoices.billTo, bold: true, alignment: 'right' },
+              { text: this.invoices.billToEmail, alignment: 'right' },
+              { text: this.invoices.billToContact, alignment: 'right' },
+              { text: this.invoices.billToAddress, alignment: 'right' }
             ]
           ]
         },
         {
           text: 'Order Details',
-          style: 'sectionHeader'
+          style: 'sectionHeader',
+          margin: [0, 20, 0, 10] // Add space before and after the section
         },
         {
           table: {
             headerRows: 1,
-            widths: ['*', 'auto', 'auto',  'auto' , 'auto'],
+            widths: ['*', 'auto', 'auto', 'auto', 'auto'],
             body: [
-              ['Product', 'Price', 'Quantity','Discount', 'Amount'],
-              ...this.invoices.products.map(p => ([p.name, p.price, p.qty, p.discount ,this.calculateTotalPrice(p.price , p.qty , p.discount)])),
-              [{ text: 'Total Amount', colSpan: 3 }, {}, {}, {} ,this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2)]
+              ['Product', 'Price', 'Quantity', 'Discount', 'Amount'],
+              ...this.invoices.products.map(p => ([p.name, p.price, p.qty, p.discount, this.calculateTotalPrice(p.price, p.qty, p.discount)])),
+              [{ text: 'Total Amount', colSpan: 3 }, {}, {}, {}, this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2)]
             ]
           }
         },
@@ -204,15 +212,25 @@ export class CreateinvoiceComponent {
         {
           columns: [
             [{ qr: `${this.invoices.customerName}`, fit: '50' }],
-            [{ text: 'Signature', alignment: 'right', italics: true }],
+            [{ text: 'Signature', alignment: 'right', italics: true }]
           ]
         },
         {
-          text: this.terms,
-          style: 'sectionHeader'
+          text: 'Terms',
+          style: 'sectionHeader',
+          margin: [0, 20, 0, 5] // Add space before and after the section
         },
         {
-          ul: this.termsList.split('\n').filter((item :any) => item.trim() !== ''),
+          ul: this.termsList.split('\n').filter((item: any) => item.trim() !== ''),
+          margin: [0, 0, 0, 10] // Add space after the list
+        },
+        {
+          text: 'Notes',
+          style: 'sectionHeader',
+          margin: [0, 0, 0, 5] // Add space before and after the section
+        },
+        {
+          ul: this.notesList.split('\n').filter((item: any) => item.trim() !== '')
         }
       ],
       styles: {
@@ -220,10 +238,11 @@ export class CreateinvoiceComponent {
           bold: true,
           decoration: 'underline',
           fontSize: 14,
-          margin: [0, 15, 0, 15]
+          margin: [0, 15, 0, 5] // Adjust top and bottom margins
         }
       }
     };
+    
 
     if (action === 'download') {
       pdfMake.createPdf(docDefinition).download();
@@ -381,29 +400,52 @@ export class CreateinvoiceComponent {
   calculateSubTotal(): any {
     let subTotal = 0;
     for (const product of this.invoices.products) {
-      subTotal += product.price * product.qty * (1 - product.discount / 100);
+      subTotal += product.price * product.qty;
     }
+
     return subTotal.toFixed(2) ? subTotal.toFixed(2) : 0;
   }
 
-  calculateTotalDiscounts(): any {
-    let totalDiscounts = 0;
+  grandTotalNumer() {
+    let grandTotal = 0;
     for (const product of this.invoices.products) {
-      totalDiscounts += product.discount;
+      grandTotal += product.price * product.qty * (1 - this.totalDiscount / 100);
     }
-    return totalDiscounts ? totalDiscounts : 0;
+    grandTotal += this.totalShipping;
+    const taxAmount = grandTotal * (this.taxRate / 100);
+    grandTotal += taxAmount;
+    return grandTotal.toFixed(2);
   }
 
-    handleLogoUpload(event: any) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.invoiceLogo = reader.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    }
+  discountShow() {
+    this.isvisibleButton = false
+    this.totalDiscount = 0
+  }
 
+  shippingShow() {
+    this.isvisibleShippingButton = false
+    this.totalShipping = 0
+  }
+
+  taxRateShow() {
+    this.isvisibleTaxButton = false
+    this.taxRate = 0
+  }
+
+
+  handleLogoUpload(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.invoiceLogo = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  getsymbol(data: any) {
+    return `${data.code} (${data.symbol_native})`
+  }
 }
 
