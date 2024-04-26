@@ -28,6 +28,14 @@
     color: #2a3547;
     font-size: 14px;
 }
+
+.contact-info-reserved {
+    line-height: 20px;
+    transition: all 0.5s;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: #2a3547;
+    font-size: 12px;
+}
 .list-unstyled{
     list-style-type: none;
 }
@@ -63,4 +71,24 @@
     bottom: 0;
     display: block;
     border-bottom: 3px solid #5d87ff;
+}
+
+.footer-heading-terms {
+    position: relative;
+    padding-bottom: 12px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: #2a3547;
+    font-size: 15px;
+    line-height: 1.334rem;
+}
+
+.footer-heading-terms:after {
+    content: '';
+    width: 50px;
+    border-bottom: 1px solid #FFF;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    border-bottom: 3px solid #f6f9fc;
 }
