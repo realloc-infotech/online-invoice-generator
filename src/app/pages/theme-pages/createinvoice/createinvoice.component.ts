@@ -55,6 +55,7 @@ export class CreateinvoiceComponent {
   text: string = "Sub Total"; // Input text
   discount: any = "Discount"; // Input text
   shipping: any = "Shipping";
+  mainTitle: any = "INVOICE";
   gst: any = "Gst";
   terms: any = "Terms and conditions";
   notes: any = "Notes";
@@ -64,6 +65,7 @@ export class CreateinvoiceComponent {
   isGst: boolean = false;
   isTerms: boolean = false;
   isNotes: boolean = false;
+  isTitle: boolean = false;
   invoiceLogo: string | ArrayBuffer | null = null;
   isvisibleButton: boolean = false
   isvisibleShippingButton: boolean = false
@@ -160,33 +162,39 @@ export class CreateinvoiceComponent {
           text: 'INVOICE',
           fontSize: 20,
           bold: true,
-          alignment: 'center',
-          decoration: 'underline',
-          color: 'skyblue',
+          alignment: 'start',
+          color: 'green',
           margin: [0, 0, 0, 20] // Add some space after the title
         },
         {
-          text: 'Customer Details',
-          style: 'sectionHeader'
-        },
-        {
           columns: [
-            [
-              { text: this.invoices.customerName, bold: true },
-              { text: this.invoices.email },
-              { text: this.invoices.contactNo },
-              { text: this.invoices.address }
-            ],
-            [
-              { text: this.invoices.billTo, bold: true, alignment: 'right' },
-              { text: this.invoices.billToEmail, alignment: 'right' },
-              { text: this.invoices.billToContact, alignment: 'right' },
-              { text: this.invoices.billToAddress, alignment: 'right' }
-            ]
-          ]
+            // Customer Details on the left
+            {
+              width: '*',
+              text: [
+                { text: 'Customer Details\n', style: 'sectionHeader' },
+                { text: this.invoices.customerName + '\n', bold: true },
+                this.invoices.email + '\n',
+                this.invoices.contactNo + '\n',
+                this.invoices.address
+              ]
+            },
+            // Bill Details on the right
+            {
+              width: '*',
+              text: [
+                { text: 'Bill Details\n', style: 'sectionHeader' },
+                { text: this.invoices.billTo + '\n', bold: true },
+                this.invoices.billToEmail + '\n',
+                this.invoices.billToContact + '\n',
+                this.invoices.billToAddress
+              ]
+            }
+          ],
+          margin: [0, 0, 0, 20] // Add space after the columns
         },
         {
-          text: 'Order Details',
+          text: 'Product Details',
           style: 'sectionHeader',
           margin: [0, 20, 0, 10] // Add space before and after the section
         },
@@ -195,9 +203,21 @@ export class CreateinvoiceComponent {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto', 'auto'],
             body: [
-              ['Product', 'Price', 'Quantity', 'Discount', 'Amount'],
-              ...this.invoices.products.map(p => ([p.name, p.price, p.qty, p.discount, this.calculateTotalPrice(p.price, p.qty, p.discount)])),
-              [{ text: 'Total Amount', colSpan: 3 }, {}, {}, {}, this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2)]
+              [
+                { text: 'Product', style: 'tableHeader', border: [] },
+                { text: 'Price', style: 'tableHeader', border: [] },
+                { text: 'Quantity', style: 'tableHeader', border: [] },
+                { text: 'Discount', style: 'tableHeader', border: [] },
+                { text: 'Amount', style: 'tableHeader', border: [] }
+              ],
+              ...this.invoices.products.map(p => ([
+                { text: p.name, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] },
+                { text: p.price, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] },
+                { text: p.qty, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] },
+                { text: p.discount, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] },
+                { text: this.calculateTotalPrice(p.price, p.qty, p.discount), fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] }
+              ])),
+              // [{ text: 'Total Amount', colSpan: 3, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] }, {}, {}, {}, { text: this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2), fillColor: '#eceff7' , border: [] }]
             ]
           }
         },
@@ -236,9 +256,17 @@ export class CreateinvoiceComponent {
       styles: {
         sectionHeader: {
           bold: true,
-          decoration: 'underline',
           fontSize: 14,
+          color: 'green',
           margin: [0, 15, 0, 5] // Adjust top and bottom margins
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 14,
+          fillColor: 'green',
+          color: 'white',
+          alignment: 'center',
+          margin: [5, 5, 5, 5]
         }
       }
     };
