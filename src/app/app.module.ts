@@ -28,13 +28,35 @@ import { CreateinvoiceComponent } from './pages/theme-pages/createinvoice/create
 import { ThmHeaderComponent } from './pages/theme/thm-header/thm-header.component';
 import { ThmFooterComponent } from './pages/theme/thm-footer/thm-footer.component';
 import { AppLandingpageComponent } from './pages/theme-pages/landingpage/landingpage.component';
+import { PrivacypolicyComponent } from './pages/resources/privacypolicy/privacypolicy.component';
+import { TermsofserviceComponent } from './pages/resources/termsofservice/termsofservice.component';
+
+import { HelpPageComponent } from './pages/resources/help-page/help-page.component';
+import { InvoicingGuideComponent } from './pages/resources/invoicing-guide/invoicing-guide.component';
+import { GettingPaidComponent } from './pages/resources/invoicing-guide/getting-paid/getting-paid.component';
+import { CreatingInvoicesComponent } from './pages/resources/invoicing-guide/creating-invoices/creating-invoices.component';
+import { SendingInvoicesComponent } from './pages/resources/invoicing-guide/sending-invoices/sending-invoices.component';
+import { BestPracticesComponent } from './pages/resources/invoicing-guide/best-practices/best-practices.component';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
 }
 
 @NgModule({
-  declarations: [AppComponent, BlankComponent, FilterPipe , ThmHeaderComponent , ThmFooterComponent],
+  declarations: [AppComponent,
+    BlankComponent,
+    FilterPipe,
+    ThmHeaderComponent,
+    ThmFooterComponent,
+    PrivacypolicyComponent,
+    TermsofserviceComponent,
+    HelpPageComponent,
+    InvoicingGuideComponent,
+    GettingPaidComponent,
+    CreatingInvoicesComponent,
+    SendingInvoicesComponent,
+    BestPracticesComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -52,9 +74,9 @@ export function HttpLoaderFactory(http: HttpClient): any {
       },
     }),
     NgScrollbarModule,
-    FullComponent,
+    FullComponent
   ],
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

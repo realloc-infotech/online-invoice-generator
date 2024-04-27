@@ -1,10 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { CreateinvoiceComponent } from './pages/theme-pages/createinvoice/createinvoice.component';
 import { AppLandingpageComponent } from './pages/theme-pages/landingpage/landingpage.component';
 import { CookieService } from 'ngx-cookie-service';
+import { TermsofserviceComponent } from './pages/resources/termsofservice/termsofservice.component';
+import { PrivacypolicyComponent } from './pages/resources/privacypolicy/privacypolicy.component';
+import { HelpPageComponent } from './pages/resources/help-page/help-page.component';
+import { InvoicingGuideComponent } from './pages/resources/invoicing-guide/invoicing-guide.component';
+import { GettingPaidComponent } from './pages/resources/invoicing-guide/getting-paid/getting-paid.component';
+import { CreatingInvoicesComponent } from './pages/resources/invoicing-guide/creating-invoices/creating-invoices.component';
+import { SendingInvoicesComponent } from './pages/resources/invoicing-guide/sending-invoices/sending-invoices.component';
+import { BestPracticesComponent } from './pages/resources/invoicing-guide/best-practices/best-practices.component';
 
 
 const routes: Routes = [
@@ -34,6 +41,38 @@ const routes: Routes = [
   {
     path: '**',
     redirectTo: 'authentication/error',
+  },
+  {
+    path : 'terms',
+    component :TermsofserviceComponent
+  },
+  {
+    path : 'privacy',
+    component :PrivacypolicyComponent
+  },
+  {
+    path : 'help',
+    component : HelpPageComponent
+  },
+  {
+    path : 'guide',
+    component : InvoicingGuideComponent
+  },
+  {
+    path : 'guide/getting-paid',
+    component : GettingPaidComponent
+  },
+  {
+    path : 'guide/creating-invoices',
+    component : CreatingInvoicesComponent
+  },
+  {
+    path : 'guide/sending-invoices',
+    component : SendingInvoicesComponent
+  },
+  {
+    path : 'guide/best-practices',
+    component : BestPracticesComponent
   },
 ];
 

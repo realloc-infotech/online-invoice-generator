@@ -59,12 +59,12 @@ export class ThmHeaderComponent {
     {
       id: 1,
       title: 'Invoicing Guide',
-      link: '',
+      link: '/guide',
     },
     {
       id: 2,
       title: 'How to Use',
-      link: '',
+      link: '/help',
     },
     {
       id: 3,

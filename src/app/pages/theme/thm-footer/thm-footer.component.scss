@@ -27,6 +27,10 @@
     font-family: "Plus Jakarta Sans", sans-serif;
     color: #2a3547;
     font-size: 14px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .contact-info-reserved {

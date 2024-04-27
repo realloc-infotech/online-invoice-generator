@@ -17,8 +17,8 @@
                     <div class="">
                         <h6 class="footer-heading">RESOURCES</h6>
                         <ul class="list-unstyled footer-link mt-4 p-0">
-                            <li><a href="">Invoicing Guide</a></li>
-                            <li><a href="">How to Use</a></li>
+                            <li><a href="" [routerLink]="['/guide']">Invoicing Guide</a></li>
+                            <li><a href="" [routerLink]="['/help']">How to Use</a></li>
                             <li><a href="">Sign In</a></li>
                             <li><a href="">Sign Up</a></li>
                             <li><a href="">Release Notes</a></li>
@@ -31,8 +31,8 @@
                     <div class="">
                         <h6 class="footer-heading-terms"></h6>
                         <p class="contact-info-reserved">©2024 Realloc Infotech PVT LTD. All Right Reserved.</p>
-                        <p class="contact-info">Terms of Service</p>
-                        <p class="contact-info">Privacy Policy</p>
+                        <p class="contact-info" routerLink="/privacy">Privacy Policy</p>
+                        <p class="contact-info" routerLink="/terms">Terms of Service</p>
                     </div>
                 </div>
             </div>
