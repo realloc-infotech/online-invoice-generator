@@ -28,6 +28,28 @@
                             (keydown.enter)="isTitle = false" (blur)="isTitle = false">
                         </ng-template>
                       </div>
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <mat-form-field class="w-100 h-60" appearance="outline">
+                            <input matInput [matDatepicker]="touchpicker" [readonly]="true" placeholder="bill date" [value]="todayDate | date:'yyyy-MM-dd'"/>
+                            <mat-datepicker-toggle matIconSuffix [for]="touchpicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #touchpicker></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                          <div (mouseenter)="isInvoiceId = true" (mouseleave)="isInvoiceId = false" class="edit m-b-5">
+                            <ng-container *ngIf="!isInvoiceId; else invoiceIdField">
+                              <h5 class="f-w-600 f-s-24 m-0 p-0 text-right h-55 d-flex justify-content-end align-items-center" style="padding: 10px 20px !important;">#{{ invoiceId }}
+                              </h5>
+                            </ng-container>
+                            <ng-template #invoiceIdField>
+                              <input type="text" class="m-b-5 f-w-600 f-s-16 h-55 text-right" [(ngModel)]="invoiceId" [ngModelOptions]="{standalone: true}"
+                                (keydown.enter)="isInvoiceId = false" (blur)="isInvoiceId = false">
+                            </ng-template>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
       

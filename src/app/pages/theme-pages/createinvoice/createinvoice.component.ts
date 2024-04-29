@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { HttpClient } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 class Product {
@@ -52,6 +53,8 @@ export class CreateinvoiceComponent {
   termsList: ''
   notesList: ''
   iscurrencyName: any = ''
+  isInvoiceId : boolean = false
+  invoiceId :any =  1
   text: string = "Sub Total"; // Input text
   discount: any = "Discount"; // Input text
   shipping: any = "Shipping";
@@ -74,11 +77,13 @@ export class CreateinvoiceComponent {
   totalShipping: any = 0
   taxRate: any = 0
   currencyList: any = []
-
+  // invoiceDate : any  = ''
+  todayDate: Date = new Date();
   totalTextData: any = []
 
   constructor(
     private fb: UntypedFormBuilder,
+    private datePipe: DatePipe,
     private router: Router,
     private http: HttpClient,
     // public dialogRef: MatDialogRef<CreateinvoiceComponent>,
@@ -212,13 +217,33 @@ export class CreateinvoiceComponent {
           alignment: 'center',
           margin: [0, 10]
         },
-        {
-          text: this.mainTitle,
-          fontSize: 20,
-          bold: true, 
-          alignment: 'start',
-          color: 'green',
-          margin: [0, 0, 0, 20] // Add some space after the title
+          {
+          columns: [
+            [
+              {
+                text: this.invoiceId,
+                fontSize: 20,
+                bold: true, 
+                alignment: 'start',
+                color: 'green',
+                margin: [0, 0, 0, 10] // Add some space after the title
+              },
+              {
+                text:  this.formatDate(this.todayDate), // Add invoice date here
+                fontSize: 14,
+                alignment: 'start',
+                margin: [0, 0, 0, 20] // Add some space after the invoice date
+              }
+            ],
+            [ {
+              text: this.mainTitle,
+              fontSize: 20,
+              bold: true,
+              alignment: 'right',
+              color: 'green',
+              margin: [0, 0, 0, 20] // Add some space after the title
+            },]
+          ]
         },
         {
           columns: [
@@ -341,6 +366,10 @@ export class CreateinvoiceComponent {
       pdfMake.createPdf(docDefinition).open();
     }
 
+  }
+
+  formatDate(date: Date): string {
+    return this.datePipe.transform(date, 'yyyy-MM-dd') || '';
   }
 
   addProduct() {

@@ -37,6 +37,8 @@ import { GettingPaidComponent } from './pages/resources/invoicing-guide/getting-
 import { CreatingInvoicesComponent } from './pages/resources/invoicing-guide/creating-invoices/creating-invoices.component';
 import { SendingInvoicesComponent } from './pages/resources/invoicing-guide/sending-invoices/sending-invoices.component';
 import { BestPracticesComponent } from './pages/resources/invoicing-guide/best-practices/best-practices.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { DatePipe } from '@angular/common';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -74,9 +76,11 @@ export function HttpLoaderFactory(http: HttpClient): any {
       },
     }),
     NgScrollbarModule,
-    FullComponent
+    FullComponent,
+    MatNativeDateModule
   ],
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],
+  providers : [DatePipe]
 })
 export class AppModule { }
