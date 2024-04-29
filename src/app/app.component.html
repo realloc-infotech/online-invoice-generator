@@ -5,7 +5,8 @@
 
 
 <div *ngIf="!cookieExists" style="background-color: #5d87ff; height: 80px; position: fixed; z-index: 1; bottom: 0; width: 100%;" [@bottomToTop]>
-    <div class="container" style="text-align: end; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: end;">
+    <div class="container" style="text-align: end; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between;">
+        <span class="cookies">This website uses cookies to improve your experience. By continuing to browse, you agree to our use of cookies.</span>
         <button class="m-r-10" style="background-color: #ffffff; color: #000; font-weight: 500;" color="primary"
             mat-stroked-button (click)="setCookies()">
             Accept Cookies

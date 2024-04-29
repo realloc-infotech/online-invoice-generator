@@ -2,6 +2,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
+import { InvoiceService } from './pages/theme/service/invoice.service';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,9 @@ export class AppComponent {
   isOpen = false;
   cookieExists:any;
 
-  constructor(public translate: TranslateService, private cookieService: CookieService) {
+  constructor(public translate: TranslateService, 
+    private cookieService: CookieService,
+  private invoiceService : InvoiceService) {
     translate.addLangs(['en', 'fr','es','de']);
     translate.setDefaultLang('en');
 
@@ -34,6 +37,7 @@ export class AppComponent {
     if(!this.cookieExists) {
       this.cookieService.set('invoice', 'name : "Manish Savaliya"');
       this.cookieExists = true;
+      this.invoiceService.setData(this.cookieExists)
     }
   }
 

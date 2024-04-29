@@ -6,6 +6,8 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { InvoiceService } from '../../theme/service/invoice.service';
+import { CookieService } from 'ngx-cookie-service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 class Product {
@@ -96,6 +98,8 @@ export class CreateinvoiceComponent {
   constructor(
     private fb: UntypedFormBuilder,
     private datePipe: DatePipe,
+    private invoiceService :InvoiceService,
+    private cookieService :CookieService,
     private router: Router,
     private http: HttpClient,
     // public dialogRef: MatDialogRef<CreateinvoiceComponent>,
@@ -116,6 +120,22 @@ export class CreateinvoiceComponent {
         console.log('Error fetching JSON data:', error);
       }
     );
+
+    if(this.cookieService.get('invoice')){
+      const value = JSON?.parse(this.cookieService.get('invoice'))
+  
+      if(value) {
+        this.invoiceLogo = value?.logoUrl
+        this.mainTitle = value?.title
+        this.invoiceId = value?.id + 1
+        this.invoices.customerName = value?.billFrom
+        this.invoices.email = value?.emailId
+        this.invoices.address = value?.fromAddress
+        this.invoices.contactNo = value?.contactNo
+        this.termsList = value?.termsConditions
+        this.notesList = value?.notes
+      }
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////////////
@@ -363,6 +383,22 @@ export class CreateinvoiceComponent {
       }
     };
     
+
+    if(this.invoiceService.getData()) {
+      const data = {
+        logoUrl : this.invoiceLogo,
+        title : this.mainTitle,
+        id : this.invoiceId,
+        billFrom : this.invoices.customerName,
+        emailId : this.invoices.email,
+        fromAddress : this.invoices.address,
+        contactNo : this.invoices.contactNo,
+        termsConditions : this.termsList,
+        notes : this.notesList
+      }
+  
+      this.cookieService.set('invoice', JSON.stringify(data));
+    }
 
     if (action === 'download') {
       pdfMake.createPdf(docDefinition).download(`${this.invoiceId}/${this.invoices.billTo}`);
