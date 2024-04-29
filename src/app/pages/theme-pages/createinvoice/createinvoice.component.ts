@@ -74,6 +74,9 @@ export class CreateinvoiceComponent {
   totalShipping: any = 0
   taxRate: any = 0
   currencyList: any = []
+
+  totalTextData: any = []
+
   constructor(
     private fb: UntypedFormBuilder,
     private router: Router,
@@ -148,6 +151,57 @@ export class CreateinvoiceComponent {
 
 
   generatePDF(action = 'open') {
+    this.totalTextData = []
+    this.totalTextData.push(
+      {
+        text: `Sub Total: ${this.iscurrencyName.split(" ")[0]} ${this.calculateSubTotal()}/- \n`,
+        bold: true,
+        margin: [0, 5],
+        lineHeight: 1.5
+      },
+    )
+    if (this.isvisibleButton) {
+      this.totalTextData.push(
+        {
+          text: `Discount: ${this.totalDiscount}% \n`,
+          bold: true,
+          margin: [0, 5],
+          lineHeight: 1.5
+        },
+      )
+    }
+
+    if (this.isvisibleShippingButton) {
+      this.totalTextData.push(
+        {
+          text: `Shipping: ${this.iscurrencyName.split(" ")[1]} ${this.totalShipping}/- \n`,
+          bold: true,
+          margin: [0, 5],
+          lineHeight: 1.5
+        },
+      )
+    }
+
+    if (this.isvisibleTaxButton) {
+      this.totalTextData.push(
+        {
+          text: `Tax: ${this.iscurrencyName.split(" ")[0]} ${this.taxRate}% \n`,
+          bold: true,
+          margin: [0, 5],
+          lineHeight: 1.5
+        },
+      )
+    }
+
+    this.totalTextData.push(
+      {
+        text: `Grand Total: ${this.iscurrencyName.split(" ")[0]} ${this.grandTotalNumer()}/- \n`,
+        bold: true,
+        margin: [0, 5],
+        lineHeight: 1.5
+      },
+    )
+    
     let docDefinition: any = {
       pageSize: 'A4',
       pageMargins: [40, 60, 40, 60], // [left, top, right, bottom]
@@ -159,9 +213,9 @@ export class CreateinvoiceComponent {
           margin: [0, 10]
         },
         {
-          text: 'INVOICE',
+          text: this.mainTitle,
           fontSize: 20,
-          bold: true,
+          bold: true, 
           alignment: 'start',
           color: 'green',
           margin: [0, 0, 0, 20] // Add some space after the title
@@ -171,6 +225,7 @@ export class CreateinvoiceComponent {
             // Customer Details on the left
             {
               width: '*',
+              alignment: 'left',
               text: [
                 { text: 'Customer Details\n', style: 'sectionHeader' },
                 { text: this.invoices.customerName + '\n', bold: true },
@@ -182,6 +237,7 @@ export class CreateinvoiceComponent {
             // Bill Details on the right
             {
               width: '*',
+              alignment: 'right',
               text: [
                 { text: 'Bill Details\n', style: 'sectionHeader' },
                 { text: this.invoices.billTo + '\n', bold: true },
@@ -191,7 +247,7 @@ export class CreateinvoiceComponent {
               ]
             }
           ],
-          margin: [0, 0, 0, 20] // Add space after the columns
+          // margin: [0, 0, 0, 20] // Add space after the columns
         },
         {
           text: 'Product Details',
@@ -201,40 +257,45 @@ export class CreateinvoiceComponent {
         {
           table: {
             headerRows: 1,
-            widths: ['*', 'auto', 'auto', 'auto', 'auto'],
+            widths: ['*', 'auto', 'auto', 'auto'],
             body: [
               [
                 { text: 'Product', style: 'tableHeader', border: [] },
                 { text: 'Price', style: 'tableHeader', border: [] },
                 { text: 'Quantity', style: 'tableHeader', border: [] },
-                { text: 'Discount', style: 'tableHeader', border: [] },
                 { text: 'Amount', style: 'tableHeader', border: [] }
               ],
               ...this.invoices.products.map(p => ([
-                { text: p.name, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] },
-                { text: p.price, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] },
-                { text: p.qty, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] },
-                { text: p.discount, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] },
-                { text: this.calculateTotalPrice(p.price, p.qty, p.discount), fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] }
+                { text: p.name, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] },
+                { text: p.price, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] , alignment: 'center',},
+                { text: p.qty, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] ,alignment: 'center', },
+                { text: this.calculateTotalPrice(p.price, p.qty, p.discount), fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] , alignment: 'center', }
               ])),
               // [{ text: 'Total Amount', colSpan: 3, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] }, {}, {}, {}, { text: this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2), fillColor: '#eceff7' , border: [] }]
             ]
           }
         },
+        // {
+        //   text: 'Additional Details',
+        //   style: 'sectionHeader'
+        // },
+
         {
-          text: 'Additional Details',
-          style: 'sectionHeader'
-        },
-        {
-          text: this.invoices.additionalDetails,
-          margin: [0, 0, 0, 15]
-        },
-        {
+          margin: [0, 20, 0, 10],
           columns: [
-            [{ qr: `${this.invoices.customerName}`, fit: '50' }],
-            [{ text: 'Signature', alignment: 'right', italics: true }]
-          ]
-        },
+            {
+              width: '*',
+              alignment: 'right',
+              text : this.totalTextData
+            }
+          ],
+        },        
+        // {
+        //   columns: [
+        //     [{ qr: `${this.invoices.customerName}`, fit: '50' }],
+        //     [{ text: 'Signature', alignment: 'right', italics: true }]
+        //   ]
+        // },
         {
           text: 'Terms',
           style: 'sectionHeader',
@@ -261,12 +322,12 @@ export class CreateinvoiceComponent {
           margin: [0, 15, 0, 5] // Adjust top and bottom margins
         },
         tableHeader: {
-          bold: true,
-          fontSize: 14,
+          bold: false,
+          fontSize: 12,
           fillColor: 'green',
           color: 'white',
           alignment: 'center',
-          margin: [5, 5, 5, 5]
+          margin: [3, 3, 3, 3]
         }
       }
     };
@@ -299,105 +360,183 @@ export class CreateinvoiceComponent {
 
 
   sendPdfWhatsapp() {
+    this.totalTextData = []
+    this.totalTextData.push(
+      {
+        text: `Sub Total: ${this.iscurrencyName.split(" ")[0]} ${this.calculateSubTotal()}/- \n`,
+        bold: true,
+        margin: [0, 5],
+        lineHeight: 1.5
+      },
+    )
+    if (this.isvisibleButton) {
+      this.totalTextData.push(
+        {
+          text: `Discount: ${this.totalDiscount}% \n`,
+          bold: true,
+          margin: [0, 5],
+          lineHeight: 1.5
+        },
+      )
+    }
+
+    if (this.isvisibleShippingButton) {
+      this.totalTextData.push(
+        {
+          text: `Shipping: ${this.iscurrencyName.split(" ")[1]} ${this.totalShipping}/- \n`,
+          bold: true,
+          margin: [0, 5],
+          lineHeight: 1.5
+        },
+      )
+    }
+
+    if (this.isvisibleTaxButton) {
+      this.totalTextData.push(
+        {
+          text: `Tax: ${this.iscurrencyName.split(" ")[0]} ${this.taxRate}% \n`,
+          bold: true,
+          margin: [0, 5],
+          lineHeight: 1.5
+        },
+      )
+    }
+
+    this.totalTextData.push(
+      {
+        text: `Grand Total: ${this.iscurrencyName.split(" ")[0]} ${this.grandTotalNumer()}/- \n`,
+        bold: true,
+        margin: [0, 5],
+        lineHeight: 1.5
+      },
+    )
+    
     let docDefinition: any = {
+      pageSize: 'A4',
+      pageMargins: [40, 60, 40, 60], // [left, top, right, bottom]
       content: [
         {
-          text: 'ELECTRONIC SHOP',
-          fontSize: 16,
+          image: this.invoiceLogo,
+          width: 100,
           alignment: 'center',
-          color: '#047886'
+          margin: [0, 10]
         },
         {
-          text: 'INVOICE',
+          text: this.mainTitle,
           fontSize: 20,
-          bold: true,
-          alignment: 'center',
-          decoration: 'underline',
-          color: 'skyblue'
-        },
-        {
-          text: 'Customer Details',
-          style: 'sectionHeader'
+          bold: true, 
+          alignment: 'start',
+          color: 'green',
+          margin: [0, 0, 0, 20] // Add some space after the title
         },
         {
           columns: [
-            [
-              {
-                text: this.invoices.customerName,
-                bold: true
-              },
-              { text: this.invoices.email },
-              { text: this.invoices.contactNo },
-              { text: this.invoices.address }
-            ],
-            [
-              {
-                text: this.invoices.billTo,
-                bold: true,
-                alignment: 'right'
-              },
-              {
-                text: this.invoices.billToEmail,
-                alignment: 'right'
-              },
-              {
-                text: this.invoices.billToContact,
-                alignment: 'right'
-              },
-              {
-                text: this.invoices.billToAddress,
-                alignment: 'right'
-              }
-            ]
-          ]
+            // Customer Details on the left
+            {
+              width: '*',
+              alignment: 'left',
+              text: [
+                { text: 'Customer Details\n', style: 'sectionHeader' },
+                { text: this.invoices.customerName + '\n', bold: true },
+                this.invoices.email + '\n',
+                this.invoices.contactNo + '\n',
+                this.invoices.address
+              ]
+            },
+            // Bill Details on the right
+            {
+              width: '*',
+              alignment: 'right',
+              text: [
+                { text: 'Bill Details\n', style: 'sectionHeader' },
+                { text: this.invoices.billTo + '\n', bold: true },
+                this.invoices.billToEmail + '\n',
+                this.invoices.billToContact + '\n',
+                this.invoices.billToAddress
+              ]
+            }
+          ],
+          // margin: [0, 0, 0, 20] // Add space after the columns
         },
         {
-          text: 'Order Details',
-          style: 'sectionHeader'
+          text: 'Product Details',
+          style: 'sectionHeader',
+          margin: [0, 20, 0, 10] // Add space before and after the section
         },
         {
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
             body: [
-              ['Product', 'Price', 'Quantity', 'Amount'],
-              ...this.invoices.products.map(p => ([p.name, p.price, p.qty, (p.price * p.qty).toFixed(2)])),
-              [{ text: 'Total Amount', colSpan: 3 }, {}, {}, this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2)]
+              [
+                { text: 'Product', style: 'tableHeader', border: [] },
+                { text: 'Price', style: 'tableHeader', border: [] },
+                { text: 'Quantity', style: 'tableHeader', border: [] },
+                { text: 'Amount', style: 'tableHeader', border: [] }
+              ],
+              ...this.invoices.products.map(p => ([
+                { text: p.name, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] },
+                { text: p.price, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] , alignment: 'center',},
+                { text: p.qty, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] ,alignment: 'center', },
+                { text: this.calculateTotalPrice(p.price, p.qty, p.discount), fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] , alignment: 'center', }
+              ])),
+              // [{ text: 'Total Amount', colSpan: 3, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] }, {}, {}, {}, { text: this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2), fillColor: '#eceff7' , border: [] }]
             ]
           }
         },
+        // {
+        //   text: 'Additional Details',
+        //   style: 'sectionHeader'
+        // },
+
         {
-          text: 'Additional Details',
-          style: 'sectionHeader'
-        },
-        {
-          text: this.invoices.additionalDetails,
-          margin: [0, 0, 0, 15]
-        },
-        {
+          margin: [0, 20, 0, 10],
           columns: [
-            [{ qr: `${this.invoices.customerName}`, fit: '50' }],
-            [{ text: 'Signature', alignment: 'right', italics: true }],
-          ]
-        },
-        {
-          text: 'Terms and Conditions',
-          style: 'sectionHeader'
-        },
-        {
-          ul: [
-            'Order can be return in max 10 days.',
-            'Warrenty of the product will be subject to the manufacturer terms and conditions.',
-            'This is system generated invoices.',
+            {
+              width: '*',
+              alignment: 'right',
+              text : this.totalTextData
+            }
           ],
+        },        
+        // {
+        //   columns: [
+        //     [{ qr: `${this.invoices.customerName}`, fit: '50' }],
+        //     [{ text: 'Signature', alignment: 'right', italics: true }]
+        //   ]
+        // },
+        {
+          text: 'Terms',
+          style: 'sectionHeader',
+          margin: [0, 20, 0, 5] // Add space before and after the section
+        },
+        {
+          ul: this.termsList.split('\n').filter((item: any) => item.trim() !== ''),
+          margin: [0, 0, 0, 10] // Add space after the list
+        },
+        {
+          text: 'Notes',
+          style: 'sectionHeader',
+          margin: [0, 0, 0, 5] // Add space before and after the section
+        },
+        {
+          ul: this.notesList.split('\n').filter((item: any) => item.trim() !== '')
         }
       ],
       styles: {
         sectionHeader: {
           bold: true,
-          decoration: 'underline',
           fontSize: 14,
-          margin: [0, 15, 0, 15]
+          color: 'green',
+          margin: [0, 15, 0, 5] // Adjust top and bottom margins
+        },
+        tableHeader: {
+          bold: false,
+          fontSize: 12,
+          fillColor: 'green',
+          color: 'white',
+          alignment: 'center',
+          margin: [3, 3, 3, 3]
         }
       }
     };
