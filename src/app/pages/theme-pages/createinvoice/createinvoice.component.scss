@@ -28,6 +28,10 @@
 .all-btn {
   position: fixed;
   width: min-content;
+
+  button{
+    height: 33px !important;
+  }
 }
 
 .w-150 {
@@ -190,4 +194,28 @@
     position: relative;
     width: 100%;
   }
+}
+
+.color-option {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+.color-option-label {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #ccc;
+}
+
+::ng-deep .mdc-list-item__primary-text{
+  display: flex !important  ;
+  align-items: center !important;
+}
+
+::ng-deep .mat-mdc-form-field{
+  height: 65px !important;
 }

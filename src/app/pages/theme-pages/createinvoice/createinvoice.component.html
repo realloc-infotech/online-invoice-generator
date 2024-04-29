@@ -382,17 +382,17 @@
       </div>
      <div class="col-md-2 col-sm-12 col-xs-12">
        <div class="row m-t-20 all-btn">
-        <button class="m-b-20 w-100" color="primary" mat-flat-button
+        <button class="m-b-10 w-100" color="primary" mat-flat-button
           (click)="invoiceForm.valid ? generatePDF('download') : ''">
           Download Invoice
         </button>
-        <button class="m-b-20 w-100" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF('print') : ''">
+        <button class="m-b-10 w-100" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF('print') : ''">
           Print Invoice
         </button>
-        <button class="m-b-20 w-100" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF() : ''">
+        <button class="m-b-10 w-100" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF() : ''">
           Open Invoice
         </button>
-        <button class="m-b-20 w-100" color="primary" mat-flat-button (click)="sendPdfWhatsapp()">
+        <button class="m-b-10 w-100" color="primary" mat-flat-button (click)="sendPdfWhatsapp()">
           Send Pdf Whatsapp
         </button>
         <mat-form-field appearance="outline" class="w-100" id="billbox">
@@ -400,6 +400,14 @@
           <mat-select name="Currency" [(ngModel)]="iscurrencyName">
             <mat-option *ngFor="let currency of currencyList | keyvalue" [value]="getsymbol(currency.value)">
               {{getsymbol(currency.value)}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100" id="billbox">
+          <mat-label><span class="color-option-label" [style.background-color]="isInvoiceThemeColor"></span> Invoice Theme Color</mat-label>
+          <mat-select name="InvoiceThemeColor" [(ngModel)]="isInvoiceThemeColor">
+            <mat-option *ngFor="let item of invoiceThemeColorList" [value]="item.colorCode">
+              <span class="color-option" [style.background-color]="item.colorCode"></span>{{ item.colorCode }}
             </mat-option>
           </mat-select>
         </mat-form-field>

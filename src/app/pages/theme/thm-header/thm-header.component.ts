@@ -68,23 +68,23 @@ export class ThmHeaderComponent {
     },
     {
       id: 3,
-      title: 'Sign In',
-      link: '',
+      title: 'Invoice Format',
+      link: 'invoice-format-2',
     },
     {
       id: 4,
-      title: 'Sign Up',
-      link: '',
+      title: 'E-Invoicing',
+      link: 'e-invoices',
     },
     {
       id: 5,
-      title: 'Release Notes',
-      link: '',
+      title: 'Invoice Templates',
+      link: 'invoice-templates',
     },
     {
       id: 6,
-      title: 'Developer API',
-      link: '',
+      title: 'FIRC in India',
+      link: 'firc-india',
     },
   ];
 

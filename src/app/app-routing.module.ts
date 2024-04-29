@@ -12,6 +12,10 @@ import { GettingPaidComponent } from './pages/resources/invoicing-guide/getting-
 import { CreatingInvoicesComponent } from './pages/resources/invoicing-guide/creating-invoices/creating-invoices.component';
 import { SendingInvoicesComponent } from './pages/resources/invoicing-guide/sending-invoices/sending-invoices.component';
 import { BestPracticesComponent } from './pages/resources/invoicing-guide/best-practices/best-practices.component';
+import { EInvoicesComponent } from './pages/resources/e-invoices/e-invoices.component';
+import { FircReceiveForeignComponent } from './pages/resources/firc-receive-foreign/firc-receive-foreign.component';
+import { InvoiceFormatComponent } from './pages/resources/invoice-format/invoice-format.component';
+import { InvoiceTemplatesComponent } from './pages/resources/invoice-templates/invoice-templates.component';
 
 
 const routes: Routes = [
@@ -73,6 +77,22 @@ const routes: Routes = [
   {
     path : 'guide/best-practices',
     component : BestPracticesComponent
+  },
+  {
+    path : 'invoice-format-2',
+    component : InvoiceFormatComponent
+  },
+  {
+    path : 'e-invoices',
+    component : EInvoicesComponent
+  },
+  {
+    path : 'invoice-templates',
+    component : InvoiceTemplatesComponent
+  },  
+  {
+    path : 'firc-india',
+    component : FircReceiveForeignComponent
   },
 ];
 

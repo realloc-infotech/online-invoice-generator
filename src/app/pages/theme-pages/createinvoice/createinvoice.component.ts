@@ -80,6 +80,18 @@ export class CreateinvoiceComponent {
   // invoiceDate : any  = ''
   todayDate: Date = new Date();
   totalTextData: any = []
+  isInvoiceThemeColor : any
+  invoiceThemeColorList : any = [
+    {
+      colorCode : '#000'
+    },
+    {
+      colorCode : '#5d87ff'
+    },
+    {
+      colorCode : '#008000'
+    },
+  ] 
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -88,7 +100,7 @@ export class CreateinvoiceComponent {
     private http: HttpClient,
     // public dialogRef: MatDialogRef<CreateinvoiceComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
-
+      this.isInvoiceThemeColor = this.invoiceThemeColorList[0].colorCode
 
     this.addForm = this.fb.group({});
 
@@ -225,7 +237,7 @@ export class CreateinvoiceComponent {
                 fontSize: 20,
                 bold: true, 
                 alignment: 'start',
-                color: 'green',
+                color: this.isInvoiceThemeColor,
                 margin: [0, 0, 0, 10] // Add some space after the title
               },
               {
@@ -240,7 +252,7 @@ export class CreateinvoiceComponent {
               fontSize: 20,
               bold: true,
               alignment: 'right',
-              color: 'green',
+              color: this.isInvoiceThemeColor,
               margin: [0, 0, 0, 20] // Add some space after the title
             },]
           ]
@@ -314,13 +326,7 @@ export class CreateinvoiceComponent {
               text : this.totalTextData
             }
           ],
-        },        
-        // {
-        //   columns: [
-        //     [{ qr: `${this.invoices.customerName}`, fit: '50' }],
-        //     [{ text: 'Signature', alignment: 'right', italics: true }]
-        //   ]
-        // },
+        },
         {
           text: 'Terms',
           style: 'sectionHeader',
@@ -343,13 +349,13 @@ export class CreateinvoiceComponent {
         sectionHeader: {
           bold: true,
           fontSize: 14,
-          color: 'green',
+          color: this.isInvoiceThemeColor,
           margin: [0, 15, 0, 5] // Adjust top and bottom margins
         },
         tableHeader: {
           bold: false,
           fontSize: 12,
-          fillColor: 'green',
+          fillColor: this.isInvoiceThemeColor,
           color: 'white',
           alignment: 'center',
           margin: [3, 3, 3, 3]
@@ -359,7 +365,7 @@ export class CreateinvoiceComponent {
     
 
     if (action === 'download') {
-      pdfMake.createPdf(docDefinition).download();
+      pdfMake.createPdf(docDefinition).download(`${this.invoiceId}/${this.invoices.billTo}`);
     } else if (action === 'print') {
       pdfMake.createPdf(docDefinition).print();
     } else {
@@ -571,9 +577,7 @@ export class CreateinvoiceComponent {
     };
 
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-    // Download PDF
     pdfDocGenerator.getBlob((blob: Blob) => {
-      // Create WhatsApp message with PDF upload link
       const whatsappUrl = window.URL.createObjectURL(blob);
       const message = encodeURIComponent(`Please open the link and upload the document: ${whatsappUrl}`);
       this.openWhatsAppChat(message);
