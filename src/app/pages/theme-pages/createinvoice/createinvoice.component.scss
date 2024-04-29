@@ -181,6 +181,13 @@
   margin-top: 10px;
 }
 
-// @media only screen and (max-width: 1200px) {
- 
-// }
+@media only screen and (max-width: 960px) {
+  .rowFix{
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .all-btn{
+    position: relative;
+    width: 100%;
+  }
+}

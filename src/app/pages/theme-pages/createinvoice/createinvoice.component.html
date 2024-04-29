@@ -1,6 +1,6 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-10">
+  <div class="row rowFix">
+    <div class="col-md-10 col-sm-12 col-xs-12">
         <mat-sidenav-container class="cardWithShadow m-t-20">
           <mat-sidenav-content style="overflow: hidden;">
             <mat-card>
@@ -380,7 +380,7 @@
           </mat-sidenav-content>
         </mat-sidenav-container>
       </div>
-     <div class="col-md-2">
+     <div class="col-md-2 col-sm-12 col-xs-12">
        <div class="row m-t-20 all-btn">
         <button class="m-b-20 w-100" color="primary" mat-flat-button
           (click)="invoiceForm.valid ? generatePDF('download') : ''">
