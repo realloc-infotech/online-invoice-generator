@@ -79,8 +79,7 @@ export class CreateinvoiceComponent {
   totalShipping: any = 0
   taxRate: any = 0
   currencyList: any = []
-  // invoiceDate : any  = ''
-  todayDate: Date = new Date();
+  invoiceDate : Date  = new Date();
   totalTextData: any = []
   isInvoiceThemeColor : any
   invoiceThemeColorList : any = [
@@ -88,10 +87,31 @@ export class CreateinvoiceComponent {
       colorCode : '#000'
     },
     {
-      colorCode : '#5d87ff'
+      colorCode : '#1b476a'
     },
     {
-      colorCode : '#008000'
+      colorCode : '#28a352'
+    },
+    {
+      colorCode : '#f2ac33'
+    },
+    {
+      colorCode : '#fc7734'
+    },
+    {
+      colorCode : '#9051ba'
+    },
+    {
+      colorCode : '#be348a'
+    },
+    {
+      colorCode : '#ca2e55'
+    },
+    {
+      colorCode : '#5ed0aa'
+    },
+    {
+      colorCode : '#5d87ff'
     },
   ] 
 
@@ -261,7 +281,7 @@ export class CreateinvoiceComponent {
                 margin: [0, 0, 0, 10] // Add some space after the title
               },
               {
-                text:  this.formatDate(this.todayDate), // Add invoice date here
+                text:  this.formatDate(this.invoiceDate), // Add invoice date here
                 fontSize: 14,
                 alignment: 'start',
                 margin: [0, 0, 0, 20] // Add some space after the invoice date

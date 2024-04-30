@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row rowFix">
-    <div class="col-md-10 col-sm-12 col-xs-12">
+    <div class="col-md-12 col-sm-12 col-xs-12">
         <mat-sidenav-container class="cardWithShadow m-t-20">
           <mat-sidenav-content style="overflow: hidden;">
             <mat-card>
@@ -10,7 +10,7 @@
                     <div class="col-md-6">
                       <div class="upload-btn-wrapper" *ngIf="!invoiceLogo">
                         <button class="btn">Upload a Logo</button>
-                        <input type="file" name="myfile" (change)="handleLogoUpload($event)" />
+                        <input type="file" name="myfile" (change)="handleLogoUpload($event)" required />
                       </div>
                       <div *ngIf="invoiceLogo" style="position: relative; max-height: 60px; overflow: hidden; height: 60px; margin-bottom: 15px;">
                         <i-tabler name="square-rounded-x" (click)="closeImg()" class="icon-18" style="position: absolute; right: 0;"></i-tabler>
@@ -18,6 +18,28 @@
                       </div>
                     </div>
                     <div class="col-md-6">
+                      <div style="display: flex; justify-content: space-between;">
+                        <div class="m-r-10 w-100">
+                          <mat-form-field appearance="outline" class="w-100" id="billbox">
+                            <mat-label>Currency</mat-label>
+                            <mat-select name="Currency" [(ngModel)]="iscurrencyName" required>
+                              <mat-option *ngFor="let currency of currencyList | keyvalue" [value]="getsymbol(currency.value)">
+                                {{getsymbol(currency.value)}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="m-r-10 w-100">
+                          <mat-form-field appearance="outline" class="w-100" id="billbox">
+                            <mat-label><span class="color-option-label" [style.background-color]="isInvoiceThemeColor"></span> Invoice Theme Color</mat-label>
+                            <mat-select name="InvoiceThemeColor" [(ngModel)]="isInvoiceThemeColor">
+                              <mat-option *ngFor="let item of invoiceThemeColorList" [value]="item.colorCode">
+                                <span class="color-option" [style.background-color]="item.colorCode"></span>{{ item.colorCode }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
                       <div (mouseenter)="isTitle = true" (mouseleave)="isTitle = false" class="edit m-b-5">
                         <ng-container *ngIf="!isTitle; else titleField">
                           <h5 class="f-w-600 f-s-24 m-0 p-0 text-right h-55 d-flex justify-content-end align-items-center" style="padding: 10px 20px !important;">{{ mainTitle }}
@@ -32,11 +54,13 @@
                       <div class="row">
                         <div class="col-md-6">
                           <mat-form-field class="w-100 h-60" appearance="outline">
-                            <input matInput [matDatepicker]="touchpicker" [readonly]="true" placeholder="bill date" [value]="todayDate | date:'yyyy-MM-dd'"/>
+                            <input matInput [matDatepicker]="touchpicker" readonly [(ngModel)]="invoiceDate" placeholder="bill date" name="invoiceDate"/>
                             <mat-datepicker-toggle matIconSuffix [for]="touchpicker"></mat-datepicker-toggle>
                             <mat-datepicker touchUi #touchpicker></mat-datepicker>
                           </mat-form-field>
                         </div>
+                        
+                        
                         <div class="col-md-6">
                           <div (mouseenter)="isInvoiceId = true" (mouseleave)="isInvoiceId = false" class="edit m-b-5">
                             <ng-container *ngIf="!isInvoiceId; else invoiceIdField">
@@ -68,7 +92,7 @@
                             <mat-form-field appearance="outline" class="w-100 h-60" id="billbox">
                               <mat-label>Email Id</mat-label>
                               <input type="email" matInput class="form-control" name="email" id="email" [(ngModel)]="invoices.email"
-                                required>
+                                required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
                             </mat-form-field>
                         </div>
       
@@ -84,12 +108,13 @@
                         <div class="col-md-12">
                           <mat-form-field appearance="outline" class="w-100" id="billbox">
                             <mat-label>Contact No</mat-label>
-                            <input type="number" matInput class="form-control" name="contactNo" id="contactNo"
-                              [ngClass]="{'is-invalid': invoiceForm.submitted && ContactNo.invalid}"
-                              [(ngModel)]="invoices.contactNo" #ContactNo="ngModel" required>
+                            <input type="text" matInput class="form-control" name="contactNo" id="contactNo"
+                                   [ngClass]="{'is-invalid': invoiceForm.submitted && (ContactNo.invalid || !invoices.contactNo)}"
+                                   [(ngModel)]="invoices.contactNo" #ContactNo="ngModel" required 
+                                   pattern="[0-9]{10}">
                           </mat-form-field>
                         </div>
-                        <!-- </div> -->
+                        
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -106,7 +131,7 @@
                           <mat-form-field appearance="outline" class="w-100 h-60" id="billbox">
                             <mat-label>Email Id</mat-label>
                             <input type="email" matInput class="form-control" name="billEmail" id="billEmail"
-                              [(ngModel)]="invoices.billToEmail" required>
+                              [(ngModel)]="invoices.billToEmail" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
                           </mat-form-field>
                         </div>
                         <div class="col-md-12">
@@ -120,9 +145,9 @@
                         <div class="col-md-12">
                           <mat-form-field appearance="outline" class="w-100" id="billbox">
                             <mat-label>Contact No</mat-label>
-                            <input type="number" matInput class="form-control" name="billContactNo" id="billContactNo"
+                            <input type="text" matInput class="form-control" name="billContactNo" id="billContactNo"
                               [ngClass]="{'is-invalid': invoiceForm.submitted && billToContact.invalid}"
-                              [(ngModel)]="invoices.billToContact" #billToContact="ngModel" required>
+                              [(ngModel)]="invoices.billToContact" #billToContact="ngModel" required pattern="[0-9]{10}">
                           </mat-form-field>
                         </div>
                       </div>
@@ -173,7 +198,7 @@
                             </div>
                           </td>
                           <td>
-                            <button color="warn" mat-icon-button (click)="removeRow(i)" class="d-flex justify-content-center">
+                            <button color="warn" [disabled]="invoices.products.length <= 1" style="margin-bottom: 17px;" mat-icon-button (click)="removeRow(i)" class="d-flex justify-content-center">
                               <i-tabler name="trash" class="icon-18 d-flex"></i-tabler>
                             </button>
                           </td>
@@ -380,37 +405,26 @@
           </mat-sidenav-content>
         </mat-sidenav-container>
       </div>
-     <div class="col-md-2 col-sm-12 col-xs-12">
-       <div class="row m-t-20 all-btn">
-        <button class="m-b-10 w-100" color="primary" mat-flat-button
+     <div class="col-md-12 col-sm-12 col-xs-12">
+       <div class="row m-t-20" style="margin-left: 2px;">
+        <button class="m-b-10 m-r-10" color="primary" mat-flat-button
+        [disabled]="!iscurrencyName || !invoiceLogo || !invoices.customerName || !invoices.email || !invoices.address || !invoices.contactNo
+        || !invoices.billTo || !invoices.billToEmail || !invoices.billToAddress || !invoices.billToAddress || !termsList || !notesList" 
           (click)="invoiceForm.valid ? generatePDF('download') : ''">
           Download Invoice
         </button>
-        <button class="m-b-10 w-100" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF('print') : ''">
+        <button class="m-b-10 m-r-10" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF('print') : ''"
+        [disabled]="!iscurrencyName || !invoiceLogo || !invoices.customerName || !invoices.email || !invoices.address || !invoices.contactNo
+        || !invoices.billTo || !invoices.billToEmail || !invoices.billToAddress || !invoices.billToAddress || !termsList || !notesList"
+        >
           Print Invoice
         </button>
-        <button class="m-b-10 w-100" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF() : ''">
+        <!-- <button class="m-b-10 m-r-10" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF() : ''">
           Open Invoice
+        </button> -->
+        <button class="m-b-10 m-r-10 whatsapp-button" style="background: #25D366; color: #ffff;" mat-flat-button (click)="sendPdfWhatsapp()">
+          Send in Whatsapp
         </button>
-        <button class="m-b-10 w-100" color="primary" mat-flat-button (click)="sendPdfWhatsapp()">
-          Send Pdf Whatsapp
-        </button>
-        <mat-form-field appearance="outline" class="w-100" id="billbox">
-          <mat-label>Currency</mat-label>
-          <mat-select name="Currency" [(ngModel)]="iscurrencyName">
-            <mat-option *ngFor="let currency of currencyList | keyvalue" [value]="getsymbol(currency.value)">
-              {{getsymbol(currency.value)}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="w-100" id="billbox">
-          <mat-label><span class="color-option-label" [style.background-color]="isInvoiceThemeColor"></span> Invoice Theme Color</mat-label>
-          <mat-select name="InvoiceThemeColor" [(ngModel)]="isInvoiceThemeColor">
-            <mat-option *ngFor="let item of invoiceThemeColorList" [value]="item.colorCode">
-              <span class="color-option" [style.background-color]="item.colorCode"></span>{{ item.colorCode }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
        </div>
      </div>
   </div>
