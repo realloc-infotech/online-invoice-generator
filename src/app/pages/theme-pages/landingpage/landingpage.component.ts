@@ -29,7 +29,7 @@ interface testimonials {
   subtext: string;
   imgSrc: string;
   desc: string;
-
+  rating : number
 }
 
 interface features {
@@ -122,24 +122,27 @@ export class AppLandingpageComponent {
   testimonials: testimonials[] = [
     {
       id: 1,
-      imgSrc: '/assets/images/landingpage/profile/testimonial1.png',
+      imgSrc: '../../../../assets/images/1.png',
       name: 'Jenny Wilson',
       subtext: 'Artist',
-      desc : "Easy invoice Generator has been a game-changer for my small business. The platform is user-friendly, and the invoices are professional and accurate. I no longer have to worry about manual errors or wasting time creating invoices from scratch. Highly recommend!"
+      desc : "Easy invoice Generator has been a game-changer for my small business. The platform is user-friendly, and invoices professional and accurate. I no longer have to worry about manual errors or wasting time creating invoices from scratch. Highly recommend!",
+      rating : 3
     },
     {
       id: 2,
-      imgSrc: '/assets/images/landingpage/profile/testimonial2.png',
+      imgSrc: '../../../../assets/images/2.png',
       name: 'Minshan Cui',
       subtext: 'Freelancer',
-      desc : "As a freelancer, I appreciate the simplicity and efficiency of Easy invoice Generator. It has helped me streamline my invoicing process, allowing me to focus more on my work and less on administrative tasks. The customization options are a nice touch, too!"
+      desc : "As a freelancer, I appreciate the simplicity and efficiency of Easy invoice Generator. It has helped me streamline my invoicing process, allowing me to focus more on my work and less on administrative tasks. The customization options are a nice touch, too!",
+      rating : 5
     },
     {
       id: 3,
-      imgSrc: '/assets/images/landingpage/profile/testimonial3.png',
+      imgSrc: '../../../../assets/images/3.png',
       name: 'Eminson Mendoza',
       subtext: 'Services',
-      desc : "I've tried several invoicing tools, but Easy invoice Generator stands out for its affordability and functionality. The website is easy to navigate, and the customer support is top-notch. I'm very satisfied with the service and would recommend it to any business owner or freelancer."
+      desc : "I've tried several invoicing tools, but Easy invoice Generator stands out for its affordability . The website is easy to navigate, and the customer support is top-notch. I'm very satisfied with the service and would recommend it to any business owner or freelancer.",
+      rating : 4
     },
   ];
   features: features[] = [

@@ -89,7 +89,9 @@ End Banner
   
       <!-- ------------------------------------------------------------------
   Testimonial
+
   ------------------------------------------------------------------ -->
+
       <div class="spacer">
         <div class="container">
           <div class="row justify-content-center">
@@ -100,31 +102,38 @@ End Banner
               </h2>
             </div>
           </div>
-          <div class="row m-t-24">
+          <div class="row m-t-24 d-flex align-items-start">
             <div class="col-lg-4 col-sm-6" *ngFor="let testimonial of testimonials">
               <mat-card class="cardWithShadow">
                 <mat-card-content class="p-24">
-                  <div class="d-flex align-items-center">
+                  <div class="d-flex align-items-center flex-column">
                     <img [src]="testimonial.imgSrc" alt="profile" class="rounded-circle" width="40" />
-                    <div class="m-l-12">
-                      <h6 class="mat-subtitle-1 f-s-16 f-w-600">
-                        {{ testimonial.name }}
-                      </h6>
-                      <span>{{ testimonial.subtext }}</span>
-                    </div>
-                    <div class="m-l-auto">
-                      <div class="d-flex align-items-center">
-                        <i-tabler name="star-filled" class="fill-warning icon-18"></i-tabler>
-                        <i-tabler name="star-filled" class="fill-warning icon-18 m-l-4"></i-tabler>
-                        <i-tabler name="star-filled" class="fill-warning icon-18 m-l-4"></i-tabler>
-                        <i-tabler name="star-filled" class="fill-warning icon-18 m-l-4"></i-tabler>
-                        <i-tabler name="star-filled" class="fill-warning icon-18 m-l-4"></i-tabler>
+
+                    <div style="margin-left: 10px;">
+                      <div>
+                        <h6 class="mat-subtitle-1 f-s-16 f-w-600 m-0">
+                          {{ testimonial.name }}
+                        </h6>
                       </div>
+                      <div class="m-l-12">
+                        <span>{{ testimonial.subtext }}</span>
+                      </div>
+
                     </div>
                   </div>
-                  <p class="m-t-24 f-s-14 m-b-0">
-                    {{testimonial.desc}}
-                  </p>
+                  <div class="m-l-auto m-t-10">
+                    <div class="d-flex align-items-center">
+                      <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                        <i-tabler name="star-filled" class="fill-warning icon-18" *ngIf="star <= testimonial.rating"></i-tabler>
+                        <i-tabler name="star" class="fill-warning icon-18" *ngIf="star > testimonial.rating"></i-tabler>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div>
+                    <p class="m-t-24 f-s-14 m-b-0">
+                      {{testimonial.desc}}
+                    </p>
+                  </div>
                 </mat-card-content>
               </mat-card>
             </div>

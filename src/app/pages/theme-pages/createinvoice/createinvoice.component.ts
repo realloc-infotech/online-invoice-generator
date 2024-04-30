@@ -52,8 +52,9 @@ export class CreateinvoiceComponent {
   subTotal = 0;
   vat = 0;
   grandTotal = 0;
-  termsList: ''
-  notesList: ''
+  termsList: any =''
+
+  notesList: any = ''
   iscurrencyName: any = ''
   isInvoiceId : boolean = false
   invoiceId :any =  1
@@ -124,6 +125,20 @@ export class CreateinvoiceComponent {
     private http: HttpClient,
     // public dialogRef: MatDialogRef<CreateinvoiceComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
+
+      this.termsList = `Payment is due within [number of days] days from the date of invoice.
+      Late payments may incur a [specified percentage] late fee.
+      All payments must be made in [currency].
+      Any disputes regarding the invoice must be raised within [number of days] days of receipt.
+      Failure to adhere to these terms may result in legal action.`
+
+      this.notesList = `Ensure billing details are accurate and complete.
+      Provide clear instructions for payment methods.
+      Include any relevant reference or invoice numbers.
+      Specify billing contact information for queries.
+      Review invoices for discrepancies before payment.`
+
+
       this.isInvoiceThemeColor = this.invoiceThemeColorList[0].colorCode
 
     this.addForm = this.fb.group({});
@@ -347,7 +362,7 @@ export class CreateinvoiceComponent {
             [
               {
                 text:  'Invoice No' + this.invoiceId,
-                fontSize: 20,
+                fontSize: 16,
                 bold: true, 
                 alignment: 'right',
                 color: this.isInvoiceThemeColor,
@@ -368,6 +383,7 @@ export class CreateinvoiceComponent {
             {
               width: '*',
               alignment: 'left',
+              margin: [0, 3, 0, 3],
               text: [
                 { text: 'Customer Details\n', style: 'sectionHeader' },
                 { text: this.invoices.customerName + '\n', bold: true },
@@ -380,6 +396,7 @@ export class CreateinvoiceComponent {
             {
               width: '*',
               alignment: 'right',
+              margin: [0, 3, 0, 3],
               text: [
                 { text: 'Bill Details\n', style: 'sectionHeader' },
                 { text: this.invoices.billTo + '\n', bold: true },
@@ -449,11 +466,7 @@ export class CreateinvoiceComponent {
         {
           ul: this.notesList.split('\n').filter((item: any) => item.trim() !== '')
         },
-        {
-          text: 'Signature',
-          margin: [0, 35, 0, 5], // Adjust margins as needed
-          alignment: 'right' // Align the text to the right
-        },
+        { text: 'Signature', alignment: 'right', margin: [100, 100] },
       ],
       styles: {
         sectionHeader: {
