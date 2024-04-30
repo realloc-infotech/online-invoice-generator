@@ -155,7 +155,7 @@
                   </div>
                 </form>
                 <div class="text-right m-t-10">
-                  <div class="table-responsive">
+                  <div class="table-responsive showTable">
                     <table class="table table-hover b-1 no-wrap w-100 rounded">
                       <thead>
                         <tr>
@@ -215,6 +215,52 @@
                         </div>
                       </tbody>
                     </table>
+                  </div>
+                  <div class="showCard">
+                    <div class="cardtext">
+                      <span>Product Detail</span>
+                    </div>
+                    <div *ngFor="let product of invoices.products; let i=index" class="productcard">
+                      <div>
+                        <mat-form-field id="product" appearance="outline" class="w-100 hide-hint h-40">
+                          <mat-label>Product Name</mat-label>
+                          <input type="text" matInput class="form-control" name="productName{{i}}"
+                            [ngClass]="{'is-invalid': invoiceForm.submitted && ProductName.invalid}" id="productName"
+                            [(ngModel)]="product.name" #ProductName="ngModel" required>
+                        </mat-form-field>
+                        <mat-form-field id="product" appearance="outline" class="w-100 hide-hint h-40">
+                          <mat-label>Product Price</mat-label>
+                          <span matPrefix class="prefix">{{iscurrencyName.split(" ")[1]}}</span>
+                          <input type="number" matInput class="form-control" name="price{{i}}" id="price"
+                            [ngClass]="{'is-invalid': invoiceForm.submitted && ProductPrice.invalid}"
+                            [(ngModel)]="product.price" #ProductPrice="ngModel" required>
+                        </mat-form-field>
+                        <mat-form-field id="product" appearance="outline" class="w-100 hide-hint h-40">
+                          <mat-label>Product Quantity</mat-label>
+                          <input type="number" matInput class="form-control" name="quantity{{i}}" id="quantity"
+                            [ngClass]="{'is-invalid': invoiceForm.submitted && ProductQty.invalid}"
+                            [(ngModel)]="product.qty" #ProductQty="ngModel" required>
+                        </mat-form-field>
+                        <div class="totalAmounts">
+                          <span>Total :- {{iscurrencyName.split(" ")[0]}}
+                            {{calculateTotalPrice(product.price ? product.price : 0 , product.qty ? product.qty : 0 ,
+                            product.discount ? product.discount : 0)}}</span>
+                          <button color="warn" [disabled]="invoices.products.length <= 1" style="margin-bottom: 6px;" mat-icon-button (click)="removeRow(i)">
+                            <i-tabler name="trash" class="icon-18 d-flex"></i-tabler>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="addbutton" (click)="addProduct()">
+                      <button>
+                        <div>
+                          <i-tabler name="plus" class="icon-16 d-flex"></i-tabler>
+                        </div>
+                        <div>
+                          Product
+                        </div>
+                      </button>
+                    </div>
                   </div>
                   <div class="text-right m-t-30">
                     <div class="row">
