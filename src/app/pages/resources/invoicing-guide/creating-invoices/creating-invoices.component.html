@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="body border bg-white rounded rounded-4 shadow p-5 mx-auto mt-3">
+    <div class="card">
         <div class="header">
             <div class="bg" style="background-color: #f44336;">
                 <img src="https://invoice-generator.com/build/img/guide/creating-invoices.941a6fb6.jpg"
@@ -7,7 +7,9 @@
             </div>
         </div>
 
-        <h1>Creating Invoice</h1>
+        <h1 class="display-3">Creating Invoice</h1>
+        <hr class="my-3 my-md-5">
+
         <p>
             EasyInvoice is a versatile and accessible invoice generator that simplifies the invoicing process for
             businesses. Our platform offers a range of features designed to streamline invoice creation and management,
@@ -64,12 +66,12 @@
         <div class="row">
             <div class="col-6">
                 <button class="btn-white start" [routerLink]="['/guide/getting-paid']">
-                    Invoicing Basics
+                    Getting Paid
                 </button>
             </div>
             <div class="col-6" style="text-align: end;">
                 <button class="btn-white end" [routerLink]="['/guide/sending-invoices']">
-                    Past Due Reminders
+                    Sending Invoice
                 </button>
             </div>
         </div>
