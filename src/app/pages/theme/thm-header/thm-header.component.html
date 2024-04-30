@@ -1,6 +1,6 @@
 <style>
   .logo {
-    width: 30%;
+    width: 33%;
     padding-top: 10px;
   }
 
@@ -13,7 +13,7 @@
     <!-- ------------------------------------------------------------------
     Header
     ------------------------------------------------------------------ -->
-    <mat-toolbar class="topbar topbar-xl m-auto" style="margin-bottom: 20px;">
+    <mat-toolbar class="topbar topbar-xl m-auto" style="margin-bottom: 20px;position: fixed;">
         <div class="container full-width p-xs-6">
           <!-- --------------------------------------------------------------- -->
           <div class="branding p-x-0">
@@ -62,8 +62,8 @@
               aria-label="Notifications"
             >
               <div class="d-flex align-items-center">
-                Pages
-                <i-tabler name="chevron-down" class="icon-16 m-l-4"></i-tabler>
+                Quick Links
+                <i-tabler name="chevron-down" class="icon-16 m-l-4 m-b-8" style="margin-bottom: 3px;"></i-tabler>
               </div>
             </button>
             <mat-menu
@@ -72,7 +72,7 @@
               xPosition="before"
             >
               <div class="row">
-                <div class="col-sm-6 b-r-1 p-r-0">
+                <!-- <div class="col-sm-6 b-r-1 p-r-0"> -->
                   <div class="p-32 p-b-0">
                     <div class="row">
                       <div
@@ -87,7 +87,7 @@
                             mat-mini-fab
                             class="text-primary bg-light-primary shadow-none rounded"
                           >
-                            <img [src]="appdd.img" width="20" />
+                            <img [src]="appdd.img" width="18" />
                           </button>
   
                           <div class="m-l-16">
@@ -96,33 +96,16 @@
                             >
                               {{ appdd.title }}
                             </h5>
-                            <span class="mat-body-1 f-s-12">{{
+                            <!-- <span class="mat-body-1 f-s-12">{{
                               appdd.subtitle
-                            }}</span>
+                            }}</span> -->
                           </div>
                         </a>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-6">
-                  <div class="p-x-16 p-y-32">
-                    <h4 class="f-s-18 f-w-600 mat-subtitle-1 m-b-16" style="margin-top: 0;">
-                      Quick Links
-                    </h4>
-                    <div
-                      class="text-hover-primary"
-                      *ngFor="let quicklink of quicklinks"
-                    >
-                      <a
-                        [routerLink]="[quicklink.link]"
-                        class="hover-text text-decoration-none mat-body-1 f-w-600 d-block p-y-8"
-                        >{{ quicklink.title }}</a
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <!-- </div> -->
             </mat-menu>
             <a
               mat-flat-button
@@ -213,7 +196,7 @@
                     >
                       {{ appdd.title }}
                     </h5>
-                    <span class="mat-body-1 f-s-12">{{ appdd.subtitle }}</span>
+                    <!-- <span class="mat-body-1 f-s-12">{{ appdd.subtitle }}</span> -->
                   </div>
                 </a>
               </div>

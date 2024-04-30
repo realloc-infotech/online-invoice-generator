@@ -1,4 +1,5 @@
 <div class="container">
+  <!-- <button (click)="openPdfDemo()">open Pdf</button> -->
   <div class="row rowFix">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <mat-sidenav-container class="cardWithShadow m-t-20">
@@ -92,7 +93,7 @@
                             <mat-form-field appearance="outline" class="w-100 h-60" id="billbox">
                               <mat-label>Email Id</mat-label>
                               <input type="email" matInput class="form-control" name="email" id="email" [(ngModel)]="invoices.email"
-                                required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                required>
                             </mat-form-field>
                         </div>
       
@@ -131,7 +132,7 @@
                           <mat-form-field appearance="outline" class="w-100 h-60" id="billbox">
                             <mat-label>Email Id</mat-label>
                             <input type="email" matInput class="form-control" name="billEmail" id="billEmail"
-                              [(ngModel)]="invoices.billToEmail" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                              [(ngModel)]="invoices.billToEmail" required>
                           </mat-form-field>
                         </div>
                         <div class="col-md-12">
@@ -452,7 +453,8 @@
         </mat-sidenav-container>
       </div>
      <div class="col-md-12 col-sm-12 col-xs-12">
-       <div class="row m-t-20" style="margin-left: 2px;">
+       <div class="row m-t-20" style="display: flex;
+       justify-content: center;margin-left: 2px;">
         <button class="m-b-10 m-r-10" color="primary" mat-flat-button
         [disabled]="!iscurrencyName || !invoiceLogo || !invoices.customerName || !invoices.email || !invoices.address || !invoices.contactNo
         || !invoices.billTo || !invoices.billToEmail || !invoices.billToAddress || !invoices.billToAddress || !termsList || !notesList" 

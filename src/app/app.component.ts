@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
 import { InvoiceService } from './pages/theme/service/invoice.service';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -26,16 +28,25 @@ export class AppComponent {
 
   constructor(public translate: TranslateService, 
     private cookieService: CookieService,
-  private invoiceService : InvoiceService) {
+    private router: Router,
+    private invoiceService : InvoiceService) {
     translate.addLangs(['en', 'fr','es','de']);
     translate.setDefaultLang('en');
 
     this.cookieExists = this.cookieService.check('invoice') 
+ // Subscribe to the Router events
+ this.router.events.pipe(
+  filter(event => event instanceof NavigationEnd)
+).subscribe((event: any) => {
+  // Scroll to the top of the page when navigation ends
+  window.scrollTo(0, 0);
+});
+
+    
   }
 
   setCookies() {
     if(!this.cookieExists) {
-      this.cookieService.set('invoice', 'name : "Manish Savaliya"');
       this.cookieExists = true;
       this.invoiceService.setData(this.cookieExists)
     }

@@ -3,3 +3,8 @@
     width: 100%;
     overflow: scroll;
 }
+
+::ng-deep .mdc-fab--mini{
+    width: 30px !important;
+    height: 30px !important;
+  }

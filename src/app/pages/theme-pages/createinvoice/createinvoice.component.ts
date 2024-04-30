@@ -156,6 +156,8 @@ export class CreateinvoiceComponent {
         this.notesList = value?.notes
       }
     }
+
+    this.generatePdf()
   }
 
   ////////////////////////////////////////////////////////////////////////////////////
@@ -206,6 +208,25 @@ export class CreateinvoiceComponent {
   }
   ////////////////////////////////////////////////////////////////////
 
+  invoice :any = ''
+
+
+  generatePdf() {
+    const imageUrl = '../../.././../assets/images/pdfBill.png'; // Path to your image file
+
+    // Load the image as a blob
+    this.http.get(imageUrl, { responseType: 'blob' }).subscribe(blob => {
+      // Convert blob to data URL
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => {
+        const dataUrl = reader.result as string;
+        this.invoice =  dataUrl
+        console.log("invoice=>>>>>>" , this.invoice);
+        
+      };
+    });
+  }
 
   generatePDF(action = 'open') {
     this.totalTextData = []
@@ -261,7 +282,51 @@ export class CreateinvoiceComponent {
     
     let docDefinition: any = {
       pageSize: 'A4',
-      pageMargins: [40, 60, 40, 60], // [left, top, right, bottom]
+      pageMargins: [40, 10, 40, 10], // [left, top, right, bottom]
+      background: function (currentPage: any) {
+        const padding = -10;
+        const lineColor = '#000'
+      return {
+        canvas: [
+            // Left margin line
+            {
+                type: 'line',
+                x1: 40 + padding, // Left margin + padding
+                y1: 60 + padding, // Top margin + padding
+                x2: 40 + padding, // Left margin + padding
+                y2: 781.89 - padding, // 841.89 - Bottom margin - padding
+                lineColor: lineColor // Set line color
+            },
+            // Top margin line
+            {
+                type: 'line',
+                x1: 40 + padding, // Left margin + padding
+                y1: 60 + padding, // Top margin + padding
+                x2: 555.28 - padding, // A4 width - Right margin - padding
+                y2: 60 + padding, // Top margin + padding
+                lineColor: lineColor // Set line color
+            },
+            // Right margin line
+            {
+                type: 'line',
+                x1: 555.28 - padding, // A4 width - Right margin - padding
+                y1: 60 + padding, // Top margin + padding
+                x2: 555.28 - padding, // A4 width - Right margin - padding
+                y2: 781.89 - padding, // 841.89 - Bottom margin - padding
+                lineColor: lineColor // Set line color
+            },
+            // Bottom margin line
+            {
+                type: 'line',
+                x1: 40 + padding, // Left margin + padding
+                y1: 781.89 - padding, // 841.89 - Bottom margin - padding
+                x2: 555.28 - padding, // A4 width - Right margin - padding
+                y2: 781.89 - padding, // 841.89 - Bottom margin - padding
+                lineColor: lineColor // Set line color
+            }
+        ]
+    };
+      },
       content: [
         {
           image: this.invoiceLogo,
@@ -271,30 +336,30 @@ export class CreateinvoiceComponent {
         },
           {
           columns: [
+            [ {
+              text: this.mainTitle,
+              fontSize: 20,
+              bold: true,
+              alignment: 'start',
+              color: this.isInvoiceThemeColor,
+              margin: [0, 0, 0, 20] // Add some space after the title
+            },],
             [
               {
-                text: this.invoiceId,
+                text:  'Invoice No' + this.invoiceId,
                 fontSize: 20,
                 bold: true, 
-                alignment: 'start',
+                alignment: 'right',
                 color: this.isInvoiceThemeColor,
                 margin: [0, 0, 0, 10] // Add some space after the title
               },
               {
                 text:  this.formatDate(this.invoiceDate), // Add invoice date here
                 fontSize: 14,
-                alignment: 'start',
+                alignment: 'right',
                 margin: [0, 0, 0, 20] // Add some space after the invoice date
               }
             ],
-            [ {
-              text: this.mainTitle,
-              fontSize: 20,
-              bold: true,
-              alignment: 'right',
-              color: this.isInvoiceThemeColor,
-              margin: [0, 0, 0, 20] // Add some space after the title
-            },]
           ]
         },
         {
@@ -383,7 +448,12 @@ export class CreateinvoiceComponent {
         },
         {
           ul: this.notesList.split('\n').filter((item: any) => item.trim() !== '')
-        }
+        },
+        {
+          text: 'Signature',
+          margin: [0, 35, 0, 5], // Adjust margins as needed
+          alignment: 'right' // Align the text to the right
+        },
       ],
       styles: {
         sectionHeader: {
@@ -403,7 +473,6 @@ export class CreateinvoiceComponent {
       }
     };
     
-
     if(this.invoiceService.getData()) {
       const data = {
         logoUrl : this.invoiceLogo,
@@ -428,6 +497,60 @@ export class CreateinvoiceComponent {
       pdfMake.createPdf(docDefinition).open();
     }
 
+  }
+
+  openPdfDemo(){
+    let docDefinition: any = {
+      pageSize: 'A4',
+      pageMargins: [40, 60, 40, 60], // [left, top, right, bottom]
+      background: function (currentPage: any) {
+        return {
+          canvas: [
+            {
+              type: 'line',
+              x1: 40, // Left margin
+              y1: 60, // Top margin
+              x2: 40, // Left margin
+              y2: 781.89, // 841.89 - Bottom margin
+              lineColor: '#000' // Line color
+            },
+            {
+              type: 'line',
+              x1: 40, // Left margin
+              y1: 60, // Top margin
+              x2: 555.28, // A4 width - Right margin
+              y2: 60, // Top margin
+              lineColor: '#000'
+            },
+            {
+              type: 'line',
+              x1: 555.28, // A4 width - Right margin
+              y1: 60, // Top margin
+              x2: 555.28, // A4 width - Right margin
+              y2: 781.89, // 841.89 - Bottom margin
+              lineColor: '#000'
+            },
+            // Bottom margin line
+            {
+              type: 'line',
+              x1: 40, // Left margin
+              y1: 781.89, // 841.89 - Bottom margin
+              x2: 555.28, // A4 width - Right margin
+              y2: 781.89, // 841.89 - Bottom margin
+              lineColor: '#000'
+            }
+          ]
+        };
+      },
+      content: [
+        {
+          image: this.invoice,
+          width: 510, // Set the width of the image
+          height: 150, // Set the height of the image
+        },
+      ]
+    }
+    pdfMake.createPdf(docDefinition).print();
   }
 
   formatDate(date: Date): string {

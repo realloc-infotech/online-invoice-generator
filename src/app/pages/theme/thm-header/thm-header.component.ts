@@ -6,7 +6,6 @@ interface apps {
   id: number;
   img: string;
   title: string;
-  subtitle: string;
   link: string;
 }
 
@@ -28,30 +27,38 @@ export class ThmHeaderComponent {
     {
       id: 1,
       img: '/assets/images/svgs/icon-dd-chat.svg',
-      title: 'Invoice Template',
-      subtitle: 'Invoice Template',
-      link: '/apps/chat',
+      title: 'Invoicing Guide',
+      link: 'guide',
     },
     {
       id: 2,
       img: '/assets/images/svgs/icon-dd-cart.svg',
-      title: 'Credit Note Template',
-      subtitle: 'Credit Note Template',
-      link: '/apps/email/inbox',
+      title: 'How to Use',
+      link: 'help',
     },
     {
       id: 3,
       img: '/assets/images/svgs/icon-dd-invoice.svg',
-      title: 'Quote Template',
-      subtitle: 'Quote Template',
-      link: '/apps/invoice',
+      title: 'Invoice Format',
+      link: 'invoice-format-2',
     },
     {
       id: 4,
+      img: '/assets/images/svgs/icon-dd-chat.svg',
+      title: 'E-Invoicing',
+      link: 'e-invoices',
+    },
+    {
+      id: 5,
       img: '/assets/images/svgs/icon-dd-date.svg',
-      title: 'Purchase Order Template',
-      subtitle: 'Purchase Order Template',
-      link: '/apps/calendar',
+      title: 'Invoice Templates',
+      link: 'invoice-templates',
+    },
+    {
+      id: 6,
+      img: '/assets/images/svgs/icon-dd-cart.svg',
+      title: 'FIRC in India',
+      link: 'firc-india',
     }
   ];
 
