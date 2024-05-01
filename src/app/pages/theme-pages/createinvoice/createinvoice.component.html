@@ -1,5 +1,5 @@
 <div class="container">
-  <button (click)="openPdfDemo()">open Pdf</button>
+  <!-- <button (click)="openPdfDemo()">open Pdf</button> -->
   <div class="row rowFix">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <mat-sidenav-container class="cardWithShadow m-t-20">
@@ -93,7 +93,7 @@
                             <mat-form-field appearance="outline" class="w-100 h-60" id="billbox">
                               <mat-label>Email Id</mat-label>
                               <input type="email" matInput class="form-control" name="email" id="email" [(ngModel)]="invoices.email"
-                                required>
+                                required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
                             </mat-form-field>
                         </div>
       
@@ -132,7 +132,7 @@
                           <mat-form-field appearance="outline" class="w-100 h-60" id="billbox">
                             <mat-label>Email Id</mat-label>
                             <input type="email" matInput class="form-control" name="billEmail" id="billEmail"
-                              [(ngModel)]="invoices.billToEmail" required>
+                              [(ngModel)]="invoices.billToEmail" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
                           </mat-form-field>
                         </div>
                         <div class="col-md-12">
@@ -204,7 +204,7 @@
                             </button>
                           </td>
                         </tr>
-                        <div class="addbutton" (click)="addProduct()">
+                        <div class="addbutton" (click)="addProduct()" *ngIf="invoices.products.length < 5">
                           <button>
                             <div>
                               <i-tabler name="plus" class="icon-16 d-flex"></i-tabler>
@@ -252,7 +252,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="addbutton" (click)="addProduct()">
+                    <div class="addbutton" (click)="addProduct()" *ngIf="invoices.products.length < 5">
                       <button>
                         <div>
                           <i-tabler name="plus" class="icon-16 d-flex"></i-tabler>
@@ -264,138 +264,174 @@
                     </div>
                   </div>
                   <div class="text-right m-t-30">
+
                     <div class="row">
-                      <div class="col-sm-8">
+                      <div class="col-md-8">
+                        <div class="nots-term">
+                          <div class="col-md-12">
+                            <div class="termstextarea">
+                              <div (mouseenter)="isTerms = true" (mouseleave)="isTerms = false" class="edit m-b-5">
+                                <ng-container *ngIf="!isTerms; else termsField">
+                                  <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ terms }}
+                                  </h5>
+                                </ng-container>
+                                <ng-template #termsField>
+                                  <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="terms" (keydown.enter)="isTerms = false"
+                                    (blur)="isTerms = false">
+                                </ng-template>
+                              </div>
+                              <mat-form-field appearance="outline" class="w-100">
+                                <textarea class="form-control" matInput name="terms" id="terms"
+                                  placeholder="Terms and conditions - late fees, payment methods, delivery schedule"
+                                  [(ngModel)]="termsList" required style="height: 100px;"></textarea>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="termstextarea" style="margin-top: 70px;">
+                              <div (mouseenter)="isNotes = true" (mouseleave)="isNotes = false" class="edit m-b-5">
+                                <ng-container *ngIf="!isNotes; else notesField">
+                                  <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ notes }}
+                                  </h5>
+                                </ng-container>
+                                <ng-template #notesField>
+                                  <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="notes" (keydown.enter)="isNotes = false"
+                                    (blur)="isNotes = false">
+                                </ng-template>
+                              </div>
+                              <mat-form-field appearance="outline" class="w-100">
+                                <textarea class="form-control" matInput name="address" id="Notes" placeholder="Notes - any relevant information not already covered"
+                                    [(ngModel)]="notesList" required style="height: 100px;"></textarea>
+                            </mat-form-field>                  
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="col-sm-2">
-                        <div (mouseenter)="isEditing = true" (mouseleave)="isEditing = false" class="edit m-b-5">
-                          <ng-container *ngIf="!isEditing; else editField">
-                            <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ text }}
-                            </h5>
+                      <div class="col-md-4">
+                        <div class="d-flex align-items-baseline">
+                          <div class="col-sm-6">
+                            <div (mouseenter)="isEditing = true" (mouseleave)="isEditing = false" class="edit m-b-5">
+                              <ng-container *ngIf="!isEditing; else editField">
+                                <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ text }}
+                                </h5>
+                              </ng-container>
+                              <ng-template #editField>
+                                <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="text"
+                                  (keydown.enter)="isEditing = false" (blur)="isEditing = false">
+                              </ng-template>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <!-- : {{ subTotal }} -->
+                            {{iscurrencyName.split(" ")[0]}} {{calculateSubTotal()}}
+                          </div>
+                        </div>
+                        <div class="row">
+                          <ng-container *ngIf="isvisibleButton">
+                            <div class="col-sm-6">
+                              <div (mouseenter)="isDiscount = true" (mouseleave)="isDiscount = false" class="edit m-b-5">
+                                <ng-container *ngIf="!isDiscount; else discountField">
+                                  <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ discount
+                                    }}
+                                  </h5>
+                                </ng-container>
+                                <ng-template #discountField>
+                                  <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="discount"
+                                    (keydown.enter)="isDiscount = false" (blur)="isDiscount = false">
+                                </ng-template>
+                              </div>
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-start align-items-baseline">
+                              <mat-form-field id="product" appearance="outline" class="w-100">
+                                <span matPrefix class="prefix">%</span>
+                                <input type="number" matInput class="form-control" [(ngModel)]="totalDiscount" required>
+                              </mat-form-field>
+                              <div>
+                                <div style="margin-left: 10px;">
+                                  <i-tabler name="square-rounded-x" (click)="discountShow()" class="icon-19"></i-tabler>
+                                </div>
+                              </div>
+                            </div>
                           </ng-container>
-                          <ng-template #editField>
-                            <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="text"
-                              (keydown.enter)="isEditing = false" (blur)="isEditing = false">
-                          </ng-template>
+                          <ng-container *ngIf="!isvisibleButton">
+                            <div class="sub-button" (click)="isvisibleButton = true">
+                              <i-tabler name="plus" class="icon-16"></i-tabler>
+                              Discount
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div class="row">
+                          <ng-container *ngIf="isvisibleShippingButton">
+                            <div class="col-sm-6">
+                              <div (mouseenter)="isShipping = true" (mouseleave)="isShipping = false" class="edit m-b-5">
+                                <ng-container *ngIf="!isShipping; else shippingField">
+                                  <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ shipping
+                                    }}
+                                  </h5>
+                                </ng-container>
+                                <ng-template #shippingField>
+                                  <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="shipping"
+                                    (keydown.enter)="isShipping = false" (blur)="isShipping = false">
+                                </ng-template>
+                              </div>
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-start align-items-baseline">
+                              <mat-form-field id="product" appearance="outline" class="w-100">
+                                <span matPrefix class="prefix">{{iscurrencyName.split(" ")[1]}}</span>
+                                <input type="number" matInput class="form-control" [(ngModel)]="totalShipping" required>
+                              </mat-form-field>
+                              <div>
+                                <div style="margin-left: 10px;">
+                                  <i-tabler name="square-rounded-x" (click)="shippingShow()" class="icon-19"></i-tabler>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="!isvisibleShippingButton">
+                            <div class="sub-button" (click)="isvisibleShippingButton = true">
+                              <i-tabler name="plus" class="icon-16"></i-tabler>
+                              Shipping
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div class="row">
+                          <ng-container *ngIf="isvisibleTaxButton">
+                            <div class="col-sm-6">
+                              <div (mouseenter)="isGst = true" (mouseleave)="isGst = false" class="edit m-b-5">
+                                <ng-container *ngIf="!isGst; else gstField">
+                                  <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ gst }}
+                                  </h5>
+                                </ng-container>
+                                <ng-template #gstField>
+                                  <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="gst"
+                                    (keydown.enter)="isGst = false" (blur)="isGst = false">
+                                </ng-template>
+                              </div>
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-start align-items-baseline">
+                              <mat-form-field id="product" appearance="outline" class="w-100">
+                                <span matPrefix class="prefix">%</span>
+                                <input type="number" matInput class="form-control" [(ngModel)]="taxRate" required>
+                              </mat-form-field>
+                              <div>
+                                <div style="margin-left: 10px;">
+                                  <i-tabler name="square-rounded-x" (click)="taxRateShow()" class="icon-19"></i-tabler>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="!isvisibleTaxButton">
+                            <div class="sub-button" (click)="isvisibleTaxButton = true">
+                              <i-tabler name="plus" class="icon-16"></i-tabler>
+                              Tax
+                            </div>
+                          </ng-container>
                         </div>
                       </div>
-                      <div class="col-sm-2 d-flex justify-content-start align-items-center">
-                        <!-- : {{ subTotal }} -->
-                        {{iscurrencyName.split(" ")[0]}} {{calculateSubTotal()}}
-                      </div>
                     </div>
-      
-                    <!-- <h5 class="m-b-5 f-w-600 f-s-16">Sub total: {{ subTotal }}</h5>
-                      <h5 class="f-w-600 f-s-16">Total Vat: {{ vat }}%</h5> -->
-      
-                    <div class="row">
-                      <div class="col-sm-8"></div>
-                      <ng-container *ngIf="isvisibleButton">
-                        <div class="col-sm-2">
-                          <div (mouseenter)="isDiscount = true" (mouseleave)="isDiscount = false" class="edit m-b-5">
-                            <ng-container *ngIf="!isDiscount; else discountField">
-                              <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ discount
-                                }}
-                              </h5>
-                            </ng-container>
-                            <ng-template #discountField>
-                              <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="discount"
-                                (keydown.enter)="isDiscount = false" (blur)="isDiscount = false">
-                            </ng-template>
-                          </div>
-                        </div>
-                        <div class="col-sm-2 d-flex justify-content-start align-items-baseline">
-                          <mat-form-field id="product" appearance="outline" class="w-100">
-                            <span matPrefix class="prefix">%</span>
-                            <input type="number" matInput class="form-control" [(ngModel)]="totalDiscount" required>
-                          </mat-form-field>
-                          <div>
-                            <div style="margin-left: 10px;">
-                              <i-tabler name="square-rounded-x" (click)="discountShow()" class="icon-19"></i-tabler>
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container>
-                      <ng-container *ngIf="!isvisibleButton">
-                        <div class="sub-button" (click)="isvisibleButton = true">
-                          <i-tabler name="plus" class="icon-16"></i-tabler>
-                          Discount
-                        </div>
-                      </ng-container>
+                    <div style="margin-top: 70px;">
+                      <mat-divider></mat-divider>
                     </div>
-      
-                    <div class="row">
-                      <div class="col-sm-8"></div>
-                      <ng-container *ngIf="isvisibleShippingButton">
-                        <div class="col-sm-2">
-                          <div (mouseenter)="isShipping = true" (mouseleave)="isShipping = false" class="edit m-b-5">
-                            <ng-container *ngIf="!isShipping; else shippingField">
-                              <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ shipping
-                                }}
-                              </h5>
-                            </ng-container>
-                            <ng-template #shippingField>
-                              <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="shipping"
-                                (keydown.enter)="isShipping = false" (blur)="isShipping = false">
-                            </ng-template>
-                          </div>
-                        </div>
-                        <div class="col-sm-2 d-flex justify-content-start align-items-baseline">
-                          <mat-form-field id="product" appearance="outline" class="w-100">
-                            <span matPrefix class="prefix">{{iscurrencyName.split(" ")[1]}}</span>
-                            <input type="number" matInput class="form-control" [(ngModel)]="totalShipping" required>
-                          </mat-form-field>
-                          <div>
-                            <div style="margin-left: 10px;">
-                              <i-tabler name="square-rounded-x" (click)="shippingShow()" class="icon-19"></i-tabler>
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container>
-                      <ng-container *ngIf="!isvisibleShippingButton">
-                        <div class="sub-button" (click)="isvisibleShippingButton = true">
-                          <i-tabler name="plus" class="icon-16"></i-tabler>
-                          Shipping
-                        </div>
-                      </ng-container>
-                    </div>
-      
-                    <div class="row">
-                      <div class="col-sm-8"></div>
-                      <ng-container *ngIf="isvisibleTaxButton">
-                        <div class="col-sm-2">
-                          <div (mouseenter)="isGst = true" (mouseleave)="isGst = false" class="edit m-b-5">
-                            <ng-container *ngIf="!isGst; else gstField">
-                              <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ gst }}
-                              </h5>
-                            </ng-container>
-                            <ng-template #gstField>
-                              <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="gst"
-                                (keydown.enter)="isGst = false" (blur)="isGst = false">
-                            </ng-template>
-                          </div>
-                        </div>
-                        <div class="col-sm-2 d-flex justify-content-start align-items-baseline">
-                          <mat-form-field id="product" appearance="outline" class="w-100">
-                            <span matPrefix class="prefix">%</span>
-                            <input type="number" matInput class="form-control" [(ngModel)]="taxRate" required>
-                          </mat-form-field>
-                          <div>
-                            <div style="margin-left: 10px;">
-                              <i-tabler name="square-rounded-x" (click)="taxRateShow()" class="icon-19"></i-tabler>
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container>
-                      <ng-container *ngIf="!isvisibleTaxButton">
-                        <div class="sub-button" (click)="isvisibleTaxButton = true">
-                          <i-tabler name="plus" class="icon-16"></i-tabler>
-                          Tax
-                        </div>
-                      </ng-container>
-                    </div>
-      
-                    <mat-divider></mat-divider>
                     <div class="row">
                       <div class="col-sm-8"></div>
                       <div class="col-sm-2">
@@ -411,42 +447,7 @@
                   </div>
                 </div>
       
-                <div class="nots-term">
-                  <div class="termstextarea">
-                    <div (mouseenter)="isTerms = true" (mouseleave)="isTerms = false" class="edit m-b-5">
-                      <ng-container *ngIf="!isTerms; else termsField">
-                        <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ terms }}
-                        </h5>
-                      </ng-container>
-                      <ng-template #termsField>
-                        <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="terms" (keydown.enter)="isTerms = false"
-                          (blur)="isTerms = false">
-                      </ng-template>
-                    </div>
-                    <mat-form-field appearance="outline" class="w-100">
-                      <textarea class="form-control" matInput name="terms" id="terms" row="3"
-                        placeholder="Terms and conditions - late fees, payment methods, delivery schedule"
-                        [(ngModel)]="termsList" required></textarea>
-                    </mat-form-field>
-                  </div>
-                  <div class="termstextarea">
-                    <div (mouseenter)="isNotes = true" (mouseleave)="isNotes = false" class="edit m-b-5">
-                      <ng-container *ngIf="!isNotes; else notesField">
-                        <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ notes }}
-                        </h5>
-                      </ng-container>
-                      <ng-template #notesField>
-                        <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="notes" (keydown.enter)="isNotes = false"
-                          (blur)="isNotes = false">
-                      </ng-template>
-                    </div>
-                    <mat-form-field appearance="outline" class="w-100">
-                      <textarea class="form-control" matInput name="address" id="Notes" row="3"
-                        placeholder="Notes - any relevant information not already covered" [(ngModel)]="notesList"
-                        required></textarea>
-                    </mat-form-field>
-                  </div>
-                </div>
+                
               </mat-card-content>
             </mat-card>
           </mat-sidenav-content>

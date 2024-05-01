@@ -115,6 +115,10 @@ export class CreateinvoiceComponent {
       colorCode : '#5d87ff'
     },
   ] 
+  selectedCurrency: string;
+  filteredCurrencies: string[];
+
+  
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -125,19 +129,12 @@ export class CreateinvoiceComponent {
     private http: HttpClient,
     // public dialogRef: MatDialogRef<CreateinvoiceComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
+      this.filteredCurrencies = this.currencyList;
+      this.termsList = `Maintain strict confidentiality of invoices, prohibiting sharing with unauthorized parties.
+      Define conditions for invoice cancellation or modification, including associated fees.`
 
-      this.termsList = `Payment is due within [number of days] days from the date of invoice.
-      Late payments may incur a [specified percentage] late fee.
-      All payments must be made in [currency].
-      Any disputes regarding the invoice must be raised within [number of days] days of receipt.
-      Failure to adhere to these terms may result in legal action.`
-
-      this.notesList = `Ensure billing details are accurate and complete.
-      Provide clear instructions for payment methods.
-      Include any relevant reference or invoice numbers.
-      Specify billing contact information for queries.
-      Review invoices for discrepancies before payment.`
-
+      this.notesList = `Make invoices clear with details like invoice number, date, and product/service breakdown.
+      Keep a professional tone with consistent formatting, proper grammar, and suitable language.`
 
       this.isInvoiceThemeColor = this.invoiceThemeColorList[0].colorCode
 
@@ -237,8 +234,6 @@ export class CreateinvoiceComponent {
       reader.onloadend = () => {
         const dataUrl = reader.result as string;
         this.invoice =  dataUrl
-        console.log("invoice=>>>>>>" , this.invoice);
-        
       };
     });
   }
@@ -294,64 +289,107 @@ export class CreateinvoiceComponent {
         lineHeight: 1.5
       },
     )
-    
+
+
+
+    // Calculate the number of empty rows needed to make the total rows equal to five
+    const emptyRowCount = Math.max(5 - this.invoices.products.length, 0);
+
+    // Create an array to hold the empty rows
+    const emptyRows = Array(emptyRowCount).fill({
+      name: '',
+      price: '',
+      qty: '',
+      discount: ''
+    });
+
+    // Merge the products array with the empty rows
+    const allProducts = [...this.invoices.products, ...emptyRows];
+
+    // Generate rows for the table with background color applied to alternate rows and bottom border for the last row
+    const tableRows: any = allProducts.map((p, index, array) => {
+      const isLastRow = index === array.length - 1; // Check if it's the last row
+      // const rowColor = index % 2 === 0 ? '#e5e5e5' : '#ffff'; // Apply background color to alternate rows
+      const bottomBorder = isLastRow ? [true, false, true, true] : [true, false, true, false]; // Set bottom border for the last row
+      return [
+        { text: p.name, fillColor: '#eceff7', border: bottomBorder, margin: [0, 3, 0, 3] },
+        { text: p.price, fillColor: '#eceff7', border: bottomBorder, margin: [0, 3, 0, 3], alignment: 'center' },
+        { text: p.qty, fillColor: '#eceff7', border: bottomBorder, margin: [0, 3, 0, 3], alignment: 'center' },
+        { text: p.price ? this.calculateTotalPrice(p.price, p.qty, p.discount) : "" , fillColor: '#eceff7', border: bottomBorder, margin: [0, 3, 0, 3], alignment: 'center' }
+      ];
+    });
+
+
+    // Update the table body with the generated rows
+    const tableBody = [
+      [
+        { text: 'Product', style: 'tableHeader', border: [true, true, true, true] },
+        { text: 'Price', style: 'tableHeader', border: [true, true, true, true] },
+        { text: 'Quantity', style: 'tableHeader', border: [true, true, true, true] },
+        { text: 'Amount', style: 'tableHeader', border: [true, true, true, true] }
+      ],
+      ...tableRows
+    ];
+
+
     let docDefinition: any = {
       pageSize: 'A4',
       pageMargins: [40, 10, 40, 10], // [left, top, right, bottom]
       background: function (currentPage: any) {
         const padding = -10;
         const lineColor = '#000'
-      return {
-        canvas: [
+        return {
+          canvas: [
             // Left margin line
             {
-                type: 'line',
-                x1: 40 + padding, // Left margin + padding
-                y1: 60 + padding, // Top margin + padding
-                x2: 40 + padding, // Left margin + padding
-                y2: 781.89 - padding, // 841.89 - Bottom margin - padding
-                lineColor: lineColor // Set line color
+              type: 'line',
+              x1: 40 + padding, // Left margin + padding
+              y1: 60 + padding, // Top margin + padding
+              x2: 40 + padding, // Left margin + padding
+              y2: 781.89 - padding, // 841.89 - Bottom margin - padding
+              lineColor: lineColor // Set line color
             },
             // Top margin line
             {
-                type: 'line',
-                x1: 40 + padding, // Left margin + padding
-                y1: 60 + padding, // Top margin + padding
-                x2: 555.28 - padding, // A4 width - Right margin - padding
-                y2: 60 + padding, // Top margin + padding
-                lineColor: lineColor // Set line color
+              type: 'line',
+              x1: 40 + padding, // Left margin + padding
+              y1: 60 + padding, // Top margin + padding
+              x2: 555.28 - padding, // A4 width - Right margin - padding
+              y2: 60 + padding, // Top margin + padding
+              lineColor: lineColor // Set line color
             },
             // Right margin line
             {
-                type: 'line',
-                x1: 555.28 - padding, // A4 width - Right margin - padding
-                y1: 60 + padding, // Top margin + padding
-                x2: 555.28 - padding, // A4 width - Right margin - padding
-                y2: 781.89 - padding, // 841.89 - Bottom margin - padding
-                lineColor: lineColor // Set line color
+              type: 'line',
+              x1: 555.28 - padding, // A4 width - Right margin - padding
+              y1: 60 + padding, // Top margin + padding
+              x2: 555.28 - padding, // A4 width - Right margin - padding
+              y2: 781.89 - padding, // 841.89 - Bottom margin - padding
+              lineColor: lineColor // Set line color
             },
             // Bottom margin line
             {
-                type: 'line',
-                x1: 40 + padding, // Left margin + padding
-                y1: 781.89 - padding, // 841.89 - Bottom margin - padding
-                x2: 555.28 - padding, // A4 width - Right margin - padding
-                y2: 781.89 - padding, // 841.89 - Bottom margin - padding
-                lineColor: lineColor // Set line color
+              type: 'line',
+              x1: 40 + padding, // Left margin + padding
+              y1: 781.89 - padding, // 841.89 - Bottom margin - padding
+              x2: 555.28 - padding, // A4 width - Right margin - padding
+              y2: 781.89 - padding, // 841.89 - Bottom margin - padding
+              lineColor: lineColor // Set line color
             }
-        ]
-    };
+          ]
+        };
       },
       content: [
         {
           image: this.invoiceLogo,
-          width: 100,
+          width: '*', // Set the width to fill available content width
+          fit: [90, 90], // Fit the image within 100x100 dimensions
           alignment: 'center',
-          margin: [0, 10]
+          margin: [0, 50, 0, 10]
         },
-          {
+        {
           columns: [
-            [ {
+            [{
               text: this.mainTitle,
               fontSize: 20,
               bold: true,
@@ -361,15 +399,15 @@ export class CreateinvoiceComponent {
             },],
             [
               {
-                text:  'Invoice No' + this.invoiceId,
+                text: 'Invoice No' + this.invoiceId,
                 fontSize: 16,
-                bold: true, 
+                bold: true,
                 alignment: 'right',
                 color: this.isInvoiceThemeColor,
                 margin: [0, 0, 0, 10] // Add some space after the title
               },
               {
-                text:  this.formatDate(this.invoiceDate), // Add invoice date here
+                text: this.formatDate(this.invoiceDate), // Add invoice date here
                 fontSize: 14,
                 alignment: 'right',
                 margin: [0, 0, 0, 20] // Add some space after the invoice date
@@ -385,7 +423,7 @@ export class CreateinvoiceComponent {
               alignment: 'left',
               margin: [0, 3, 0, 3],
               text: [
-                { text: 'Customer Details\n', style: 'sectionHeader' },
+                { text: 'Shop Details\n', style: 'sectionHeader'},
                 { text: this.invoices.customerName + '\n', bold: true },
                 this.invoices.email + '\n',
                 this.invoices.contactNo + '\n',
@@ -398,7 +436,7 @@ export class CreateinvoiceComponent {
               alignment: 'right',
               margin: [0, 3, 0, 3],
               text: [
-                { text: 'Bill Details\n', style: 'sectionHeader' },
+                { text: 'Customer Details\n', style: 'sectionHeader'},
                 { text: this.invoices.billTo + '\n', bold: true },
                 this.invoices.billToEmail + '\n',
                 this.invoices.billToContact + '\n',
@@ -417,21 +455,7 @@ export class CreateinvoiceComponent {
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
-            body: [
-              [
-                { text: 'Product', style: 'tableHeader', border: [] },
-                { text: 'Price', style: 'tableHeader', border: [] },
-                { text: 'Quantity', style: 'tableHeader', border: [] },
-                { text: 'Amount', style: 'tableHeader', border: [] }
-              ],
-              ...this.invoices.products.map(p => ([
-                { text: p.name, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] },
-                { text: p.price, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] , alignment: 'center',},
-                { text: p.qty, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] ,alignment: 'center', },
-                { text: this.calculateTotalPrice(p.price, p.qty, p.discount), fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] , alignment: 'center', }
-              ])),
-              // [{ text: 'Total Amount', colSpan: 3, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] }, {}, {}, {}, { text: this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2), fillColor: '#eceff7' , border: [] }]
-            ]
+            body: tableBody,
           }
         },
         // {
@@ -445,14 +469,14 @@ export class CreateinvoiceComponent {
             {
               width: '*',
               alignment: 'right',
-              text : this.totalTextData
+              text: this.totalTextData
             }
           ],
         },
         {
           text: 'Terms',
           style: 'sectionHeader',
-          margin: [0, 20, 0, 5] // Add space before and after the section
+          margin: [0, 15, 0, 5] // Add space before and after the section
         },
         {
           ul: this.termsList.split('\n').filter((item: any) => item.trim() !== ''),
@@ -466,7 +490,7 @@ export class CreateinvoiceComponent {
         {
           ul: this.notesList.split('\n').filter((item: any) => item.trim() !== '')
         },
-        { text: 'Signature', alignment: 'right', margin: [100, 100] },
+        { text: 'Signature', alignment: 'right', margin: [50, 50] },
       ],
       styles: {
         sectionHeader: {
@@ -485,20 +509,20 @@ export class CreateinvoiceComponent {
         }
       }
     };
-    
-    if(this.invoiceService.getData()) {
+
+    if (this.invoiceService.getData()) {
       const data = {
-        logoUrl : this.invoiceLogo,
-        title : this.mainTitle,
-        id : this.invoiceId,
-        billFrom : this.invoices.customerName,
-        emailId : this.invoices.email,
-        fromAddress : this.invoices.address,
-        contactNo : this.invoices.contactNo,
-        termsConditions : this.termsList,
-        notes : this.notesList
+        logoUrl: this.invoiceLogo,
+        title: this.mainTitle,
+        id: this.invoiceId,
+        billFrom: this.invoices.customerName,
+        emailId: this.invoices.email,
+        fromAddress: this.invoices.address,
+        contactNo: this.invoices.contactNo,
+        termsConditions: this.termsList,
+        notes: this.notesList
       }
-  
+
       this.cookieService.set('invoice', JSON.stringify(data));
     }
 
@@ -638,23 +662,130 @@ export class CreateinvoiceComponent {
       },
     )
     
+
+
+    // Calculate the number of empty rows needed to make the total rows equal to five
+const emptyRowCount = Math.max(5 - this.invoices.products.length, 0);
+
+// Create an array to hold the empty rows
+const emptyRows = Array(emptyRowCount).fill({
+  name: '',
+  price: '',
+  qty: '',
+  discount: ''
+});
+
+// Merge the products array with the empty rows
+const allProducts = [...this.invoices.products, ...emptyRows];
+
+// Generate rows for the table with background color applied to alternate rows and bottom border for the last row
+const tableRows: any = allProducts.map((p, index, array) => {
+  const isLastRow = index === array.length - 1; // Check if it's the last row
+  // const rowColor = index % 2 === 0 ? '#e5e5e5' : '#ffff'; // Apply background color to alternate rows
+  const bottomBorder = isLastRow ? [true, false, true, true] : [true, false, true, false]; // Set bottom border for the last row
+  return [
+    { text: p.name, fillColor: '#eceff7', border: bottomBorder, margin: [0, 3, 0, 3] },
+    { text: p.price, fillColor: '#eceff7', border: bottomBorder, margin: [0, 3, 0, 3], alignment: 'center' },
+    { text: p.qty, fillColor: '#eceff7', border: bottomBorder, margin: [0, 3, 0, 3], alignment: 'center' },
+    { text: p.price ?  this.calculateTotalPrice(p.price, p.qty, p.discount) : '', fillColor: '#eceff7', border: bottomBorder, margin: [0, 3, 0, 3], alignment: 'center' }
+  ];
+});
+
+
+// Update the table body with the generated rows
+const tableBody = [
+  [
+    { text: 'Product', style: 'tableHeader', border: [true, true, true, true] },
+    { text: 'Price', style: 'tableHeader', border: [true, true, true, true] },
+    { text: 'Quantity', style: 'tableHeader', border: [true, true, true, true] },
+    { text: 'Amount', style: 'tableHeader', border: [true, true, true, true] }
+  ],
+  ...tableRows
+];
+
+    
     let docDefinition: any = {
       pageSize: 'A4',
-      pageMargins: [40, 60, 40, 60], // [left, top, right, bottom]
+      pageMargins: [40, 10, 40, 10], // [left, top, right, bottom]
+      background: function (currentPage: any) {
+        const padding = -10;
+        const lineColor = '#000'
+        return {
+          canvas: [
+            // Left margin line
+            {
+              type: 'line',
+              x1: 40 + padding, // Left margin + padding
+              y1: 60 + padding, // Top margin + padding
+              x2: 40 + padding, // Left margin + padding
+              y2: 781.89 - padding, // 841.89 - Bottom margin - padding
+              lineColor: lineColor // Set line color
+            },
+            // Top margin line
+            {
+              type: 'line',
+              x1: 40 + padding, // Left margin + padding
+              y1: 60 + padding, // Top margin + padding
+              x2: 555.28 - padding, // A4 width - Right margin - padding
+              y2: 60 + padding, // Top margin + padding
+              lineColor: lineColor // Set line color
+            },
+            // Right margin line
+            {
+              type: 'line',
+              x1: 555.28 - padding, // A4 width - Right margin - padding
+              y1: 60 + padding, // Top margin + padding
+              x2: 555.28 - padding, // A4 width - Right margin - padding
+              y2: 781.89 - padding, // 841.89 - Bottom margin - padding
+              lineColor: lineColor // Set line color
+            },
+            // Bottom margin line
+            {
+              type: 'line',
+              x1: 40 + padding, // Left margin + padding
+              y1: 781.89 - padding, // 841.89 - Bottom margin - padding
+              x2: 555.28 - padding, // A4 width - Right margin - padding
+              y2: 781.89 - padding, // 841.89 - Bottom margin - padding
+              lineColor: lineColor // Set line color
+            }
+          ]
+        };
+      },
       content: [
         {
           image: this.invoiceLogo,
-          width: 100,
+          width: '*', // Set the width to fill available content width
+          fit: [100, 100], // Fit the image within 100x100 dimensions
           alignment: 'center',
-          margin: [0, 10]
+          margin: [0, 50, 0, 10]
         },
         {
-          text: this.mainTitle,
-          fontSize: 20,
-          bold: true, 
-          alignment: 'start',
-          color: 'green',
-          margin: [0, 0, 0, 20] // Add some space after the title
+          columns: [
+            [{
+              text: this.mainTitle,
+              fontSize: 20,
+              bold: true,
+              alignment: 'start',
+              color: this.isInvoiceThemeColor,
+              margin: [0, 0, 0, 20] // Add some space after the title
+            },],
+            [
+              {
+                text: 'Invoice No' + this.invoiceId,
+                fontSize: 16,
+                bold: true,
+                alignment: 'right',
+                color: this.isInvoiceThemeColor,
+                margin: [0, 0, 0, 10] // Add some space after the title
+              },
+              {
+                text: this.formatDate(this.invoiceDate), // Add invoice date here
+                fontSize: 14,
+                alignment: 'right',
+                margin: [0, 0, 0, 20] // Add some space after the invoice date
+              }
+            ],
+          ]
         },
         {
           columns: [
@@ -663,11 +794,12 @@ export class CreateinvoiceComponent {
               width: '*',
               alignment: 'left',
               text: [
-                { text: 'Customer Details\n', style: 'sectionHeader' },
+                { text: 'Customer Details\n', bold: true, fontSize: 14, color: this.isInvoiceThemeColor },
+                { text: '\n', margin: [0, 25, 0, 0] },
                 { text: this.invoices.customerName + '\n', bold: true },
                 this.invoices.email + '\n',
                 this.invoices.contactNo + '\n',
-                this.invoices.address
+                { text: this.invoices.address }
               ]
             },
             // Bill Details on the right
@@ -675,14 +807,16 @@ export class CreateinvoiceComponent {
               width: '*',
               alignment: 'right',
               text: [
-                { text: 'Bill Details\n', style: 'sectionHeader' },
-                { text: this.invoices.billTo + '\n', bold: true },
+                { text: 'Bill Details\n', bold: true, fontSize: 14, color: this.isInvoiceThemeColor },
+                { text: '\n', margin: [0, 25, 0, 0] },
+                { text: this.invoices.billTo + '\n', bold: true},
                 this.invoices.billToEmail + '\n',
                 this.invoices.billToContact + '\n',
-                this.invoices.billToAddress
+                { text: this.invoices.billToAddress }
               ]
             }
-          ],
+          ]
+          
           // margin: [0, 0, 0, 20] // Add space after the columns
         },
         {
@@ -694,21 +828,7 @@ export class CreateinvoiceComponent {
           table: {
             headerRows: 1,
             widths: ['*', 'auto', 'auto', 'auto'],
-            body: [
-              [
-                { text: 'Product', style: 'tableHeader', border: [] },
-                { text: 'Price', style: 'tableHeader', border: [] },
-                { text: 'Quantity', style: 'tableHeader', border: [] },
-                { text: 'Amount', style: 'tableHeader', border: [] }
-              ],
-              ...this.invoices.products.map(p => ([
-                { text: p.name, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] },
-                { text: p.price, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] , alignment: 'center',},
-                { text: p.qty, fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] ,alignment: 'center', },
-                { text: this.calculateTotalPrice(p.price, p.qty, p.discount), fillColor: '#eceff7' ,  border : [] ,  margin: [0, 3, 0, 3] , alignment: 'center', }
-              ])),
-              // [{ text: 'Total Amount', colSpan: 3, fillColor: '#eceff7' ,  border: [] ,  margin: [0, 5, 0, 5] }, {}, {}, {}, { text: this.invoices.products.reduce((sum, p) => sum + (p.qty * p.price), 0).toFixed(2), fillColor: '#eceff7' , border: [] }]
-            ]
+            body: tableBody,
           }
         },
         // {
@@ -722,20 +842,14 @@ export class CreateinvoiceComponent {
             {
               width: '*',
               alignment: 'right',
-              text : this.totalTextData
+              text: this.totalTextData
             }
           ],
-        },        
-        // {
-        //   columns: [
-        //     [{ qr: `${this.invoices.customerName}`, fit: '50' }],
-        //     [{ text: 'Signature', alignment: 'right', italics: true }]
-        //   ]
-        // },
+        },
         {
           text: 'Terms',
           style: 'sectionHeader',
-          margin: [0, 20, 0, 5] // Add space before and after the section
+          margin: [0, 15, 0, 5] // Add space before and after the section
         },
         {
           ul: this.termsList.split('\n').filter((item: any) => item.trim() !== ''),
@@ -748,26 +862,26 @@ export class CreateinvoiceComponent {
         },
         {
           ul: this.notesList.split('\n').filter((item: any) => item.trim() !== '')
-        }
+        },
+        { text: 'Signature', alignment: 'right', margin: [50, 50] },
       ],
       styles: {
         sectionHeader: {
           bold: true,
           fontSize: 14,
-          color: 'green',
+          color: this.isInvoiceThemeColor,
           margin: [0, 15, 0, 5] // Adjust top and bottom margins
         },
         tableHeader: {
           bold: false,
           fontSize: 12,
-          fillColor: 'green',
+          fillColor: this.isInvoiceThemeColor,
           color: 'white',
           alignment: 'center',
           margin: [3, 3, 3, 3]
         }
       }
     };
-
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
     pdfDocGenerator.getBlob((blob: Blob) => {
       const whatsappUrl = window.URL.createObjectURL(blob);

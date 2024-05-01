@@ -57,19 +57,8 @@
 }
 
 .termstextarea {
-  width: 50%;
-  text-align: start;
-  display: flex;
-  margin: 0 10px;
-  flex-direction: column;
+  width: 100%;
 }
-
-
-// .upload-btn-wrapper {
-//   position: relative;
-//   overflow: hidden;
-//   display: inline-block;
-// }
 
 .btn {
   display: inline-block;
@@ -156,14 +145,10 @@
   }
 }
 
-.nots-term {
-  position: absolute;
-  display: flex;
-  // top: 74%;
-  bottom: 10%;
-  justify-content: space-between;
-  width: 60%;
-}
+// .nots-term {
+//   display: flex;
+//   align-items: center;
+// }
 
 .prefix {
   color: black;
