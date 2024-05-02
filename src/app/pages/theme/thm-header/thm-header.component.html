@@ -17,14 +17,14 @@
         <div class="container full-width p-xs-6">
           <!-- --------------------------------------------------------------- -->
           <div class="branding p-x-0">
-            <a href="/" *ngIf="options.theme === 'light'">
+            <a routerLink="/" *ngIf="options.theme === 'light'">
               <img
                 src="../../../../assets/images/New Project (1).png"
                 class="align-middle m-2 logo"
                 alt="logo"
               />
             </a>
-            <a href="/" *ngIf="options.theme === 'dark'">
+            <a routerLink="/" *ngIf="options.theme === 'dark'">
               <img
                 src="./assets/images/logos/light-logo.svg"
                 class="align-middle m-2"

@@ -13,7 +13,7 @@
                         <button class="btn">Upload a Logo</button>
                         <input type="file" name="myfile" (change)="handleLogoUpload($event)" required />
                       </div>
-                      <div *ngIf="invoiceLogo" style="position: relative; max-height: 60px; overflow: hidden; height: 60px; margin-bottom: 15px;">
+                      <div *ngIf="invoiceLogo" style="position: relative; max-height: 60px; overflow: hidden; height: 60px; margin-bottom: 15px;text-align: center;">
                         <i-tabler name="square-rounded-x" (click)="closeImg()" class="icon-18" style="position: absolute; right: 0;"></i-tabler>
                         <img [src]="invoiceLogo" alt="Uploaded Logo" style="max-width: 200px;margin-bottom: 15px;  height: inherit;">
                       </div>
@@ -42,8 +42,12 @@
                         </div>
                       </div>
                       <div (mouseenter)="isTitle = true" (mouseleave)="isTitle = false" class="edit m-b-5">
+                        
                         <ng-container *ngIf="!isTitle; else titleField">
-                          <h5 class="f-w-600 f-s-24 m-0 p-0 text-right h-55 d-flex justify-content-end align-items-center" style="padding: 10px 20px !important;">{{ mainTitle }}
+                          <h5 class="f-w-600 f-s-24 m-0 p-0 text-right h-55 d-flex justify-content-end align-items-center" style="padding: 10px 20px !important;">
+                            <div  style="margin-right: 10px;">
+                              <i-tabler name="pencil" class="icon-20 d-flex"></i-tabler>
+                            </div>{{ mainTitle }}
                           </h5>
                         </ng-container>
                         <ng-template #titleField>
@@ -65,7 +69,10 @@
                         <div class="col-md-6">
                           <div (mouseenter)="isInvoiceId = true" (mouseleave)="isInvoiceId = false" class="edit m-b-5">
                             <ng-container *ngIf="!isInvoiceId; else invoiceIdField">
-                              <h5 class="f-w-600 f-s-24 m-0 p-0 text-right h-55 d-flex justify-content-end align-items-center" style="padding: 10px 20px !important;">#{{ invoiceId }}
+                              <h5 class="f-w-600 f-s-24 m-0 p-0 text-right h-55 d-flex justify-content-end align-items-center" style="padding: 10px 20px !important;">
+                                <div  style="margin-right: 10px;">
+                                  <i-tabler name="pencil" class="icon-20 d-flex"></i-tabler>
+                                </div>#{{ invoiceId }}
                               </h5>
                             </ng-container>
                             <ng-template #invoiceIdField>
@@ -272,7 +279,10 @@
                             <div class="termstextarea">
                               <div (mouseenter)="isTerms = true" (mouseleave)="isTerms = false" class="edit m-b-5">
                                 <ng-container *ngIf="!isTerms; else termsField">
-                                  <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ terms }}
+                                  <h5 class="d-flex f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">
+                                    <div  style="margin-right: 10px;">
+                                      <i-tabler name="pencil" class="icon-20 d-flex"></i-tabler>
+                                    </div>{{ terms }}
                                   </h5>
                                 </ng-container>
                                 <ng-template #termsField>
@@ -291,7 +301,11 @@
                             <div class="termstextarea" style="margin-top: 70px;">
                               <div (mouseenter)="isNotes = true" (mouseleave)="isNotes = false" class="edit m-b-5">
                                 <ng-container *ngIf="!isNotes; else notesField">
-                                  <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ notes }}
+                                  <h5 class="d-flex f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">
+                                    <div  style="margin-right: 10px;">
+                                      <i-tabler name="pencil" class="icon-20 d-flex"></i-tabler>
+                                    </div>
+                                    {{ notes }}
                                   </h5>
                                 </ng-container>
                                 <ng-template #notesField>
@@ -312,7 +326,11 @@
                           <div class="col-sm-6">
                             <div (mouseenter)="isEditing = true" (mouseleave)="isEditing = false" class="edit m-b-5">
                               <ng-container *ngIf="!isEditing; else editField">
-                                <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ text }}
+                                <h5 class="d-flex f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 3px !important;">
+                                  <div  style="margin-right: 10px;">
+                                    <i-tabler name="pencil" class="icon-20 d-flex"></i-tabler>
+                                  </div>
+                                  {{ text }}
                                 </h5>
                               </ng-container>
                               <ng-template #editField>
@@ -326,12 +344,16 @@
                             {{iscurrencyName.split(" ")[0]}} {{calculateSubTotal()}}
                           </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="position: relative;">
                           <ng-container *ngIf="isvisibleButton">
                             <div class="col-sm-6">
                               <div (mouseenter)="isDiscount = true" (mouseleave)="isDiscount = false" class="edit m-b-5">
                                 <ng-container *ngIf="!isDiscount; else discountField">
-                                  <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ discount
+                                  <h5 class="d-flex f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 18px !important;">
+                                  <div  style="margin-right: 10px;">
+                                    <i-tabler name="pencil" class="icon-20 d-flex"></i-tabler>
+                                  </div>
+                                  {{ discount
                                     }}
                                   </h5>
                                 </ng-container>
@@ -343,7 +365,7 @@
                             </div>
                             <div class="col-sm-6 d-flex justify-content-start align-items-baseline">
                               <mat-form-field id="product" appearance="outline" class="w-100">
-                                <span matPrefix class="prefix">%</span>
+                                <span matPrefix class="prefix">{{selectedDiscountType === 'percentage' ? '%' : iscurrencyName.split(" ")[1]}}</span>
                                 <input type="number" matInput class="form-control" [(ngModel)]="totalDiscount" required>
                               </mat-form-field>
                               <div>
@@ -351,6 +373,12 @@
                                   <i-tabler name="square-rounded-x" (click)="discountShow()" class="icon-19"></i-tabler>
                                 </div>
                               </div>
+                            </div>
+                            <div style="width: 87%;position: absolute; bottom: -17px;right: 55px;">
+                              <mat-radio-group [(ngModel)]="selectedDiscountType">
+                                <mat-radio-button value="percentage" mat-radio-button-size="small">%</mat-radio-button>
+                                <mat-radio-button value="rupees" mat-radio-button-size="small">{{iscurrencyName.split(" ")[1]}}</mat-radio-button>
+                              </mat-radio-group>
                             </div>
                           </ng-container>
                           <ng-container *ngIf="!isvisibleButton">
@@ -360,12 +388,16 @@
                             </div>
                           </ng-container>
                         </div>
-                        <div class="row">
+                        <div class="row" [ngStyle]="{'margin-top.px': isvisibleButton ? 20 : 0}">
                           <ng-container *ngIf="isvisibleShippingButton">
                             <div class="col-sm-6">
                               <div (mouseenter)="isShipping = true" (mouseleave)="isShipping = false" class="edit m-b-5">
                                 <ng-container *ngIf="!isShipping; else shippingField">
-                                  <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ shipping
+                                  <h5 class="d-flex f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 18px !important;">
+                                    <div  style="margin-right: 10px;">
+                                      <i-tabler name="pencil" class="icon-20 d-flex"></i-tabler>
+                                    </div>
+                                    {{ shipping
                                     }}
                                   </h5>
                                 </ng-container>
@@ -399,7 +431,11 @@
                             <div class="col-sm-6">
                               <div (mouseenter)="isGst = true" (mouseleave)="isGst = false" class="edit m-b-5">
                                 <ng-container *ngIf="!isGst; else gstField">
-                                  <h5 class="f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 20px !important;">{{ gst }}
+                                  <h5 class="d-flex f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 18px !important;">
+                                    <div  style="margin-right: 10px;">
+                                      <i-tabler name="pencil" class="icon-20 d-flex"></i-tabler>
+                                    </div>
+                                    {{ gst }}
                                   </h5>
                                 </ng-container>
                                 <ng-template #gstField>

@@ -117,6 +117,7 @@ export class CreateinvoiceComponent {
   ] 
   selectedCurrency: string;
   filteredCurrencies: string[];
+  selectedDiscountType :any = 'percentage'
 
   
 
@@ -131,10 +132,12 @@ export class CreateinvoiceComponent {
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
       this.filteredCurrencies = this.currencyList;
       this.termsList = `Maintain strict confidentiality of invoices, prohibiting sharing with unauthorized parties.
-      Define conditions for invoice cancellation or modification, including associated fees.`
+
+Define conditions for invoice cancellation or modification, including associated fees.`
 
       this.notesList = `Make invoices clear with details like invoice number, date, and product/service breakdown.
-      Keep a professional tone with consistent formatting, proper grammar, and suitable language.`
+
+Keep a professional tone with consistent formatting, proper grammar, and suitable language.`
 
       this.isInvoiceThemeColor = this.invoiceThemeColorList[0].colorCode
 
@@ -147,15 +150,18 @@ export class CreateinvoiceComponent {
     this.http.get<any>('../../../../assets/currency/Currency.json').subscribe(
       data => {
         this.currencyList = data
+        this.iscurrencyName = this.getsymbol(this.currencyList.INR)
+      
       },
       error => {
         console.log('Error fetching JSON data:', error);
       }
     );
 
-    if(this.cookieService.get('invoice')){
-      const value = JSON?.parse(this.cookieService.get('invoice'))
-  
+    if(Boolean(this.cookieService.get('AcceptCookies')) === true){
+      const invoiceItem :any = localStorage.getItem('invoice');
+      const value = JSON.parse(invoiceItem);
+      
       if(value) {
         this.invoiceLogo = value?.logoUrl
         this.mainTitle = value?.title
@@ -224,18 +230,18 @@ export class CreateinvoiceComponent {
 
 
   generatePdf() {
-    const imageUrl = '../../.././../assets/images/pdfBill.png'; // Path to your image file
+    // const imageUrl = '../../.././../assets/images/pdfBill.png'; // Path to your image file
 
-    // Load the image as a blob
-    this.http.get(imageUrl, { responseType: 'blob' }).subscribe(blob => {
-      // Convert blob to data URL
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = () => {
-        const dataUrl = reader.result as string;
-        this.invoice =  dataUrl
-      };
-    });
+    // // Load the image as a blob
+    // this.http.get(imageUrl, { responseType: 'blob' }).subscribe(blob => {
+    //   // Convert blob to data URL
+    //   const reader = new FileReader();
+    //   reader.readAsDataURL(blob);
+    //   reader.onloadend = () => {
+    //     const dataUrl = reader.result as string;
+    //     this.invoice =  dataUrl
+    //   };
+    // });
   }
 
   generatePDF(action = 'open') {
@@ -290,7 +296,7 @@ export class CreateinvoiceComponent {
       },
     )
 
-
+      
 
     // Calculate the number of empty rows needed to make the total rows equal to five
     const emptyRowCount = Math.max(5 - this.invoices.products.length, 0);
@@ -399,7 +405,7 @@ export class CreateinvoiceComponent {
             },],
             [
               {
-                text: 'Invoice No' + this.invoiceId,
+                text: '#' + this.invoiceId,
                 fontSize: 16,
                 bold: true,
                 alignment: 'right',
@@ -408,7 +414,7 @@ export class CreateinvoiceComponent {
               },
               {
                 text: this.formatDate(this.invoiceDate), // Add invoice date here
-                fontSize: 14,
+                fontSize: 13,
                 alignment: 'right',
                 margin: [0, 0, 0, 20] // Add some space after the invoice date
               }
@@ -424,10 +430,10 @@ export class CreateinvoiceComponent {
               margin: [0, 3, 0, 3],
               text: [
                 { text: 'Shop Details\n', style: 'sectionHeader'},
-                { text: this.invoices.customerName + '\n', bold: true },
-                this.invoices.email + '\n',
-                this.invoices.contactNo + '\n',
-                this.invoices.address
+                { text: this.invoices.customerName + '\n' , bold: true,  fontSize: 11, margin: [0, 5, 0, 5] },
+                { text: this.invoices.email + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
+                { text: this.invoices.contactNo + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
+                { text: this.invoices.address + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
               ]
             },
             // Bill Details on the right
@@ -437,10 +443,10 @@ export class CreateinvoiceComponent {
               margin: [0, 3, 0, 3],
               text: [
                 { text: 'Customer Details\n', style: 'sectionHeader'},
-                { text: this.invoices.billTo + '\n', bold: true },
-                this.invoices.billToEmail + '\n',
-                this.invoices.billToContact + '\n',
-                this.invoices.billToAddress
+                { text: this.invoices.billTo + '\n',  bold: true,  fontSize: 11, margin: [0, 5, 0, 5] },
+                { text: this.invoices.billToEmail  + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
+                { text: this.invoices.billToContact  + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
+                { text: this.invoices.billToAddress  + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
               ]
             }
           ],
@@ -510,8 +516,8 @@ export class CreateinvoiceComponent {
       }
     };
 
-    if (this.invoiceService.getData()) {
-      const data = {
+    if (Boolean(this.cookieService.get('AcceptCookies')) === true) {
+      const data :any = {
         logoUrl: this.invoiceLogo,
         title: this.mainTitle,
         id: this.invoiceId,
@@ -523,7 +529,9 @@ export class CreateinvoiceComponent {
         notes: this.notesList
       }
 
-      this.cookieService.set('invoice', JSON.stringify(data));
+      // Store the data in localStorage
+      localStorage.setItem('invoice', JSON.stringify(data));
+
     }
 
     if (action === 'download') {
@@ -913,14 +921,26 @@ const tableBody = [
   }
 
   grandTotalNumer() {
+
     let grandTotal = 0;
-    for (const product of this.invoices.products) {
-      grandTotal += product.price * product.qty * (1 - this.totalDiscount / 100);
+    if(this.selectedDiscountType === 'percentage')  {
+      for (const product of this.invoices.products) {
+        grandTotal += product.price * product.qty * (1 - this.totalDiscount / 100);
+      }
+      grandTotal += this.totalShipping;
+      const taxAmount = grandTotal * (this.taxRate / 100);
+      grandTotal += taxAmount;
+      return grandTotal.toFixed(2);
+    } else {
+      for (const product of this.invoices.products) {
+        grandTotal += product.price * product.qty - this.totalDiscount;
+      }
+      grandTotal += this.totalShipping;
+      const taxAmount = grandTotal * (this.taxRate / 100);
+      grandTotal += taxAmount;
+      return grandTotal.toFixed(2);
     }
-    grandTotal += this.totalShipping;
-    const taxAmount = grandTotal * (this.taxRate / 100);
-    grandTotal += taxAmount;
-    return grandTotal.toFixed(2);
+
   }
 
   discountShow() {
@@ -951,7 +971,7 @@ const tableBody = [
   }
 
   getsymbol(data: any) {
-    return `${data.code} (${data.symbol_native})`
+    return `${data.code} (${data.symbol})`
   }
 }
 
