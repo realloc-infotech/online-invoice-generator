@@ -39,6 +39,7 @@ import { SendingInvoicesComponent } from './pages/resources/invoicing-guide/send
 import { BestPracticesComponent } from './pages/resources/invoicing-guide/best-practices/best-practices.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
+import { BlogComponent } from './pages/theme-pages/blog/blog.component';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -57,7 +58,8 @@ export function HttpLoaderFactory(http: HttpClient): any {
     GettingPaidComponent,
     CreatingInvoicesComponent,
     SendingInvoicesComponent,
-    BestPracticesComponent
+    BestPracticesComponent,
+    BlogComponent
   ],
   imports: [
     BrowserModule,

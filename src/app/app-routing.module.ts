@@ -16,6 +16,7 @@ import { EInvoicesComponent } from './pages/resources/e-invoices/e-invoices.comp
 import { FircReceiveForeignComponent } from './pages/resources/firc-receive-foreign/firc-receive-foreign.component';
 import { InvoiceFormatComponent } from './pages/resources/invoice-format/invoice-format.component';
 import { InvoiceTemplatesComponent } from './pages/resources/invoice-templates/invoice-templates.component';
+import { BlogComponent } from './pages/theme-pages/blog/blog.component';
 
 
 const routes: Routes = [
@@ -93,6 +94,10 @@ const routes: Routes = [
   {
     path : 'firc-india',
     component : FircReceiveForeignComponent
+  },
+  {
+    path : 'blog',
+    component : BlogComponent
   },
 ];
 

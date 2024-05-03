@@ -20,6 +20,9 @@ import { ThemePagesRoutes } from './theme-pages.routing';
     ReactiveFormsModule,
     TablerIconsModule.pick(TablerIcons),
     MatNativeDateModule
+  ],
+  declarations: [
+ 
   ]
 })
 export class ThemePagesModule {}
