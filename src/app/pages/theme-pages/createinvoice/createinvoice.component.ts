@@ -1,4 +1,4 @@
-import { Component, Inject, Optional } from '@angular/core';
+import { Component, ElementRef, Inject, Optional, ViewChild } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl, UntypedFormArray, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -9,7 +9,6 @@ import { DatePipe } from '@angular/common';
 import { InvoiceService } from '../../theme/service/invoice.service';
 import { CookieService } from 'ngx-cookie-service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 class Product {
   name: string;
   price: number = 0;
@@ -26,8 +25,9 @@ class Invoice {
   billToEmail: string;
   billToAddress: String;
   billToContact: string;
-
   products: Product[] = [];
+  customerToGST : string ;
+  customerFormGST : string ;
   additionalDetails: string;
 
   constructor() {
@@ -59,6 +59,8 @@ export class CreateinvoiceComponent {
   isInvoiceId : boolean = false
   invoiceId :any =  1
   text: string = "Sub Total"; // Input text
+  formGSTName: any = "GST";
+  toGSTName: any = "GST";
   discount: any = "Discount"; // Input text
   shipping: any = "Shipping";
   mainTitle: any = "INVOICE";
@@ -68,6 +70,8 @@ export class CreateinvoiceComponent {
   isEditing: boolean = false;
   isDiscount: boolean = false;
   isShipping: boolean = false;
+  isFormGst: boolean = false;
+  isToGst: boolean = false;
   isGst: boolean = false;
   isTerms: boolean = false;
   isNotes: boolean = false;
@@ -118,6 +122,8 @@ export class CreateinvoiceComponent {
   selectedCurrency: string;
   filteredCurrencies: string[];
   selectedDiscountType :any = 'percentage'
+  isShowFormGst : boolean = true
+  isShowToGst : boolean = true
 
   
 
@@ -161,21 +167,19 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
     if(Boolean(this.cookieService.get('AcceptCookies')) === true){
       const invoiceItem :any = localStorage.getItem('invoice');
       const value = JSON.parse(invoiceItem);
-      
+
       if(value) {
         this.invoiceLogo = value?.logoUrl
         this.mainTitle = value?.title
         this.invoiceId = value?.id + 1
-        this.invoices.customerName = value?.billFrom
         this.invoices.email = value?.emailId
         this.invoices.address = value?.fromAddress
         this.invoices.contactNo = value?.contactNo
+        this.invoices.customerName = value?.billFrom
         this.termsList = value?.termsConditions
         this.notesList = value?.notes
       }
     }
-
-    this.generatePdf()
   }
 
   ////////////////////////////////////////////////////////////////////////////////////
@@ -228,72 +232,36 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
 
   invoice :any = ''
 
-
-  generatePdf() {
-    // const imageUrl = '../../.././../assets/images/pdfBill.png'; // Path to your image file
-
-    // // Load the image as a blob
-    // this.http.get(imageUrl, { responseType: 'blob' }).subscribe(blob => {
-    //   // Convert blob to data URL
-    //   const reader = new FileReader();
-    //   reader.readAsDataURL(blob);
-    //   reader.onloadend = () => {
-    //     const dataUrl = reader.result as string;
-    //     this.invoice =  dataUrl
-    //   };
-    // });
-  }
-
   generatePDF(action = 'open') {
     this.totalTextData = []
     this.totalTextData.push(
-      {
-        text: `Sub Total: ${this.iscurrencyName.split(" ")[0]} ${this.calculateSubTotal()}/- \n`,
-        bold: true,
-        margin: [0, 5],
-        lineHeight: 1.5
-      },
+      { text: `${this.text}       :   `, bold: true , lineHeight: 1.3 },
+      `${this.iscurrencyName.split(" ")[1]}${this.calculateSubTotal()}` + '\n',
     )
     if (this.isvisibleButton) {
       this.totalTextData.push(
-        {
-          text: `Discount: ${this.totalDiscount}% \n`,
-          bold: true,
-          margin: [0, 5],
-          lineHeight: 1.5
-        },
+        { text: `${this.discount}        :   `, bold: true , lineHeight: 1.3 },
+        `${this.totalDiscount}${this.selectedDiscountType === 'percentage' ? '%' : '₹'}` + '\n',
       )
     }
 
     if (this.isvisibleShippingButton) {
       this.totalTextData.push(
-        {
-          text: `Shipping: ${this.iscurrencyName.split(" ")[1]} ${this.totalShipping}/- \n`,
-          bold: true,
-          margin: [0, 5],
-          lineHeight: 1.5
-        },
+        { text: `${this.shipping}        :   `, bold: true , lineHeight: 1.3 },
+        `${this.iscurrencyName.split(" ")[1]}${this.totalShipping}` + '\n',
       )
     }
 
     if (this.isvisibleTaxButton) {
       this.totalTextData.push(
-        {
-          text: `Tax: ${this.iscurrencyName.split(" ")[0]} ${this.taxRate}% \n`,
-          bold: true,
-          margin: [0, 5],
-          lineHeight: 1.5
-        },
+        { text: `${this.gst}                  :   `, bold: true , lineHeight: 1.3 },
+        `${this.taxRate}%` + '\n',
       )
     }
 
     this.totalTextData.push(
-      {
-        text: `Grand Total: ${this.iscurrencyName.split(" ")[0]} ${this.grandTotalNumer()}/- \n`,
-        bold: true,
-        margin: [0, 5],
-        lineHeight: 1.5
-      },
+      { text: "Grand Total    :   ", bold: true , lineHeight: 1.3 },
+      `${this.iscurrencyName.split(" ")[1]}${this.grandTotalNumer()}` + '\n',
     )
 
       
@@ -429,11 +397,12 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
               alignment: 'left',
               margin: [0, 3, 0, 3],
               text: [
-                { text: 'Shop Details\n', style: 'sectionHeader'},
-                { text: this.invoices.customerName + '\n' , bold: true,  fontSize: 11, margin: [0, 5, 0, 5] },
-                { text: this.invoices.email + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
-                { text: this.invoices.contactNo + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
-                { text: this.invoices.address + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
+                { text: 'Shop Details\n', style: 'sectionHeader' ,lineHeight: 1.3},
+                { text: this.invoices.customerName + '\n' , bold: true,  fontSize: 11, lineHeight: 1.3 },
+                { text: this.invoices.email + '\n',  fontSize: 11, lineHeight: 1.3 },
+                { text: this.invoices.contactNo + '\n',  fontSize: 11, lineHeight: 1.3 },
+                { text: this.invoices.address + '\n',  fontSize: 11, lineHeight: 1.3 },
+                ...(this.isShowFormGst ? [{ text: `${this.formGSTName} : `, bold: true, lineHeight: 1.3 }, `${this.invoices.customerFormGST}` + '\n'] : []),
               ]
             },
             // Bill Details on the right
@@ -442,11 +411,12 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
               alignment: 'right',
               margin: [0, 3, 0, 3],
               text: [
-                { text: 'Customer Details\n', style: 'sectionHeader'},
-                { text: this.invoices.billTo + '\n',  bold: true,  fontSize: 11, margin: [0, 5, 0, 5] },
-                { text: this.invoices.billToEmail  + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
-                { text: this.invoices.billToContact  + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
-                { text: this.invoices.billToAddress  + '\n',  fontSize: 11, margin: [0, 5, 0, 5] },
+                { text: 'Customer Details\n', style: 'sectionHeader' ,lineHeight: 1.3},
+                { text: this.invoices.billTo + '\n',  bold: true,  fontSize: 11, lineHeight: 1.3 },
+                { text: this.invoices.billToEmail  + '\n',  fontSize: 11, lineHeight: 1.3 },
+                { text: this.invoices.billToContact  + '\n',  fontSize: 11, lineHeight: 1.3 },
+                { text: this.invoices.billToAddress  + '\n',  fontSize: 11, lineHeight: 1.3 },
+                ...(this.isShowToGst ? [{ text: `${this.formGSTName} : `, bold: true, lineHeight: 1.3 }, `${this.invoices.customerFormGST}` + '\n'] : []),
               ]
             }
           ],
@@ -464,21 +434,17 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
             body: tableBody,
           }
         },
-        // {
-        //   text: 'Additional Details',
-        //   style: 'sectionHeader'
-        // },
-
         {
-          margin: [0, 20, 0, 10],
           columns: [
-            {
-              width: '*',
-              alignment: 'right',
-              text: this.totalTextData
-            }
-          ],
-        },
+              // Customer Details on the left
+              {
+                  width: '*',
+                  alignment: 'left',
+                  margin: [350, 10, 0, 0],
+                  text: this.totalTextData
+              }
+          ]
+      },
         {
           text: 'Terms',
           style: 'sectionHeader',
@@ -542,60 +508,6 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
       pdfMake.createPdf(docDefinition).open();
     }
 
-  }
-
-  openPdfDemo(){
-    let docDefinition: any = {
-      pageSize: 'A4',
-      pageMargins: [40, 60, 40, 60], // [left, top, right, bottom]
-      background: function (currentPage: any) {
-        return {
-          canvas: [
-            {
-              type: 'line',
-              x1: 40, // Left margin
-              y1: 60, // Top margin
-              x2: 40, // Left margin
-              y2: 781.89, // 841.89 - Bottom margin
-              lineColor: '#000' // Line color
-            },
-            {
-              type: 'line',
-              x1: 40, // Left margin
-              y1: 60, // Top margin
-              x2: 555.28, // A4 width - Right margin
-              y2: 60, // Top margin
-              lineColor: '#000'
-            },
-            {
-              type: 'line',
-              x1: 555.28, // A4 width - Right margin
-              y1: 60, // Top margin
-              x2: 555.28, // A4 width - Right margin
-              y2: 781.89, // 841.89 - Bottom margin
-              lineColor: '#000'
-            },
-            // Bottom margin line
-            {
-              type: 'line',
-              x1: 40, // Left margin
-              y1: 781.89, // 841.89 - Bottom margin
-              x2: 555.28, // A4 width - Right margin
-              y2: 781.89, // 841.89 - Bottom margin
-              lineColor: '#000'
-            }
-          ]
-        };
-      },
-      content: [
-        {
-          image: this.invoice,
-          width: 510, // Set the width of the image
-          height: 150, // Set the height of the image
-        },
-      ]
-    }
-    pdfMake.createPdf(docDefinition).print();
   }
 
   formatDate(date: Date): string {
@@ -840,20 +752,46 @@ const tableBody = [
           }
         },
         // {
-        //   text: 'Additional Details',
-        //   style: 'sectionHeader'
+        //   margin: [0, 20, 0, 10],
+        //   columns: [
+        //     {
+        //       width: '*',
+        //       alignment: 'right',
+        //       text: this.totalTextData
+        //     }
+        //   ],
         // },
-
         {
-          margin: [0, 20, 0, 10],
           columns: [
+            // Customer Details on the left
             {
               width: '*',
-              alignment: 'right',
-              text: this.totalTextData
+              alignment: 'left',
+              text: [
+                { text: "Sub Total:" + '\n', bold: true },
+                { text: "Discount:" + '\n', bold: true },
+                { text: "Shipping:" + '\n', bold: true },
+                { text: "Tax:" + '\n', bold: true },
+                { text: "Grand Total:" + '\n', bold: true },
+              ]
+            },
+            // Bill Details on the right
+            {
+              width: '*',
+              alignment: 'left',
+              text: [
+                { text: 12.00 + '\n'},
+                { text: 10 + '\n'},
+                { text: 12 + '\n'},
+                { text: 124 + '\n'},
+                { text: 12.00 + '\n'},
+              ]
             }
-          ],
+          ]
+          
+          // margin: [0, 0, 0, 20] // Add space after the columns
         },
+
         {
           text: 'Terms',
           style: 'sectionHeader',
@@ -914,18 +852,22 @@ const tableBody = [
   calculateSubTotal(): any {
     let subTotal = 0;
     for (const product of this.invoices.products) {
-      subTotal += product.price * product.qty;
+      if (product.price >= 0 && product.qty >= 0) {
+        subTotal += product.price * product.qty;
+      }
     }
-
-    return subTotal.toFixed(2) ? subTotal.toFixed(2) : 0;
+  
+    return subTotal.toFixed(2); 
   }
+  
 
   grandTotalNumer() {
-
     let grandTotal = 0;
     if(this.selectedDiscountType === 'percentage')  {
       for (const product of this.invoices.products) {
-        grandTotal += product.price * product.qty * (1 - this.totalDiscount / 100);
+        if (product.price >= 0 && product.qty >= 0) {
+          grandTotal += product.price * product.qty * (1 - this.totalDiscount / 100);
+        }
       }
       grandTotal += this.totalShipping;
       const taxAmount = grandTotal * (this.taxRate / 100);
@@ -933,15 +875,17 @@ const tableBody = [
       return grandTotal.toFixed(2);
     } else {
       for (const product of this.invoices.products) {
-        grandTotal += product.price * product.qty - this.totalDiscount;
+        if (product.price >= 0 && product.qty >= 0) {
+          grandTotal += product.price * product.qty - this.totalDiscount;
+        }
       }
       grandTotal += this.totalShipping;
       const taxAmount = grandTotal * (this.taxRate / 100);
       grandTotal += taxAmount;
       return grandTotal.toFixed(2);
     }
-
   }
+  
 
   discountShow() {
     this.isvisibleButton = false
@@ -972,6 +916,6 @@ const tableBody = [
 
   getsymbol(data: any) {
     return `${data.code} (${data.symbol})`
-  }
+  }  
 }
 

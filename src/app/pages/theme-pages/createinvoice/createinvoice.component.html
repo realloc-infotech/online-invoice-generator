@@ -1,5 +1,4 @@
 <div class="container">
-  <!-- <button (click)="openPdfDemo()">open Pdf</button> -->
   <div class="row rowFix">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <mat-sidenav-container class="cardWithShadow m-t-20">
@@ -13,9 +12,9 @@
                         <button class="btn">Upload a Logo</button>
                         <input type="file" name="myfile" (change)="handleLogoUpload($event)" required />
                       </div>
-                      <div *ngIf="invoiceLogo" style="position: relative; max-height: 60px; overflow: hidden; height: 60px; margin-bottom: 15px;text-align: center;">
+                      <div *ngIf="invoiceLogo" style="position: relative; overflow: hidden; margin-bottom: 15px;text-align: center;">
                         <i-tabler name="square-rounded-x" (click)="closeImg()" class="icon-18" style="position: absolute; right: 0;"></i-tabler>
-                        <img [src]="invoiceLogo" alt="Uploaded Logo" style="max-width: 200px;margin-bottom: 15px;  height: inherit;">
+                        <img [src]="invoiceLogo" alt="Uploaded Logo" style="max-width: 200px;margin-top: 25px;  height: inherit;">
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -91,7 +90,7 @@
                         <div class="col-md-6">
                           <mat-form-field appearance="outline" id="billbox" class="w-100 h-60">
                             <mat-label>Bill From</mat-label>
-                            <input type="text" matInput class="form-control" name="name" id="name"
+                            <input type="text" matInput class="form-control" name="customerName" id="customerName"
                               [ngClass]="{'is-invalid': invoiceForm.submitted && CustName.invalid}"
                               [(ngModel)]="invoices.customerName" #CustName="ngModel" required>
                           </mat-form-field>
@@ -122,7 +121,44 @@
                                    pattern="[0-9]{10}">
                           </mat-form-field>
                         </div>
-                        
+                        <div class="col-md-12" *ngIf="!isShowFormGst">
+                          <div class="sub-button" (click)="isShowFormGst = true">
+                            <i-tabler name="plus" class="icon-16"></i-tabler>
+                            GST
+                          </div>
+                        </div>
+                        <div class="col-md-12 d-flex" *ngIf="isShowFormGst">
+                          <div class="col-md-4">
+                            <div (mouseenter)="isFormGst = true" (mouseleave)="isFormGst = false" class="edit m-b-5">
+                              <ng-container *ngIf="!isFormGst; else formGST">
+                                <h5 class="d-flex f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 18px !important;">
+                                  <div  style="margin-right: 10px;">
+                                    <i-tabler name="pencil" class="icon-20 d-flex"></i-tabler>
+                                  </div>
+                                  {{ formGSTName
+                                  }}
+                                </h5>
+                              </ng-container>
+                              <ng-template #formGST>
+                                <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="formGSTName" [ngModelOptions]="{standalone: true}"
+                                  (keydown.enter)="isFormGst = false" (blur)="isFormGst = false">
+                              </ng-template>
+                            </div>
+  
+                          </div>
+                          <div class="col-md-7">
+                            <mat-form-field appearance="outline" id="billbox" class="w-100 h-60">
+                              <mat-label>{{formGSTName}}</mat-label>
+                              <input type="text" matInput class="form-control" name="name" id="name"
+                                [(ngModel)]="invoices.customerFormGST" #CustGST="ngModel">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-md-1" style="display: flex; justify-content: end;">
+                            <div (click)="isShowFormGst = false">
+                              <i-tabler name="square-rounded-x" class="icon-18"></i-tabler>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -158,6 +194,45 @@
                               [(ngModel)]="invoices.billToContact" #billToContact="ngModel" required pattern="[0-9]{10}">
                           </mat-form-field>
                         </div>
+
+                        <div class="col-md-12" *ngIf="!isShowToGst">
+                          <div class="sub-button" (click)="isShowToGst = true">
+                            <i-tabler name="plus" class="icon-16"></i-tabler>
+                            GST
+                          </div>
+                        </div>
+                        <div class="col-md-12 d-flex" *ngIf="isShowToGst">
+                        <div class="col-md-4">
+                          <div (mouseenter)="isToGst = true" (mouseleave)="isToGst = false" class="edit m-b-5">
+                            <ng-container *ngIf="!isToGst; else toGSTNameField">
+                              <h5 class="d-flex f-w-600 f-s-16 text-left m-0 p-0" style="padding: 10px 18px !important;">
+                                <div  style="margin-right: 10px;">
+                                  <i-tabler name="pencil" class="icon-20 d-flex"></i-tabler>
+                                </div>
+                                {{ toGSTName
+                                }}
+                              </h5>
+                            </ng-container>
+                            <ng-template #toGSTNameField>
+                              <input type="text" class="m-b-5 f-w-600 f-s-16" [(ngModel)]="toGSTName" [ngModelOptions]="{standalone: true}"
+                                (keydown.enter)="isToGst = false" (blur)="isToGst = false">
+                            </ng-template>
+                          </div>
+
+                        </div>
+                        <div class="col-md-7">
+                          <mat-form-field appearance="outline" id="billbox" class="w-100 h-60">
+                            <mat-label>{{toGSTName}}</mat-label>
+                            <input type="text" matInput class="form-control" name="name" id="name"
+                              [(ngModel)]="invoices.customerToGST" #CustGST="ngModel">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-1" style="display: flex; justify-content: end;">
+                          <div (click)="isShowToGst = false">
+                            <i-tabler name="square-rounded-x" class="icon-18"></i-tabler>
+                          </div>
+                        </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -188,21 +263,20 @@
                               <span matPrefix class="prefix">{{iscurrencyName.split(" ")[1]}}</span>
                               <input type="number" matInput class="form-control" name="price{{i}}" id="price"
                                 [ngClass]="{'is-invalid': invoiceForm.submitted && ProductPrice.invalid}"
-                                [(ngModel)]="product.price" #ProductPrice="ngModel" required>
+                                [(ngModel)]="product.price" #ProductPrice="ngModel" required min="0">
                             </mat-form-field>
                           </td>
                           <td>
                             <mat-form-field id="product" appearance="outline" class="w-100 hide-hint h-40">
                               <input type="number" matInput class="form-control" name="quantity{{i}}" id="quantity"
                                 [ngClass]="{'is-invalid': invoiceForm.submitted && ProductQty.invalid}"
-                                [(ngModel)]="product.qty" #ProductQty="ngModel" required>
+                                [(ngModel)]="product.qty" #ProductQty="ngModel" required min="0">
                             </mat-form-field>
                           </td>
                           <td class="show-text-center">
                             <div>
                               {{iscurrencyName.split(" ")[0]}}
-                              {{calculateTotalPrice(product.price ? product.price : 0 , product.qty ? product.qty : 0 ,
-                              product.discount ? product.discount : 0)}}
+                              {{  ProductQty.valid && ProductPrice.valid ? calculateTotalPrice(product.price ? product.price : 0 , product.qty ? product.qty : 0 , product.discount ? product.discount : 0) : calculateTotalPrice(0 , 0 , 0)}}
                             </div>
                           </td>
                           <td>
@@ -340,7 +414,6 @@
                             </div>
                           </div>
                           <div class="col-sm-6">
-                            <!-- : {{ subTotal }} -->
                             {{iscurrencyName.split(" ")[0]}} {{calculateSubTotal()}}
                           </div>
                         </div>
@@ -374,7 +447,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div style="width: 87%;position: absolute; bottom: -17px;right: 55px;">
+                            <div style="width: 70%;position: absolute; bottom: -17px;right: 35px;">
                               <mat-radio-group [(ngModel)]="selectedDiscountType">
                                 <mat-radio-button value="percentage" mat-radio-button-size="small">%</mat-radio-button>
                                 <mat-radio-button value="rupees" mat-radio-button-size="small">{{iscurrencyName.split(" ")[1]}}</mat-radio-button>
