@@ -214,6 +214,7 @@
     margin: 10px 0;
 
     }
+   
   }
   .showTable{
     display: none;
@@ -221,6 +222,21 @@
   .addbutton{
     button{
       margin-top: 20px;
+    }
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  .currencyandthemecolor{
+    flex-direction: column !important;
+  }
+  .responsiveShowTotal{
+    margin-top: 29%;
+  }
+  .responsiveShowGst{
+    flex-direction: column;
+    div{
+      padding: 3px;
     }
   }
 }
@@ -267,4 +283,9 @@
 ::ng-deep .mdc-radio__inner-circle{
   top: -0.5px !important;
   left: -0.5px !important;
+}
+
+.currencyandthemecolor{
+  display: flex; 
+  justify-content: space-between;
 }

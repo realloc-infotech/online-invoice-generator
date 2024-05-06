@@ -18,7 +18,7 @@
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <div style="display: flex; justify-content: space-between;">
+                      <div class="currencyandthemecolor">
                         <div class="m-r-10 w-100">
                           <mat-form-field appearance="outline" class="w-100" id="billbox">
                             <mat-label>Currency</mat-label>
@@ -127,7 +127,7 @@
                             GST
                           </div>
                         </div>
-                        <div class="col-md-12 d-flex" *ngIf="isShowFormGst">
+                        <div class="col-md-12 d-flex responsiveShowGst" *ngIf="isShowFormGst">
                           <div class="col-md-4">
                             <div (mouseenter)="isFormGst = true" (mouseleave)="isFormGst = false" class="edit m-b-5">
                               <ng-container *ngIf="!isFormGst; else formGST">
@@ -201,7 +201,7 @@
                             GST
                           </div>
                         </div>
-                        <div class="col-md-12 d-flex" *ngIf="isShowToGst">
+                        <div class="col-md-12 d-flex responsiveShowGst" *ngIf="isShowToGst">
                         <div class="col-md-4">
                           <div (mouseenter)="isToGst = true" (mouseleave)="isToGst = false" class="edit m-b-5">
                             <ng-container *ngIf="!isToGst; else toGSTNameField">
@@ -395,7 +395,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-4">
+                      <div class="col-md-4 responsiveShowTotal">
                         <div class="d-flex align-items-baseline">
                           <div class="col-sm-6">
                             <div (mouseenter)="isEditing = true" (mouseleave)="isEditing = false" class="edit m-b-5">

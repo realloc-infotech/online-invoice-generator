@@ -1,15 +1,51 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
 
-.container{
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.container {
     max-width: 1000px !important;
 }
 
+.cookiesBg {
+    text-align: starts;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
 .cookies {
     color: #fff;
     font-size: 16px;
     font-weight: 500;
+}
+
+@media (max-width: 900px) {
+    .cookies {
+        font-size: 14px !important;
+    }
+
+    .cookies {
+        br {
+            display: none;
+        }
+    }
+    .cookiesHeight{
+        padding: 10px;
+    }
+    .cookies-button{
+        margin-top: 10px !important;
+    }
+    .cookiesBg{
+        flex-direction: column !important;
+    }
 }

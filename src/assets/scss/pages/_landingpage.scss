@@ -61,7 +61,7 @@
 
 @media (max-width: 1200px) {
   .banner-section {
-    padding-top: 60px;
+    padding-top: 25px;
   }
 }
 
@@ -81,6 +81,11 @@
   &.sm {
     padding: 0 34px !important;
   }
+}
+
+.cookiesHeight{
+
+  padding: 10px;
 }
 
 @media (max-width: 767px) {
