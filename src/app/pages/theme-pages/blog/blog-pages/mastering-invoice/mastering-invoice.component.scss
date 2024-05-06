@@ -1,0 +1,52 @@
+$primary-color: #2a3547;
+$secondary-color: #67889f;
+$light-gray: rgba(231, 234, 243, 0.7);
+$dark-gray: #67889f;
+
+.container {
+    max-width: 1320px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: $primary-color;
+    font-size: 14px;
+    line-height: 1.334rem;
+    .card {
+        padding: 30px;
+        border: 1px solid $light-gray;
+        border-radius: 21px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    .display-3 {
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1.2;
+        margin-bottom: 30px;
+        color: $primary-color;
+    }
+    hr {
+        border: none;
+        border-top: 1px solid $light-gray;
+        margin: 30px 0;
+    }
+    p {
+        margin-bottom: 1rem;
+        margin-top: 0;
+        color: $secondary-color;
+    }ol {
+        margin-bottom: 1rem;
+        margin-top: 0;
+        padding-left: 2rem;
+    }
+    
+    li {
+        margin-bottom: 5px;
+        color: $secondary-color;
+    }
+    h2 {
+        margin-top: 45px;
+        font-size: 1.3125rem;
+        color: $primary-color;
+        line-height: 1.2;
+    }
+   
+}
+

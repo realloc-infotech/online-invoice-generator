@@ -17,6 +17,13 @@ import { FircReceiveForeignComponent } from './pages/resources/firc-receive-fore
 import { InvoiceFormatComponent } from './pages/resources/invoice-format/invoice-format.component';
 import { InvoiceTemplatesComponent } from './pages/resources/invoice-templates/invoice-templates.component';
 import { BlogComponent } from './pages/theme-pages/blog/blog.component';
+import { MasteringInvoiceComponent } from './pages/theme-pages/blog/blog-pages/mastering-invoice/mastering-invoice.component';
+import { UnderstandingInvoiceComponent } from './pages/theme-pages/blog/blog-pages/understanding-invoice/understanding-invoice.component';
+import { StreamlineInvoiceComponent } from './pages/theme-pages/blog/blog-pages/streamline-invoice/streamline-invoice.component';
+import { NavigatingGstInvoiceComponent } from './pages/theme-pages/blog/blog-pages/navigating-gst-invoice/navigating-gst-invoice.component';
+import { NavigatingVatInvoiceComponent } from './pages/theme-pages/blog/blog-pages/navigating-vat-invoice/navigating-vat-invoice.component';
+import { EssentialTipsInvoiceComponent } from './pages/theme-pages/blog/blog-pages/essential-tips-invoice/essential-tips-invoice.component';
+import { StreamliningInvoiceComponent } from './pages/theme-pages/blog/blog-pages/streamlining-invoice/streamlining-invoice.component';
 
 
 const routes: Routes = [
@@ -39,6 +46,7 @@ const routes: Routes = [
       },
     ],
   },
+  
   {
     path : 'createinvoice',
     component : CreateinvoiceComponent
@@ -97,7 +105,36 @@ const routes: Routes = [
   },
   {
     path : 'blog',
-    component : BlogComponent
+    component : BlogComponent,
+    
+  },
+   {
+    path : 'mastering',
+    component : MasteringInvoiceComponent
+  },
+  {
+    path : 'understanding-invoice',
+    component : UnderstandingInvoiceComponent
+  },
+  {
+    path : 'streamline-invoice',
+    component : StreamlineInvoiceComponent
+  },
+  {
+    path : 'navigating-gst-invoice',
+    component : NavigatingGstInvoiceComponent
+  },
+  {
+    path : 'navigating-vat-invoice',
+    component : NavigatingVatInvoiceComponent
+  },
+  {
+    path : 'essential-tips-invoice',
+    component : EssentialTipsInvoiceComponent
+  },
+  {
+    path : 'streamlining-invoice',
+    component : StreamliningInvoiceComponent
   },
 ];
 
