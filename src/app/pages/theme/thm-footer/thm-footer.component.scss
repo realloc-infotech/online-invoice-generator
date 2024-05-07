@@ -81,7 +81,7 @@
     position: relative;
     padding-bottom: 12px;
     font-family: "Plus Jakarta Sans", sans-serif;
-    color: #2a3547;
+    color:#f6f9fc;
     font-size: 15px;
     line-height: 1.334rem;
 }
@@ -95,4 +95,35 @@
     bottom: 0;
     display: block;
     border-bottom: 3px solid #f6f9fc;
+}
+.footer-privcy-terms{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    ul{
+        display: flex;
+        align-items: center;
+    }
+}
+
+.row{
+    padding: 20px 0;
+}
+
+.margin-top-47{
+    margin-top: 47px;
+}
+@media only screen and (max-width: 1280px) {
+    .margin-top-47{
+        margin-top: 0 !important;
+    }
+    .footer-heading-terms {
+       display: none !important;
+    }
+  }
+
+@media only screen and (max-width: 668px) {
+    .footer-privcy-terms {
+        flex-direction: column !important;
+    }
 }

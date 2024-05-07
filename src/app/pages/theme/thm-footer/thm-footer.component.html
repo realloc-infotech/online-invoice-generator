@@ -1,42 +1,60 @@
       <footer class="section bg-footer">
         <div class="container">
-            <div class="row">
+            <div class="row" style="width: 100%;">
                 <div class="col-lg-4">
                     <div class="">
                         <h6 class="footer-heading m-b-0" routerLink="/">
                             <img src="../../../../assets/images/New Project (1).png" width="150" alt="">
                         </h6>
                         <ul class="list-unstyled footer-link mt-4 p-0">
-                            <li><a>B-801 to 804, IT Park, Opp. Gajera International <br>
-                                School, Digital Valley (Uttran) Surat, <br>
+                            <li><a>B-801 to 804, IT Park, Opp. Gajera International
+                                School, Digital Valley (Uttran) Surat,
                                 Gujarat, India - 394101</a></li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="col-lg-4">
-                    <div class="">
+                <div class="col-lg-2">
+                    <div style="margin-top: 47px;">
                         <h6 class="footer-heading m-b-0">RESOURCES</h6>
                         <ul class="list-unstyled footer-link mt-4 p-0">
                             <li><a href="" [routerLink]="['/guide']">Invoicing Guide</a></li>
                             <li><a href="" [routerLink]="['/help']">How to Use</a></li>
                             <li><a href="" [routerLink]="['/invoice-format-2']">Invoice Format</a></li>
-                            <li><a href="" [routerLink]="['/e-invoices']">E-Invoicing</a></li>
-                            <li><a href="" [routerLink]="['/invoice-templates']">Invoice Templates</a></li>
-                            <li><a href="" [routerLink]="['/firc-india']">FIRC in India</a></li>
-
                         </ul>
                     </div>
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="">
-                        <h6 class="footer-heading-terms"></h6>
-                        <p class="contact-info-reserved">©2024 Realloc Infotech PVT LTD. All Right Reserved.</p>
-                        <p class="contact-info" routerLink="/privacy">Privacy Policy</p>
-                        <p class="contact-info" routerLink="/terms">Terms of Service</p>
+                    <div class="margin-top-47">
+                        <h6 class="footer-heading-terms m-b-0"  >RESOURCES</h6>
+                        <ul class="list-unstyled footer-link mt-4 p-0">
+                            <li><a href="" [routerLink]="['/e-invoices']">E-Invoicing</a></li>
+                            <li><a href="" [routerLink]="['/invoice-templates']">Invoice Templates</a></li>
+                            <li><a href="" [routerLink]="['/firc-india']">FIRC in India</a></li>
+                        </ul>
                     </div>
                 </div>
+
+                <!-- <div class="col-lg-4">
+                    <div style="margin-top: 46px;">
+                        <h6 class="footer-heading-terms"></h6>
+                        <p class="contact-info-reserved"></p>
+                        <p class="contact-info" [routerLink]="['/e-invoices']">E-Invoicing</p>
+                        <p class="contact-info" [routerLink]="['/invoice-templates']">Invoice Templates</p>
+                        <p class="contact-info" [routerLink]="['/firc-india']">FIRC in India</p>
+                    </div>
+                </div> -->
             </div>
+            
+        <div class="footer-privcy-terms mt-6">
+            <p class="footer-alt mb-0 f-14">©2024 Realloc Infotech PVT LTD. All Right Reserved.</p>
+            <div>
+                <ul>
+                    <li class="contact-info" routerLink="/privacy">Privacy Policy</li>
+                    <li style="margin-left: 35px;" class="contact-info" routerLink="/terms">Terms of Service</li>
+                </ul>
+            </div>
+        </div>
         </div>
     </footer>

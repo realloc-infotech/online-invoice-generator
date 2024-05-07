@@ -108,32 +108,32 @@ const routes: Routes = [
     component : BlogComponent,
     
   },
-   {
-    path : 'mastering',
+  {
+    path : 'blog/mastering-invoice',
     component : MasteringInvoiceComponent
   },
   {
-    path : 'understanding-invoice',
+    path : 'blog/understanding-invoice',
     component : UnderstandingInvoiceComponent
   },
   {
-    path : 'streamline-invoice',
+    path : 'blog/streamline-invoice',
     component : StreamlineInvoiceComponent
   },
   {
-    path : 'navigating-gst-invoice',
+    path : 'blog/navigating-gst-invoice',
     component : NavigatingGstInvoiceComponent
   },
   {
-    path : 'navigating-vat-invoice',
+    path : 'blog/navigating-vat-invoice',
     component : NavigatingVatInvoiceComponent
   },
   {
-    path : 'essential-tips-invoice',
+    path : 'blog/essential-tips-invoice',
     component : EssentialTipsInvoiceComponent
   },
   {
-    path : 'streamlining-invoice',
+    path : 'blog/streamlining-invoice',
     component : StreamliningInvoiceComponent
   },
 ];

@@ -1,6 +1,6 @@
 <style>
   .logo {
-    width: 33%;
+    width: 40%;
     padding-top: 10px;
   }
 
@@ -101,16 +101,16 @@
     </div>
 
     <mat-accordion>
-      <div class="p-x-16">
-        <a mat-button class="m-b-24 m-t-24 f-s-16 f-w-500" [routerLink]="['/help']" (click)="filterNavRight.toggle()">Help</a>
+      <div class="p-x-16" [routerLink]="['/help']" (click)="filterNavRight.toggle()">
+        <a mat-button class="m-b-24 m-t-24 f-s-16 f-w-500" style="padding-left: 0;">Help</a>
       </div>
 
-      <div class="p-x-16">
-        <a mat-button class="m-b-24 f-s-16 f-w-500" [routerLink]="['/blog']" (click)="filterNavRight.toggle()">Blog</a>
+      <div class="p-x-16" [routerLink]="['/blog']" (click)="filterNavRight.toggle()">
+        <a mat-button class="m-b-24 f-s-16 f-w-500" style="padding-left: 0;">Blog</a>
       </div>
 
-      <div class="p-x-16">
-        <a mat-button class="m-b-24 f-s-16 f-w-500" [routerLink]="['/guide']" (click)="filterNavRight.toggle()">Invoicing Guide</a>
+      <div class="p-x-16" [routerLink]="['/guide']" (click)="filterNavRight.toggle()">
+        <a mat-button class="m-b-24 f-s-16 f-w-500" >Invoicing Guide</a>
       </div>
 
       <mat-expansion-panel class="shadow-none">
@@ -126,7 +126,7 @@
                 </button>
 
                 <div class="m-l-16">
-                  <h5 class="f-s-14 f-w-600 m-0 textprimary mat-body-1 hover-text">
+                  <h5 class="f-s-14 f-w-600 m-0 textprimary mat-body-1 hover-text" style="padding-left: 10px;">
                     {{ appdd.title }}
                   </h5>
                   <!-- <span class="mat-body-1 f-s-12">{{ appdd.subtitle }}</span> -->

@@ -18,7 +18,7 @@
     cursor: pointer;
     transition: all .3s;
     margin-top: 40px;
-    width: 100%;
+    // width: 100%;
 }
 
 .row{
@@ -67,7 +67,12 @@
     .blogs-container {
         justify-content: center;
     }
+    .container{
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
 }
+
 .read-more-button {
     margin: 15px 0px;
     text-align: end;
