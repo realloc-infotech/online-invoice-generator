@@ -44,13 +44,13 @@ export class ThmHeaderComponent {
     },
     {
       id: 5,
-      img: '/assets/images/svgs/icon-dd-date.svg',
+      img: '/assets/images/svgs/icon-dd-cart.svg',
       title: 'Invoice Templates',
       link: 'invoice-templates',
     },
     {
       id: 6,
-      img: '/assets/images/svgs/icon-dd-cart.svg',
+      img: '/assets/images/svgs/icon-dd-date.svg',
       title: 'FIRC in India',
       link: 'firc-india',
     }
