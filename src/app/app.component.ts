@@ -30,8 +30,8 @@ export class AppComponent {
     private cookieService: CookieService,
     private router: Router,
     private invoiceService: InvoiceService) {
-    translate.addLangs(['en', 'fr', 'es', 'de']);
-    translate.setDefaultLang('en');
+    // translate.addLangs(['en', 'fr', 'es', 'de']);
+    // translate.setDefaultLang('en');
     // this.cookieExists = this.cookieService.check('invoice')
     this.cookieExists = this.cookieService.check('AcceptCookies')
     // Subscribe to the Router events

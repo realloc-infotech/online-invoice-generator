@@ -42,7 +42,7 @@ import { DatePipe } from '@angular/common';
 import { BlogComponent } from './pages/theme-pages/blog/blog.component';
 
 export function HttpLoaderFactory(http: HttpClient): any {
-  return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, '', '.json');
 }
 
 @NgModule({
