@@ -25,14 +25,8 @@ export class ThmHeaderComponent {
 
   apps: apps[] = [
     {
-      id: 1,
-      img: '/assets/images/svgs/icon-dd-chat.svg',
-      title: 'Invoicing Guide',
-      link: 'guide',
-    },
-    {
       id: 2,
-      img: '/assets/images/svgs/icon-dd-cart.svg',
+      img: '/assets/images/svgs/icon-account.svg',
       title: 'How to Use',
       link: 'help',
     },
@@ -63,11 +57,6 @@ export class ThmHeaderComponent {
   ];
 
   quicklinks: quicklinks[] = [
-    {
-      id: 1,
-      title: 'Invoicing Guide',
-      link: '/guide',
-    },
     {
       id: 2,
       title: 'How to Use',
