@@ -9,7 +9,37 @@
 @import "./assets/scss/layouts/transitions";
 @import "./assets/scss/helpers/color";
 @import "./assets/scss/helpers/icon-size";
+
 @import "./assets/scss/themecolors/default_theme";
+@include mat.all-component-themes($bluetheme);
+
+.dark-theme {
+  @include mat.all-component-colors($darkbluetheme);
+}
+.orange_theme {
+  @import "./assets/scss/themecolors/orange_theme";
+  @include mat.all-component-colors($orangetheme);
+}
+
+.aqua_theme {
+  @import "./assets/scss/themecolors/aqua_theme";
+  @include mat.all-component-colors($aquatheme);
+}
+
+.purple_theme {
+  @import "./assets/scss/themecolors/purple_theme";
+  @include mat.all-component-colors($purpletheme);
+}
+
+.green_theme {
+  @import "./assets/scss/themecolors/green_theme";
+  @include mat.all-component-colors($greentheme);
+}
+
+.cyan_theme {
+  @import "./assets/scss/themecolors/cyan_theme";
+  @include mat.all-component-colors($cyantheme);
+}
 @import "./assets/scss/overrides/materialoverrides";
 @import "./assets/scss/dark/dark";
 @import "./assets/scss/container";
