@@ -42,6 +42,8 @@ interface features {
 @Component({
   selector: 'app-landingpage',
   templateUrl: './landingpage.component.html',
+  styleUrls: ['./landingpage.component.scss']
+
 })
 export class AppLandingpageComponent {
   @Input() showToggle = true;
