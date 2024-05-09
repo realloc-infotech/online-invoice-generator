@@ -1,16 +1,59 @@
-.btn-new{
-    
-    display: inline-block;
-    outline: none;
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 14px 24px;
-    border: none;
-    transition: box-shadow 0.2s ease 0s, -ms-transform 0.1s ease 0s, -webkit-transform 0.1s ease 0s, transform 0.1s ease 0s;
-    background: linear-gradient(to right, rgb(177, 30, 230) 0%, rgb(28, 227, 98) 50%, rgb(176, 215, 4) 100%);
-    color: #fff;
+@use "@angular/material" as mat;
+@include mat.core();
 
+@import "../../../../assets/scss/variables";
+
+@import "../../../../assets/scss/layouts/transitions";
+@import "../../../../assets/scss/helpers/color";
+@import "../../../../assets/scss/helpers/icon-size";
+
+@import "../../../../assets/scss/themecolors/default_theme";
+@include mat.all-component-themes($bluetheme);
+
+.dark-theme {
+  @include mat.all-component-colors($darkbluetheme);
 }
+.orange_theme {
+  @import "../../../../assets/scss/themecolors/orange_theme";
+  @include mat.all-component-colors($orangetheme);
+}
+
+.aqua_theme {
+  @import "../../../../assets/scss/themecolors/aqua_theme";
+  @include mat.all-component-colors($aquatheme);
+}
+
+.purple_theme {
+  @import "../../../../assets/scss/themecolors/purple_theme";
+  @include mat.all-component-colors($purpletheme);
+}
+
+.green_theme {
+  @import "../../../../assets/scss/themecolors/green_theme";
+  @include mat.all-component-colors($greentheme);
+}
+
+.cyan_theme {
+  @import "../../../../assets/scss/themecolors/cyan_theme";
+  @include mat.all-component-colors($cyantheme);
+}
+@import "../../../../assets/scss/overrides/materialoverrides";
+@import "../../../../assets/scss/dark/dark";
+@import "../../../../assets/scss/container";
+@import "../../../../assets/scss/layouts/layouts";
+@import "../../../../assets/scss/grid/grid";
+@import "../../../../assets/scss/helpers/custom-flex";
+@import "../../../../assets/scss/helpers/index";
+@import "../../../../assets/scss/horizontal/horizontal";
+@import "../../../../assets/scss/apps/calendar";
+@import "../../../../assets/scss/apps/email";
+@import "../../../../assets/scss/pages/dashboards";
+@import "../../../../assets/scss/pages/auth";
+@import "../../../../assets/scss/pages/landingpage";
+@import "../../../../assets/scss/rtl/rtl";
+
+
+.fill-warning {
+    fill: $warning;
+    color: $warning;
+  }
