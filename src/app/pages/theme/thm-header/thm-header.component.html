@@ -56,7 +56,9 @@
 
       </div>
     </mat-expansion-panel> -->
-     <li> <button class="createinvoicebutton" (click)="closeMenuBar()" [routerLink]="['/createinvoice']">Create Invoice</button></li>
+     <!-- <li> <button class="createinvoicebutton" (click)="closeMenuBar()" [routerLink]="['/createinvoice']">Create Invoice</button></li> -->
+     <li><a (click)="closeMenuBar()" [routerLink]="['/createinvoice']">Create Invoice</a></li>
+
  </ul>
  
  <label for="nav-toggle" class="icon-burger">
