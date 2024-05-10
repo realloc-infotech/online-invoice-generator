@@ -90,6 +90,19 @@ nav .icon-burger .line {
 
 }
 
+
+@media only screen and (max-width: 1153px) {
+  .logo{
+    width: 20% !important;
+    img{
+      width: 90% !important;
+    }
+  }
+  .links{
+    width: 80% !important;
+  }
+}
+
 @media screen and (max-width: 900px) {
   
   .links{
