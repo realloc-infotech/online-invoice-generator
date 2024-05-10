@@ -2,11 +2,6 @@
   display: block;
 }
 
-.fill-warning svg {
-  fill: #ffae1f;
-  color: #ffae1f;
-}
-
 
 @media only screen and (max-width: 1200px) {
   .slider-img {
@@ -14,4 +9,33 @@
   }
 }
 
+.imgscroll{
+  background-color: #ecf2ff;
+  max-height: 790px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.images1{ 
+  overflow: hidden;
+  animation: scrolltop 10s linear infinite;
+}
+.images2{ 
+  overflow: hidden;
+  animation: scrolltop 10s linear infinite reverse;
+}
+
+
+@keyframes scrolltop {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
 @import '../../../../assets/scss/style.scss'
+
+
+

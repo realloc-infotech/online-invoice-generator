@@ -26,22 +26,22 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-6 slider-img d-lg-flex">
-            <div class="p-24 banner-slider">
+          <div class="col-lg-6  d-lg-flex">
+            <div class="p-24 imgscroll">
               <div class="d-flex">
                 <div>
-                  <div class="slider-img">
+                  <div class="images1">
                     <img src="assets/images/landingpage/background/Slider-image.png" style="width: 300px;" alt="img1" />
                   </div>
-                  <div class="slider-img">
+                  <div class="images1">
                     <img src="assets/images/landingpage/background/Slider-image.png" style="width: 300px;" alt="img1" />
                   </div>
                 </div>
                 <div>
-                  <div class="slider-img2">
+                  <div class="images2">
                     <img src="assets/images/landingpage/background/Slider-image1.png" style="width: 300px;" alt="img1" />
                   </div>
-                  <div class="slider-img2">
+                  <div class="images2">
                     <img src="assets/images/landingpage/background/Slider-image1.png" style="width: 300px;" alt="img1" />
                   </div>
                 </div>
@@ -124,8 +124,8 @@ End Banner
                   <div class="m-l-auto m-t-10">
                     <div class="d-flex align-items-center">
                       <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                        <i-tabler name="star-filled" class="fill-warning icon-18" *ngIf="star <= testimonial.rating"></i-tabler>
-                        <i-tabler name="star" class="fill-warning icon-18" *ngIf="star > testimonial.rating"></i-tabler>
+                        <i-tabler name="star-filled" class="icon-18" *ngIf="star <= testimonial.rating"></i-tabler>
+                        <i-tabler name="star" class="icon-18" *ngIf="star > testimonial.rating"></i-tabler>
                       </ng-container>
                     </div>
                   </div>
