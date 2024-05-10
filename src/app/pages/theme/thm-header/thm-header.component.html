@@ -1,17 +1,72 @@
-<div>
-  <header class="header">
-    <nav>
-      <div class="logo">
-       <img src="../../../../assets/images/New Project (1).png" alt="">
+<nav>
+  <input type="checkbox" id="nav-toggle">
+  <div class="logo">
+    <img routerLink="/" width="40%" src="../../../../assets/images/New Project (1).png" alt="">
+  </div>
+
+ <ul class="links">
+     <li><a (click)="closeMenuBar()" [routerLink]="['/help']">Help</a></li>
+     <li><a (click)="closeMenuBar()" [routerLink]="['/blog']">Blog</a></li>
+     <li><a (click)="closeMenuBar()" [routerLink]="['/guide']">Invoicing Guide</a></li>
+     <ng-container>
+       <li><a [matMenuTriggerFor]="appsmenu"  >Quick Links <i-tabler name="chevron-down" class="icon-16 m-l-4"></i-tabler></a></li>
+       <mat-menu #appsmenu="matMenu" class="apps-dd cardWithShadow" xPosition="before">
+        <div class="row">
+          <div class="p-32 p-b-0">
+            <div class="row">
+              <div class="col-sm-12 text-hover-primary" *ngFor="let appdd of apps">
+                <a (click)="closeMenuBar()" [routerLink]="[appdd.link]" class="d-flex align-items-center text-decoration-none m-b-24">
+                  <button mat-mini-fab class="text-primary bg-light-primary shadow-none rounded">
+                    <img [src]="appdd.img" width="18" />
+                  </button>
+  
+                  <div class="m-l-16">
+                    <h5 class="f-s-14 f-w-600 m-0 textprimary mat-body-1 hover-text">
+                      {{ appdd.title }}
+                    </h5>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-menu>
+     </ng-container>
+
+     <!-- <mat-expansion-panel class="shadow-none">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="f-s-16 f-w-500"> Quick Links </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div>
+        <div class="row">
+          <div class="col-12 text-hover-primary" *ngFor="let appdd of apps">
+            <a [routerLink]="[appdd.link]" class="d-flex align-items-center text-decoration-none">
+              <button mat-mini-fab class="text-primary bg-light-primary shadow-none rounded">
+                <img [src]="appdd.img" width="20" />
+              </button>
+
+              <div class="m-l-16">
+                <h5 class="f-s-14 f-w-600 m-0 textprimary mat-body-1 hover-text" style="padding-left: 10px;">
+                  {{ appdd.title }}
+                </h5>
+              </div>
+            </a>
+          </div>
+        </div>
+
       </div>
-      <input type="checkbox" id="menu-toggle">
-      <label for="menu-toggle" class="menu-icon">&#9776;</label>
-      <ul class="menu">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Skills</a></li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">Connect</a></li>
-      </ul>
-    </nav>
-  </header>
-</div>
+    </mat-expansion-panel> -->
+     <li> <button class="createinvoicebutton" (click)="closeMenuBar()" [routerLink]="['/createinvoice']">Create Invoice</button></li>
+ </ul>
+ 
+ <label for="nav-toggle" class="icon-burger">
+     <div class="line"></div>
+     <div class="line"></div>
+     <div class="line"></div>
+ </label>
+</nav>
+<label for="nav-toggle" class="icon-burger">
+  <div class="line"></div>
+  <div class="line"></div>
+  <div class="line"></div>
+</label>

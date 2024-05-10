@@ -2,6 +2,12 @@
   display: block;
 }
 
+.fill-warning svg {
+  fill: #ffae1f;
+  color: #ffae1f;
+}
+
+
 @media only screen and (max-width: 1200px) {
   .slider-img {
     display: none !important;

@@ -85,9 +85,17 @@ export class ThmHeaderComponent {
   ];
 
   options = this.settings.getOptions();
-
   constructor(
     private settings: CoreService,
   ){}
+
+
+  closeMenuBar() {
+    const navToggle = document.getElementById('nav-toggle') as HTMLInputElement;
+    if (navToggle) {
+        navToggle.checked = false;
+    }
+}
+
 
 }
