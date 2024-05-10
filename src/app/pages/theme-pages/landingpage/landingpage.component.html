@@ -26,7 +26,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-6 slider-img  d-lg-flex">
+          <div class="col-lg-6 slider-imglandingpage  d-lg-flex">
             <div class="p-24 imgscroll">
               <div class="d-flex">
                 <div>
@@ -124,8 +124,8 @@ End Banner
                   <div class="m-l-auto m-t-10">
                     <div class="d-flex align-items-center">
                       <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                        <i-tabler name="star-filled" class="icon-18" *ngIf="star <= testimonial.rating"></i-tabler>
-                        <i-tabler name="star" class="icon-18" *ngIf="star > testimonial.rating"></i-tabler>
+                        <i-tabler style="color: #FFC107;" name="star-filled" class="icon-18" *ngIf="star <= testimonial.rating"></i-tabler>
+                        <i-tabler style="color: #FFC107;" name="star" class="icon-18" *ngIf="star > testimonial.rating"></i-tabler>
                       </ng-container>
                     </div>
                   </div>
