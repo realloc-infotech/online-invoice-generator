@@ -1,7 +1,7 @@
 <nav>
   <input type="checkbox" id="nav-toggle">
   <div class="logo">
-    <img routerLink="/" width="40%" src="../../../../assets/images/New Project (1).png" alt="">
+    <img [routerLink]="['/']" width="40%" src="../../../../assets/images/New Project (1).png" alt="">
   </div>
 
  <ul class="links">
@@ -32,6 +32,15 @@
         </div>
       </mat-menu>
      </ng-container>
+     <div class="dropdown">
+      <button class="dropbtn">Dropdown</button>
+      <div class="dropdown-content">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+      </div>
+    </div>
+    
 
      <!-- <mat-expansion-panel class="shadow-none">
       <mat-expansion-panel-header>
@@ -56,7 +65,7 @@
 
       </div>
     </mat-expansion-panel> -->
-     <li> <button class="createinvoicebutton" (click)="closeMenuBar()" routerLink="'/createinvoice'">Create Invoice</button></li>
+     <li> <button class="createinvoicebutton" (click)="closeMenuBar()" [routerLink]="['/createinvoice']">Create Invoice</button></li>
  </ul>
  
  <label for="nav-toggle" class="icon-burger">
