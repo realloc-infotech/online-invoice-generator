@@ -159,19 +159,21 @@ nav .icon-burger .line {
   }
 }
 .createinvoicebutton{
-  cursor: pointer;
-  outline: 0;
-  color: #fff;
-  background-color: #5d87ff;
-  border-color: #5d87ff;
-  display: inline-block;
-  font-weight: 400;
-  line-height: 1.5;
-  text-align: center;
-  border: 1px solid transparent;
-  padding: 6px 12px;
-  font-size: 16px;
-  border-radius: .25rem;
+  a{
+    cursor: pointer;
+    outline: 0;
+    color: #fff !important;
+    background-color: #5d87ff;
+    border-color: #5d87ff;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    border: 1px solid transparent;
+    font-size: 16px;
+    border-radius: .25rem;
+    padding: 10px !important;
+  }
 }
 
 .dropbtn {
@@ -204,7 +206,7 @@ nav .icon-burger .line {
   display: none;
   position: absolute;
   background-color: #ffffff;
-  min-width: 220px;
+  min-width: 270px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }

@@ -12,13 +12,13 @@
       <button class="dropbtn">Quick Links <i-tabler name="chevron-down" class="icon-16 m-l-5"></i-tabler></button>
       <div class="dropdown-content">
         <div class="text-hover-primary" *ngFor="let appdd of apps">
-          <a (click)="closeMenuBar()" [routerLink]="[appdd.link]" class="d-flex align-items-center text-decoration-none">
+          <a (click)="closeMenuBar()" [routerLink]="[appdd.link]" class="d-flex align-items-center text-decoration-none" style="padding: 8px;">
             <button mat-mini-fab class="text-primary bg-light-primary shadow-none rounded">
               <img [src]="appdd.img" width="18" />
             </button>
 
             <div class="m-l-16">
-              <h5 class="f-s-12 f-w-600 m-0 textprimary mat-body-1 hover-text" style="padding-left: 10px;">
+              <h5 class="f-s-14 f-w-600 m-0 textprimary mat-body-1 hover-text" style="padding-left: 10px;">
                 {{ appdd.title }}
               </h5>
             </div>
@@ -26,32 +26,8 @@
         </div>
       </div>
     </div>
-    
-
-     <!-- <mat-expansion-panel class="shadow-none">
-      <mat-expansion-panel-header>
-        <mat-panel-title class="f-s-16 f-w-500"> Quick Links </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div>
-        <div class="row">
-          <div class="col-12 text-hover-primary" *ngFor="let appdd of apps">
-            <a [routerLink]="[appdd.link]" class="d-flex align-items-center text-decoration-none">
-              <button mat-mini-fab class="text-primary bg-light-primary shadow-none rounded">
-                <img [src]="appdd.img" width="20" />
-              </button>
-
-              <div class="m-l-16">
-                <h5 class="f-s-14 f-w-600 m-0 textprimary mat-body-1 hover-text" style="padding-left: 10px;">
-                  {{ appdd.title }}
-                </h5>
-              </div>
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </mat-expansion-panel> -->
-     <li> <button class="createinvoicebutton" (click)="closeMenuBar()" [routerLink]="['/createinvoice']">Create Invoice</button></li>
+     <li class="createinvoicebutton"
+     > <a (click)="closeMenuBar()" [routerLink]="['/createinvoice']">Create Invoice</a></li>
  </ul>
  
  <label for="nav-toggle" class="icon-burger">
