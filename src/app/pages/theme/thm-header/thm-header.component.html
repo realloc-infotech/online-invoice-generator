@@ -1,4 +1,4 @@
-<nav>
+<!-- <nav>
   <input type="checkbox" id="nav-toggle">
   <div class="logo">
     <img [routerLink]="['/']" width="40%" src="../../../../assets/images/New Project (1).png" alt="">
@@ -40,4 +40,162 @@
   <div class="line"></div>
   <div class="line"></div>
   <div class="line"></div>
-</label>
+</label> -->
+
+
+
+
+<style>
+  .logo {
+    width: 40%;
+    padding-top: 10px;
+  }
+
+  @media only screen and (max-width: 500px) {
+    .logo {
+      width: 48%;
+    }
+  }
+</style>
+<!-- ------------------------------------------------------------------
+    Header
+    ------------------------------------------------------------------ -->
+<mat-toolbar class="topbar topbar-xl m-auto" style="margin-bottom: 20px;position: fixed;top: 0;">
+  <div class="container full-width p-xs-6">
+    <!-- --------------------------------------------------------------- -->
+    <div class="branding p-x-0">
+      <a routerLink="/" *ngIf="options.theme === 'light'">
+        <img src="../../../../assets/images/New Project (1).png" class="align-middle m-2 logo" alt="logo" />
+      </a>
+      <a routerLink="/" *ngIf="options.theme === 'dark'">
+        <img src="./assets/images/logos/light-logo.svg" class="align-middle m-2" alt="logo" />
+      </a>
+    </div>
+
+    <!-- --------------------------------------------------------------- -->
+
+    <span class="flex-1-auto"></span>
+
+    <div class="d-none d-lg-flex">
+      <!-- --------------------------------------------------------------- -->
+      <!--  Links -->
+      <!-- --------------------------------------------------------------- -->
+
+      <a mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/help']">Help</a>
+
+      <a mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/blog']">Blog</a>
+      <a mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/guide']">Invoicing Guide</a>
+
+      <button mat-button class="m-x-8 f-s-16 f-w-500" [matMenuTriggerFor]="appsmenu" aria-label="Notifications">
+        <div class="d-flex align-items-center">
+          Quick Links
+          <i-tabler name="chevron-down" class="icon-16 m-l-4 m-b-8" style="margin-bottom: 3px;"></i-tabler>
+        </div>
+      </button>
+      <mat-menu #appsmenu="matMenu" class="apps-dd cardWithShadow" xPosition="before">
+        <div class="row">
+          <!-- <div class="col-sm-6 b-r-1 p-r-0"> -->
+          <div class="p-32 p-b-0">
+            <div class="row">
+              <div class="col-sm-12 text-hover-primary" *ngFor="let appdd of apps">
+                <a [routerLink]="[appdd.link]" class="d-flex align-items-center text-decoration-none m-b-24">
+                  <button mat-mini-fab class="text-primary bg-light-primary shadow-none rounded">
+                    <img [src]="appdd.img" width="18" />
+                  </button>
+
+                  <div class="m-l-16">
+                    <h5 class="f-s-14 f-w-600 m-0 textprimary mat-body-1 hover-text">
+                      {{ appdd.title }}
+                    </h5>
+                    <!-- <span class="mat-body-1 f-s-12">{{
+                              appdd.subtitle
+                            }}</span> -->
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- </div> -->
+      </mat-menu>
+      <a  mat-flat-button style="margin-left: 20px;" color="primary" class="m-l-10"
+        [routerLink]="['/createinvoice']">Create Invoice</a>
+    </div>
+
+    <!-- Mobile Menu -->
+    <button mat-icon-button (click)="filterNavRight.toggle()" class="d-flex d-lg-none">
+      <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
+    </button>
+  </div>
+</mat-toolbar>
+
+<!-- ------------------------------------------------------------------
+     End Header
+      ------------------------------------------------------------------ -->
+
+<!-- ------------------------------------------------------------------
+    Mobile Sidebar
+    ------------------------------------------------------------------ -->
+<mat-sidenav #filterNavRight mode="over" position="start" class="filter-sidebar">
+  <div>
+    <div class="branding">
+      <a href="/" *ngIf="options.theme === 'light'">
+        <img src="" class="align-middle m-2" alt="logo" />
+      </a>
+      <a href="/" *ngIf="options.theme === 'dark'">
+        <img src="" class="align-middle m-2" alt="logo" />
+      </a>
+    </div>
+
+    <mat-accordion>
+      <div class="p-x-16" [routerLink]="['/help']" (click)="filterNavRight.toggle()">
+        <a mat-button class="m-b-24 m-t-24 f-s-16 f-w-500" style="padding-left: 0;">Help</a>
+      <div class="p-x-16" [routerLink]="['/blog']" (click)="filterNavRight.toggle()">
+        <a mat-button class="m-b-24 f-s-16 f-w-500" style="padding-left: 0;">Blog</a>
+      </div>
+
+      <div class="p-x-16" [routerLink]="['/guide']" (click)="filterNavRight.toggle()">
+        <a mat-button class="m-b-24 f-s-16 f-w-500" >Invoicing Guide</a>
+      </div>
+
+      <mat-expansion-panel class="shadow-none">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="f-s-16 f-w-500"> Quick Links </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <div class="row">
+            <div class="col-12 text-hover-primary" *ngFor="let appdd of apps">
+              <a [routerLink]="[appdd.link]" class="d-flex align-items-center text-decoration-none m-b-24" (click)="filterNavRight.toggle()">
+                <button mat-mini-fab class="text-primary bg-light-primary shadow-none rounded">
+                  <img [src]="appdd.img" width="20" />
+                </button>
+
+                <div class="m-l-16">
+                  <h5 class="f-s-14 f-w-600 m-0 textprimary mat-body-1 hover-text" style="padding-left: 10px;">
+                    {{ appdd.title }}
+                  </h5>
+                  <!-- <span class="mat-body-1 f-s-12">{{ appdd.subtitle }}</span> -->
+                </div>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+      </div>
+    </mat-accordion>
+
+    <div class="p-x-16">
+      <!-- <a href="
+            https://demos.adminmart.com/premium/angular/modernize-angular/docs/index.html
+          " class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">Documentation</span>
+      </a>
+      <a [routerLink]="['https://adminmart.com/support']"
+        class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">Support</span>
+      </a> -->
+      <a mat-flat-button color="primary" class="w-100 m-t-24 m-b-24" [routerLink]="['/createinvoice']" (click)="filterNavRight.toggle()">Create Invoice</a>
+    </div>
+  </div>
+</mat-sidenav>
