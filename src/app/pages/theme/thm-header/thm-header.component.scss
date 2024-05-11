@@ -167,11 +167,19 @@ nav .icon-burger .line {
 }
 
 .dropbtn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px;
+  cursor: pointer;
+  outline: 0;
+  color: black;
+  background-color: transparent;
+  border-color: #5d87ff;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  border: 1px solid transparent;
+  padding: 6px 12px;
   font-size: 16px;
-  border: none;
+  border-radius: .25rem;
 }
 
 .dropdown {
@@ -182,8 +190,8 @@ nav .icon-burger .line {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
+  background-color: #ffffff;
+  min-width: 220px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
@@ -195,8 +203,5 @@ nav .icon-burger .line {
   display: block;
 }
 
-.dropdown-content a:hover {background-color: #ddd;}
 
 .dropdown:hover .dropdown-content {display: block;}
-
-.dropdown:hover .dropbtn {background-color: #3e8e41;}

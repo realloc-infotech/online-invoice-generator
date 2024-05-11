@@ -8,36 +8,22 @@
      <li><a (click)="closeMenuBar()" [routerLink]="['/help']">Help</a></li>
      <li><a (click)="closeMenuBar()" [routerLink]="['/blog']">Blog</a></li>
      <li><a (click)="closeMenuBar()" [routerLink]="['/guide']">Invoicing Guide</a></li>
-     <ng-container>
-       <li><a [matMenuTriggerFor]="appsmenu"  >Quick Links <i-tabler name="chevron-down" class="icon-16 m-l-4"></i-tabler></a></li>
-       <mat-menu #appsmenu="matMenu" class="apps-dd cardWithShadow" xPosition="before">
-        <div class="row">
-          <div class="p-32 p-b-0">
-            <div class="row">
-              <div class="col-sm-12 text-hover-primary" *ngFor="let appdd of apps">
-                <a (click)="closeMenuBar()" [routerLink]="[appdd.link]" class="d-flex align-items-center text-decoration-none m-b-24">
-                  <button mat-mini-fab class="text-primary bg-light-primary shadow-none rounded">
-                    <img [src]="appdd.img" width="18" />
-                  </button>
-  
-                  <div class="m-l-16">
-                    <h5 class="f-s-14 f-w-600 m-0 textprimary mat-body-1 hover-text">
-                      {{ appdd.title }}
-                    </h5>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </mat-menu>
-     </ng-container>
      <div class="dropdown">
-      <button class="dropbtn">Dropdown</button>
+      <button class="dropbtn">Quick Links <i-tabler name="chevron-down" class="icon-16 m-l-5"></i-tabler></button>
       <div class="dropdown-content">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
+        <div class="col-sm-12 text-hover-primary" *ngFor="let appdd of apps">
+          <a (click)="closeMenuBar()" [routerLink]="[appdd.link]" class="d-flex align-items-center text-decoration-none">
+            <button mat-mini-fab class="text-primary bg-light-primary shadow-none rounded">
+              <img [src]="appdd.img" width="18" />
+            </button>
+
+            <div class="m-l-16">
+              <h5 class="f-s-12 f-w-600 m-0 textprimary mat-body-1 hover-text" style="padding-left: 10px;">
+                {{ appdd.title }}
+              </h5>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
     
