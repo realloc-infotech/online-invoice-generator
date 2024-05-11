@@ -11,7 +11,7 @@
      <div class="dropdown">
       <button class="dropbtn">Quick Links <i-tabler name="chevron-down" class="icon-16 m-l-5"></i-tabler></button>
       <div class="dropdown-content">
-        <div class="col-sm-12 text-hover-primary" *ngFor="let appdd of apps">
+        <div class="text-hover-primary" *ngFor="let appdd of apps">
           <a (click)="closeMenuBar()" [routerLink]="[appdd.link]" class="d-flex align-items-center text-decoration-none">
             <button mat-mini-fab class="text-primary bg-light-primary shadow-none rounded">
               <img [src]="appdd.img" width="18" />

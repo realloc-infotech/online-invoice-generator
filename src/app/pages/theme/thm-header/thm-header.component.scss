@@ -188,6 +188,11 @@ nav .icon-burger .line {
   padding: 6px 12px;
   font-size: 16px;
   border-radius: .25rem;
+
+  &:hover {
+  color: #5d87ff;
+
+  }
 }
 
 .dropdown {
