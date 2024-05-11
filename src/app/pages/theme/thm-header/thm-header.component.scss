@@ -105,6 +105,14 @@ nav .icon-burger .line {
 
 @media screen and (max-width: 900px) {
   
+  .logo{
+    width: 50% !important;
+
+    img{
+      width: 100% !important;
+    }
+  }
+
   .links{
     width: 100% !important;
   }
