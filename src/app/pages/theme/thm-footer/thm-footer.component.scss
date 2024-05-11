@@ -125,7 +125,16 @@
     ul{
         display: flex;
         align-items: center;
+
+        li{
+            a{
+                color: #000000;
+                text-decoration: none;
+            }
+
+        }
     }
+
 }
 
 .row{
