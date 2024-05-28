@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { InvoiceService } from '../../theme/service/invoice.service';
 import { CookieService } from 'ngx-cookie-service';
+import "jspdf-autotable";
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 class Product {
   name: string;
@@ -124,7 +126,11 @@ export class CreateinvoiceComponent {
   selectedDiscountType :any = 'percentage'
   isShowFormGst : boolean = true
   isShowToGst : boolean = true
-
+  selectedInvoiceTheme : any 
+  invoiceThemeList: any = [
+    { name: 'Invoice 1', imageUrl: '../../../../assets/images/invoice/1/invoice_page_1.jpg', value: 1 },
+    { name: 'Invoice 2', imageUrl: '../../../../assets/images/invoice/2/invoice_page_2.jpg' , value: 2 },
+  ] 
   
 
   constructor(
@@ -137,6 +143,7 @@ export class CreateinvoiceComponent {
     // public dialogRef: MatDialogRef<CreateinvoiceComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
       this.filteredCurrencies = this.currencyList;
+      this.selectedInvoiceTheme = 1
       this.termsList = `Maintain strict confidentiality of invoices, prohibiting sharing with unauthorized parties.
 
 Define conditions for invoice cancellation or modification, including associated fees.`
@@ -511,7 +518,7 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
   }
 
   formatDate(date: Date): string {
-    return this.datePipe.transform(date, 'yyyy-MM-dd') || '';
+    return this.datePipe.transform(date, 'dd-MM-yyyy') || '';
   }
 
   addProduct() {
@@ -917,5 +924,366 @@ const tableBody = [
   getsymbol(data: any) {
     return `${data.code} (${data.symbol})`
   }  
+
+  PDFprint(): void {
+    const { jsPDF } = require("jspdf");
+    switch (this.selectedInvoiceTheme) {
+      case 1:
+        
+      console.log("selectedInvoiceTheme========>>" , this.selectedInvoiceTheme);
+    
+    
+
+      const doc = new jsPDF();
+  
+      // Add image
+      const img = new Image();
+      img.src = '../../../../assets/images/invoice/1/header.png';
+      const logoimg = new Image();
+      logoimg.src = '../../../../assets/images/invoice/1/footer.png';
+      const logo1:any = new Image();
+      logo1.src = this.invoiceLogo ? this.invoiceLogo : null;
+
+      img.onload = () => {
+        doc.addImage(img, 'JPEG', 0, 0, 211, 60);
+        if (this.invoiceLogo) {
+          doc.addImage(logo1, 'JPEG', 130, 20 , 50 ,10);
+        
+        }
+        // Add text on top of the image
+        
+  
+        doc.setFontSize(30);
+        doc.setTextColor(5,57,84);
+        doc.setFont("helvetica", "bold");
+        doc.text(this.mainTitle, 15, 47);
+  
+  
+        doc.setFontSize(11);
+        doc.setTextColor(122, 122, 122);
+        doc.text(`Invoice: ${this.invoiceId}`, 130, 55);
+        doc.setFontSize(11);
+        doc.setTextColor(5, 5, 5);
+        doc.text(`Date: ${this.formatDate(this.invoiceDate)}`, 160, 55);
+  
+        // Shop Details
+        doc.setFontSize(15);
+        doc.setTextColor(122, 122, 122);
+        doc.text('Form Details', 15, 70);
+        doc.setFontSize(11);
+        doc.setTextColor(5, 5, 5);
+        doc.text(this.invoices.customerName, 15, 78);
+        doc.text(this.invoices.email, 15, 84); 
+        doc.text(this.invoices.contactNo, 15, 90);
+        doc.text(this.invoices.address, 15, 96);
+        if (this.isShowFormGst) {
+          doc.text(`${this.formGSTName} : ${this.invoices.customerFormGST}`, 15, 102);
+        }
+  
+        //  Customer Details
+        doc.setFontSize(15);
+        doc.setTextColor(122, 122, 122);
+        doc.text('To Details', 150, 70);
+        doc.setFontSize(11);
+        doc.setTextColor(5, 5, 5);
+        doc.text(this.invoices.billTo, 150, 78);
+        doc.text(this.invoices.billToEmail, 150, 84);
+        doc.text(this.invoices.billToContact, 150, 90);
+        doc.text(this.invoices.billToAddress, 150, 96);
+        if (this.isShowToGst) {
+          doc.text(`${this.toGSTName} : ${this.invoices.customerToGST}`, 150, 102);
+        }
+  
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Product Details', 15, 115);
+  
+        // Function to create placeholders
+        const createPlaceholder = (count: any) => {
+          let placeholders = [];
+          for (let i = 0; i < count; i++) {
+            placeholders.push(['- -', '00', '00', '00']);
+          }
+          return placeholders;
+        };
+  
+        // Extract the real data
+        const realData = this.invoices.products.map(item => [
+          item.name,
+          item.price,
+          item.qty,
+          (item.price * item.qty).toFixed(2)  // Total calculated as price * qty
+        ]);
+  
+        // Add placeholders to fill the rest of the rows
+        const totalRows = 5;
+        const placeholderCount = totalRows - realData.length;
+        const placeholders = createPlaceholder(placeholderCount);
+  
+        // Combine real data with placeholders
+        const tableData = [...realData, ...placeholders];
+        // Add table
+        (doc as any).autoTable({
+          head: [[ 'Item Description' , 'Price', 'Qty', 'Total']],
+          body: tableData,
+          startY: 120,
+          theme: 'plain',
+          headStyles: {
+            fillColor: [0,62,95],
+            textColor: [255, 255, 255],
+            fontSize: 10,
+            cellPadding: 2,
+          },
+          didDrawCell: (data: any) => {
+            const { cell, row, column } = data;
+            // Draw border-bottom for body cells
+            if (row.section === 'body') {
+              doc.setDrawColor(122, 122, 122);
+              doc.setLineWidth(0.2);
+              doc.line(cell.x, cell.y + cell.height, cell.x + cell.width, cell.y + cell.height);
+            }
+          }
+        });
+  
+  
+        // Terms & Conditions
+        doc.setFontSize(12);
+        doc.setTextColor(122, 122, 122);
+        doc.text(this.terms, 10, 180);
+        doc.setFontSize(8);
+        doc.setTextColor(122, 122, 122);
+        doc.text(this.termsList, 10, 188);
+  
+  
+        // Notes
+        doc.setFontSize(12);
+        doc.setTextColor(122, 122, 122);
+        doc.text(this.notes, 10, 220);
+        doc.setFontSize(8);
+        doc.setTextColor(122, 122, 122);
+        doc.text(this.notesList, 10, 228);
+  
+  
+  
+        doc.setFontSize(12);
+        doc.setTextColor(122, 122, 122);
+        doc.text(`${this.text} :` , 145, 180);
+        doc.text(`${this.iscurrencyName.split(" ")[0]} ${this.calculateSubTotal()}/-`, 170, 180);
+        doc.text(`${this.discount} :`, 145, 188);
+        doc.text(`${this.totalDiscount}/-`, 170, 188);
+        doc.text(`${this.shipping} :`, 145, 197);
+        doc.text(`${this.iscurrencyName.split(" ")[0]} ${this.totalShipping}/-`, 170, 197);
+        doc.text(`${this.gst} :`, 145, 206);
+        doc.text(`${this.taxRate}%`, 170, 206);
+        doc.setLineWidth(0.2);
+        doc.line(145, 213, 185, 213);
+        doc.setTextColor(5, 5, 5);
+        doc.text('Grand Total :', 145, 223);
+        doc.text(`${this.iscurrencyName.split(" ")[0]} ${this.grandTotalNumer()}/-`, 170, 223);
+  
+        doc.addImage(logoimg, 'JPEG', 0, 263, 211, 35);
+  
+        doc.setLineWidth(0.2);
+        doc.line(15, 268, 55, 268);
+        doc.setFontSize(10);
+        doc.setTextColor(5, 5, 5);
+        doc.text('Authorised Sign', 16, 275);
+        doc.text(`(${this.invoices.customerName})`, 16, 281);
+
+        // open PDF
+        window.open(doc.output('bloburl'))
+        // doc.save('invoice.pdf');
+  
+      };      
+        break;
+      case 2:
+          const doc2 = new jsPDF();
+          // Add image
+          const img2 = new Image();
+          img2.src = '../../../../assets/images/invoice/2/realestate11.1.png';
+          const logoimg2 = new Image();
+          logoimg2.src = '../../../../assets/images/invoice/2/realestate11.2.png';
+      
+          const logo:any = new Image();
+          logo.src = this.invoiceLogo ? this.invoiceLogo : null;
+          img2.onload = () => {
+      
+            // Add text on top of the image
+            doc2.addImage(img2, 'JPEG', 0, 0, 210, 45);
+            if (this.invoiceLogo) {
+              doc2.addImage(logo, 'JPEG', 150, 10 , 50 ,10);
+            
+            }
+      
+            // INVOICE
+            doc2.setFontSize(30);
+            doc2.setTextColor(255, 255, 255);
+            doc2.text(this.mainTitle, 5, 20);
+      
+      
+            // DATE
+            doc2.setFontSize(10);
+            doc2.setTextColor(255, 255, 255);
+            doc2.text(`DATE : ${this.formatDate(this.invoiceDate)}                        INVOICE : ${this.invoiceId}`, 5, 32);
+            // doc2.text('DATE :', 20, 38);
+            // doc2.text('INVOICE :', 20, 44);
+            // doc2.text(`${this.formatDate(this.invoiceDate)}`, 42, 38);
+            // doc2.text(`${this.invoiceId}`, 42, 44);
+      
+      
+            // Shop Details 
+            doc2.setFontSize(15);
+            doc2.setTextColor(5, 5, 5);
+            doc2.text('Form Details', 20, 56);
+            doc2.setFontSize(12);
+            doc2.setTextColor(0, 0, 0);
+            doc2.text(this.invoices.customerName, 20, 63);
+            doc2.text(this.invoices.email, 20, 69);
+            doc2.text(this.invoices.contactNo, 20, 75);
+            doc2.text(this.invoices.address, 20, 81);
+            if (this.isShowFormGst) {
+              doc2.text(`${this.formGSTName} : ${this.invoices.customerFormGST}`, 20, 87);
+            }
+            
+            // Customer Details
+            doc2.setFontSize(15);
+            doc2.setTextColor(5, 5, 5);
+            doc2.text('To Details', 140, 56);
+            doc2.setFontSize(12);
+            doc2.setTextColor(0, 0, 0);
+            doc2.text(this.invoices.billTo, 140, 63);
+            doc2.text(this.invoices.billToEmail, 140, 69);
+            doc2.text(this.invoices.billToContact, 140, 75);
+            doc2.text(this.invoices.billToAddress, 140, 81);
+            if (this.isShowToGst) {
+              doc2.text(`${this.toGSTName} : ${this.invoices.customerToGST}`, 140, 87);
+            }
+      
+            // // Product Details
+            // doc2.setFontSize(12);
+            // doc2.setTextColor(0, 0, 0);
+            // doc2.text('Product Details', 20, 95);
+      
+
+                    // Function to create placeholders
+        const createPlaceholder = (count: any) => {
+          let placeholders = [];
+          for (let i = 0; i < count; i++) {
+            placeholders.push(['- -', '00', '00', '00']);
+          }
+          return placeholders;
+        };
+  
+        // Extract the real data
+        const realData = this.invoices.products.map(item => [
+          item.name,
+          item.price,
+          item.qty,
+          (item.price * item.qty).toFixed(2)  // Total calculated as price * qty
+        ]);
+  
+        // Add placeholders to fill the rest of the rows
+        const totalRows = 5;
+        const placeholderCount = totalRows - realData.length;
+        const placeholders = createPlaceholder(placeholderCount);
+  
+        // Combine real data with placeholders
+        const tableData = [...realData, ...placeholders];
+
+      
+      
+      
+            (doc2 as any).autoTable({
+              head: [[ 'Item Description' , 'Price', 'Qty', 'Total']],
+              body:  tableData,
+      
+              startY: 100,
+              theme: 'plain',
+              headStyles: {
+                fillColor: [0, 32, 93],
+                textColor: [255, 255, 255],
+                fontSize: 10,
+                cellPadding: 3,
+              },
+              bodyStyles: {
+                fillColor: [245, 245, 245],
+                textColor: [0, 0, 0],
+                fontSize: 10,
+                cellPadding: 3,
+              },
+            });
+      
+      
+            // total
+            doc2.setFontSize(11);
+            doc2.setTextColor(5, 5, 5);
+            doc2.text(`${this.text} :`, 139, 175);
+            doc2.text(`${this.iscurrencyName.split(" ")[0]} ${this.calculateSubTotal()}/-`, 170, 175);
+            doc2.text(`${this.discount} :`, 139, 185);
+            doc2.text(`${this.totalDiscount}/-`, 170, 185);
+            doc2.text(`${this.shipping} :`, 139, 195);
+            doc2.text(`${this.iscurrencyName.split(" ")[0]} ${this.totalShipping}/-`, 170, 195);
+            doc2.text(`${this.gst} :`, 139, 205);
+            doc2.text(`${this.taxRate}%`, 170, 205);
+            doc2.setFillColor(245, 245, 245);
+            doc2.rect(138, 209, 60, 10, 'F');
+            doc2.text('Grand Total', 139, 215);
+            doc2.text(`${this.iscurrencyName.split(" ")[0]} ${this.grandTotalNumer()}/-`, 170, 215);
+      
+      
+      
+            // Terms & Conditions
+            doc2.setFontSize(10);
+            doc2.setTextColor(0, 0, 0);
+            doc2.text(this.terms, 13, 175);
+            doc2.setFontSize(8);
+            doc2.setTextColor(0, 0, 0);
+            doc2.text(this.termsList, 13, 183);
+      
+            // Notes
+            doc2.setFontSize(10);
+            doc2.setTextColor(0, 0, 0);
+            doc2.text(this.notes, 13, 220);
+            doc2.setFontSize(8);
+            doc2.setTextColor(0, 0, 0);
+            doc2.text(this.notesList, 13, 228);
+      
+            doc2.addImage(logoimg2, 'JPEG', 0, 272, 210, 25);
+      
+            //  Sign
+            doc2.setLineWidth(0.2);
+            doc2.line(150, 267, 190, 267);
+            doc2.setFontSize(10);
+            doc2.setTextColor(5, 5, 5);
+            doc2.text('Authorised Sign', 155, 272);
+            doc2.text(`(${this.invoices.customerName})`, 155, 277);
+      
+            // open PDF
+            window.open(doc2.output('bloburl'))
+      
+          };
+
+        break  
+      default:
+        break;
+    }
+    if (Boolean(this.cookieService.get('AcceptCookies')) === true) {
+      const data :any = {
+        logoUrl: this.invoiceLogo,
+        title: this.mainTitle,
+        id: this.invoiceId,
+        billFrom: this.invoices.customerName,
+        emailId: this.invoices.email,
+        fromAddress: this.invoices.address,
+        contactNo: this.invoices.contactNo,
+        termsConditions: this.termsList,
+        notes: this.notesList
+      }
+
+      // Store the data in localStorage
+      localStorage.setItem('invoice', JSON.stringify(data));
+
+    }
+  }
 }
 
