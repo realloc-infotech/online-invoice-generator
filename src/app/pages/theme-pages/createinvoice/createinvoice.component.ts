@@ -409,7 +409,7 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
                 { text: this.invoices.email + '\n',  fontSize: 11, lineHeight: 1.3 },
                 { text: this.invoices.contactNo.toString() + '\n',  fontSize: 11, lineHeight: 1.3 },
                 { text: this.invoices.address + '\n',  fontSize: 11, lineHeight: 1.3 },
-                ...(this.isShowFormGst ? [{ text: `${this.formGSTName} : `, bold: true, lineHeight: 1.3 }, `${this.invoices.customerFormGST}` + '\n'] : []),
+                ...(this.isShowFormGst && this.invoices.customerFormGST ? [{ text: `${this.formGSTName} : `, bold: true, lineHeight: 1.3 }, `${this.invoices.customerFormGST}` + '\n'] : []),
               ]
             },
             // Bill Details on the right
@@ -423,7 +423,7 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
                 { text: this.invoices.billToEmail  + '\n',  fontSize: 11, lineHeight: 1.3 },
                 { text: this.invoices.billToContact.toString()  + '\n',  fontSize: 11, lineHeight: 1.3 },
                 { text: this.invoices.billToAddress  + '\n',  fontSize: 11, lineHeight: 1.3 },
-                ...(this.isShowToGst ? [{ text: `${this.formGSTName} : `, bold: true, lineHeight: 1.3 }, `${this.invoices.customerFormGST}` + '\n'] : []),
+                ...(this.isShowToGst && this.invoices.customerFormGST ? [{ text: `${this.formGSTName} : `, bold: true, lineHeight: 1.3 }, `${this.invoices.customerFormGST}` + '\n'] : []),
               ]
             }
           ],
@@ -990,30 +990,30 @@ const tableBody = [
         // }
 
         // Shop Details
-doc.setFontSize(15);
-doc.setTextColor(122, 122, 122);
-doc.text('Form Details', 15, 70);
-doc.setFontSize(11);
-doc.setTextColor(5, 5, 5);
-doc.text(this.invoices.customerName, 15, 78);
-doc.text(this.invoices.email, 15, 84); 
-doc.text(this.invoices.contactNo.toString(), 15, 90);
+        doc.setFontSize(15);
+        doc.setTextColor(122, 122, 122);
+        doc.text('Form Details', 15, 70);
+        doc.setFontSize(11);
+        doc.setTextColor(5, 5, 5);
+        doc.text(this.invoices.customerName, 15, 78);
+        doc.text(this.invoices.email, 15, 84); 
+        doc.text(this.invoices.contactNo.toString(), 15, 90);
 
-const address = this.invoices.address;
-const x = 15; // x position
-let y = 96; // Starting y position
-const maxLineWidth = 80; // maximum width of the line
+        const address = this.invoices.address;
+        const x = 15; // x position
+        let y = 96; // Starting y position
+        const maxLineWidth = 80; // maximum width of the line
 
-const addressLines: string[] = doc.splitTextToSize(address, maxLineWidth);
+        const addressLines: string[] = doc.splitTextToSize(address, maxLineWidth);
 
-addressLines.forEach((line: string) => {
-  doc.text(line, x, y);
-  y += 4; // Adjust y position for the next line
-});
+        addressLines.forEach((line: string) => {
+          doc.text(line, x, y);
+          y += 4; // Adjust y position for the next line
+        });
 
-if (this.isShowFormGst && this.invoices.customerFormGST) {
-  doc.text(`${this.formGSTName} : ${this.invoices.customerFormGST}`, 15, y + 2);
-}
+        if (this.isShowFormGst && this.invoices.customerFormGST) {
+          doc.text(`${this.formGSTName} : ${this.invoices.customerFormGST}`, 15, y + 2);
+        }
   
         //  Customer Details
         doc.setFontSize(15);
@@ -1028,16 +1028,16 @@ if (this.isShowFormGst && this.invoices.customerFormGST) {
         // if (this.isShowToGst) {
         //   doc.text(`${this.toGSTName} : ${this.invoices.customerToGST}`, 150, 102);
         // }
-        const billAddress = this.invoices.address;
-        const billX = 150; // x position
-        let billY = 96; // Starting y position
-        const maxLineWidths = 50; // maximum width of the line
+        const billAddress = this.invoices.billToAddress;
+        const billX = 150;
+        let billY = 96;
+        const maxLineWidths = 50;
 
         const billaddressLines: string[] = doc.splitTextToSize(billAddress, maxLineWidths);
 
         billaddressLines.forEach((line: string) => {
           doc.text(line, billX, billY);
-          billY += 4; // Adjust y position for the next line
+          billY += 4;
         });
 
         if (this.isShowFormGst && this.invoices.customerToGST) {
@@ -1190,9 +1190,22 @@ if (this.isShowFormGst && this.invoices.customerFormGST) {
             doc2.text(this.invoices.customerName, 20, 63);
             doc2.text(this.invoices.email, 20, 69);
             doc2.text(this.invoices.contactNo.toString(), 20, 75);
-            doc2.text(this.invoices.address, 20, 81);
-            if (this.isShowFormGst) {
-              doc2.text(`${this.formGSTName} : ${this.invoices.customerFormGST}`, 20, 87);
+            // doc2.text(this.invoices.address, 20, 81);
+
+            const address = this.invoices.address;
+            const x = 20; // x position
+            let y = 80; // Starting y position
+            const maxLineWidth = 79; // maximum width of the line
+
+            const addressLines: string[] = doc2.splitTextToSize(address, maxLineWidth);
+
+            addressLines.forEach((line: string) => {
+              doc2.text(line, x, y);
+              y += 4; // Adjust y position for the next line
+            });
+
+            if (this.isShowFormGst && this.invoices.customerFormGST) {
+              doc2.text(`${this.formGSTName} : ${this.invoices.customerFormGST}`, 20, 95);
             }
             
             // Customer Details
@@ -1204,9 +1217,21 @@ if (this.isShowFormGst && this.invoices.customerFormGST) {
             doc2.text(this.invoices.billTo, 140, 63);
             doc2.text(this.invoices.billToEmail, 140, 69);
             doc2.text(this.invoices.billToContact.toString(), 140, 75);
-            doc2.text(this.invoices.billToAddress, 140, 81);
-            if (this.isShowToGst) {
-              doc2.text(`${this.toGSTName} : ${this.invoices.customerToGST}`, 140, 87);
+            // doc2.text(this.invoices.billToAddress, 140, 81);
+            const billAddress = this.invoices.billToAddress;
+            const billX = 140;
+            let billY = 80;
+            const maxLineWidths = 60;
+
+            const billaddressLines: string[] = doc2.splitTextToSize(billAddress, maxLineWidths);
+
+            billaddressLines.forEach((line: string) => {
+              doc2.text(line, billX, billY);
+              billY += 4;
+            });
+
+            if (this.isShowToGst && this.invoices.customerToGST) {
+              doc2.text(`${this.toGSTName} : ${this.invoices.customerToGST}`, 140, 95);
             }
       
             // // Product Details

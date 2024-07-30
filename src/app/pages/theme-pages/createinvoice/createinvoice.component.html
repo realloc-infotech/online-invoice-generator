@@ -585,12 +585,12 @@
        justify-content: center;margin-left: 2px;">
         <button class="m-b-10 m-r-10" color="primary" mat-flat-button
         [disabled]="!iscurrencyName || !invoiceLogo || !invoices.customerName || !invoices.email || !invoices.address || !invoices.contactNo
-        || !invoices.billTo || !invoices.billToEmail || !invoices.billToAddress || !invoices.billToAddress || !termsList || !notesList" 
+        || !invoices.billTo || !invoices.billToEmail || !invoices.billToAddress || !invoices.billToAddress || !termsList || !notesList || invoiceForm.invalid" 
           (click)="invoiceForm.valid ? generatePDF('download') : ''">
           Download Invoice
         </button>
         <button class="m-b-10 m-r-10" color="primary" mat-flat-button (click)="PDFprint()"  [disabled]="!iscurrencyName || !invoices.customerName || !invoices.email || !invoices.address || !invoices.contactNo
-        || !invoices.billTo || !invoices.billToEmail || !invoices.billToAddress || !invoices.billToAddress || !termsList || !notesList || !selectedInvoiceTheme">
+        || !invoices.billTo || !invoices.billToEmail || !invoices.billToAddress || !invoices.billToAddress || !termsList || !notesList || !selectedInvoiceTheme || invoiceForm.invalid">
           Print Invoice
         </button>
         <!-- <button class="m-b-10 m-r-10" color="primary" mat-flat-button (click)="invoiceForm.valid ? generatePDF('print') : ''"
