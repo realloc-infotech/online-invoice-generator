@@ -181,7 +181,7 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
         this.invoiceId = value?.id + 1
         this.invoices.email = value?.emailId
         this.invoices.address = value?.fromAddress
-        this.invoices.contactNo = value?.contactNo
+        this.invoices.contactNo = value?.contactNo.toString()
         this.invoices.customerName = value?.billFrom
         this.termsList = value?.termsConditions
         this.notesList = value?.notes
@@ -407,7 +407,7 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
                 { text: 'Shop Details\n', style: 'sectionHeader' ,lineHeight: 1.3},
                 { text: this.invoices.customerName + '\n' , bold: true,  fontSize: 11, lineHeight: 1.3 },
                 { text: this.invoices.email + '\n',  fontSize: 11, lineHeight: 1.3 },
-                { text: this.invoices.contactNo + '\n',  fontSize: 11, lineHeight: 1.3 },
+                { text: this.invoices.contactNo.toString() + '\n',  fontSize: 11, lineHeight: 1.3 },
                 { text: this.invoices.address + '\n',  fontSize: 11, lineHeight: 1.3 },
                 ...(this.isShowFormGst ? [{ text: `${this.formGSTName} : `, bold: true, lineHeight: 1.3 }, `${this.invoices.customerFormGST}` + '\n'] : []),
               ]
@@ -421,7 +421,7 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
                 { text: 'Customer Details\n', style: 'sectionHeader' ,lineHeight: 1.3},
                 { text: this.invoices.billTo + '\n',  bold: true,  fontSize: 11, lineHeight: 1.3 },
                 { text: this.invoices.billToEmail  + '\n',  fontSize: 11, lineHeight: 1.3 },
-                { text: this.invoices.billToContact  + '\n',  fontSize: 11, lineHeight: 1.3 },
+                { text: this.invoices.billToContact.toString()  + '\n',  fontSize: 11, lineHeight: 1.3 },
                 { text: this.invoices.billToAddress  + '\n',  fontSize: 11, lineHeight: 1.3 },
                 ...(this.isShowToGst ? [{ text: `${this.formGSTName} : `, bold: true, lineHeight: 1.3 }, `${this.invoices.customerFormGST}` + '\n'] : []),
               ]
@@ -497,7 +497,7 @@ Keep a professional tone with consistent formatting, proper grammar, and suitabl
         billFrom: this.invoices.customerName,
         emailId: this.invoices.email,
         fromAddress: this.invoices.address,
-        contactNo: this.invoices.contactNo,
+        contactNo: this.invoices.contactNo.toString(),
         termsConditions: this.termsList,
         notes: this.notesList
       }
@@ -725,7 +725,7 @@ const tableBody = [
                 { text: '\n', margin: [0, 25, 0, 0] },
                 { text: this.invoices.customerName + '\n', bold: true },
                 this.invoices.email + '\n',
-                this.invoices.contactNo + '\n',
+                this.invoices.contactNo.toString() + '\n',
                 { text: this.invoices.address }
               ]
             },
@@ -738,7 +738,7 @@ const tableBody = [
                 { text: '\n', margin: [0, 25, 0, 0] },
                 { text: this.invoices.billTo + '\n', bold: true},
                 this.invoices.billToEmail + '\n',
-                this.invoices.billToContact + '\n',
+                this.invoices.billToContact.toString() + '\n',
                 { text: this.invoices.billToAddress }
               ]
             }
@@ -846,7 +846,7 @@ const tableBody = [
   }
 
   openWhatsAppChat(message: string) {
-    const url = `https://web.whatsapp.com/send?phone=${this.invoices.billToContact}&text=${message}`;
+    const url = `https://web.whatsapp.com/send?phone=${this.invoices.billToContact.toString()}&text=${message}`;
     // Open WhatsApp chat window
     window.open(url, '_blank');
   }
@@ -916,6 +916,7 @@ const tableBody = [
       const reader = new FileReader();
       reader.onload = () => {
         this.invoiceLogo = reader.result;
+        debugger
       };
       reader.readAsDataURL(file);
     }
@@ -966,19 +967,53 @@ const tableBody = [
         doc.setTextColor(5, 5, 5);
         doc.text(`Date: ${this.formatDate(this.invoiceDate)}`, 160, 55);
   
+        // // Shop Details
+        // doc.setFontSize(15);
+        // doc.setTextColor(122, 122, 122);
+        // doc.text('Form Details', 15, 70);
+        // doc.setFontSize(11);
+        // doc.setTextColor(5, 5, 5);
+        // doc.text(this.invoices.customerName, 15, 78);
+        // doc.text(this.invoices.email, 15, 84); 
+        // doc.text(this.invoices.contactNo.toString().toString(), 15, 90);
+        // const addressLines = this.invoices.address.split('\n');
+        // let y = 96; // Starting y position
+        // const x = 15; // x position
+
+        // addressLines.forEach(line => {
+        //   doc.text(line, x, y);
+        //   y += 10; // Adjust y position for the next line
+        // });
+        // // doc.text(this.invoices.address, 15, 96);
+        // if (this.isShowFormGst) {
+        //   doc.text(`${this.formGSTName} : ${this.invoices.customerFormGST}`, 15, 102);
+        // }
+
         // Shop Details
-        doc.setFontSize(15);
-        doc.setTextColor(122, 122, 122);
-        doc.text('Form Details', 15, 70);
-        doc.setFontSize(11);
-        doc.setTextColor(5, 5, 5);
-        doc.text(this.invoices.customerName, 15, 78);
-        doc.text(this.invoices.email, 15, 84); 
-        doc.text(this.invoices.contactNo, 15, 90);
-        doc.text(this.invoices.address, 15, 96);
-        if (this.isShowFormGst) {
-          doc.text(`${this.formGSTName} : ${this.invoices.customerFormGST}`, 15, 102);
-        }
+doc.setFontSize(15);
+doc.setTextColor(122, 122, 122);
+doc.text('Form Details', 15, 70);
+doc.setFontSize(11);
+doc.setTextColor(5, 5, 5);
+doc.text(this.invoices.customerName, 15, 78);
+doc.text(this.invoices.email, 15, 84); 
+doc.text(this.invoices.contactNo.toString(), 15, 90);
+
+const address = this.invoices.address;
+const x = 15; // x position
+let y = 96; // Starting y position
+const maxLineWidth = 80; // maximum width of the line
+
+const addressLines: string[] = doc.splitTextToSize(address, maxLineWidth);
+
+addressLines.forEach((line: string) => {
+  doc.text(line, x, y);
+  y += 4; // Adjust y position for the next line
+});
+
+if (this.isShowFormGst && this.invoices.customerFormGST) {
+  doc.text(`${this.formGSTName} : ${this.invoices.customerFormGST}`, 15, y + 2);
+}
   
         //  Customer Details
         doc.setFontSize(15);
@@ -988,15 +1023,30 @@ const tableBody = [
         doc.setTextColor(5, 5, 5);
         doc.text(this.invoices.billTo, 150, 78);
         doc.text(this.invoices.billToEmail, 150, 84);
-        doc.text(this.invoices.billToContact, 150, 90);
-        doc.text(this.invoices.billToAddress, 150, 96);
-        if (this.isShowToGst) {
-          doc.text(`${this.toGSTName} : ${this.invoices.customerToGST}`, 150, 102);
+        doc.text(this.invoices.billToContact.toString(), 150, 90);
+        // doc.text(this.invoices.billToAddress, 150, 96);
+        // if (this.isShowToGst) {
+        //   doc.text(`${this.toGSTName} : ${this.invoices.customerToGST}`, 150, 102);
+        // }
+        const billAddress = this.invoices.address;
+        const billX = 150; // x position
+        let billY = 96; // Starting y position
+        const maxLineWidths = 50; // maximum width of the line
+
+        const billaddressLines: string[] = doc.splitTextToSize(billAddress, maxLineWidths);
+
+        billaddressLines.forEach((line: string) => {
+          doc.text(line, billX, billY);
+          billY += 4; // Adjust y position for the next line
+        });
+
+        if (this.isShowFormGst && this.invoices.customerToGST) {
+          doc.text(`${this.toGSTName} : ${this.invoices.customerToGST}`, 150, billY + 2);
         }
   
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0);
-        doc.text('Product Details', 15, 115);
+        doc.text('Product Details', 15, 118);
   
         // Function to create placeholders
         const createPlaceholder = (count: any) => {
@@ -1139,7 +1189,7 @@ const tableBody = [
             doc2.setTextColor(0, 0, 0);
             doc2.text(this.invoices.customerName, 20, 63);
             doc2.text(this.invoices.email, 20, 69);
-            doc2.text(this.invoices.contactNo, 20, 75);
+            doc2.text(this.invoices.contactNo.toString(), 20, 75);
             doc2.text(this.invoices.address, 20, 81);
             if (this.isShowFormGst) {
               doc2.text(`${this.formGSTName} : ${this.invoices.customerFormGST}`, 20, 87);
@@ -1153,7 +1203,7 @@ const tableBody = [
             doc2.setTextColor(0, 0, 0);
             doc2.text(this.invoices.billTo, 140, 63);
             doc2.text(this.invoices.billToEmail, 140, 69);
-            doc2.text(this.invoices.billToContact, 140, 75);
+            doc2.text(this.invoices.billToContact.toString(), 140, 75);
             doc2.text(this.invoices.billToAddress, 140, 81);
             if (this.isShowToGst) {
               doc2.text(`${this.toGSTName} : ${this.invoices.customerToGST}`, 140, 87);
@@ -1275,7 +1325,7 @@ const tableBody = [
         billFrom: this.invoices.customerName,
         emailId: this.invoices.email,
         fromAddress: this.invoices.address,
-        contactNo: this.invoices.contactNo,
+        contactNo: this.invoices.contactNo.toString(),
         termsConditions: this.termsList,
         notes: this.notesList
       }
